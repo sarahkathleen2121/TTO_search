@@ -22,3 +22,7 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+ai-search/data/
+ai-search/data/chroma/
+__pycache__/
+*.pyc
