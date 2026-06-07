@@ -123,7 +123,7 @@
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nisl, diam lectus sagittis,
                                         massa aliquam commodo.
                                     </p>
-                                    <a href="#" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
                             </div>
                             <div class="cs-card-right">
@@ -159,7 +159,7 @@
                                         Viverra dui massa arcu adipiscing quis integer habitasse et.
                                         Facilisis nulla muscenas malesuada pharetra vel quis.
                                     </p>
-                                    <a href="#" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
                             </div>
                             <div class="cs-card-right">
@@ -194,7 +194,7 @@
                                         Neque facilisi vel eu risus et sed amet. Molestie habitasse du
                                         sapien venenatis at. At urna egestas elit et.
                                     </p>
-                                    <a href="#" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
                             </div>
                             <div class="cs-card-right">
@@ -229,7 +229,7 @@
                                         Ultrices ullamcorper amet lacus urna velit at. Valpulate in turpis
                                         sem arcu ullamcorper egestas convallis.
                                     </p>
-                                    <a href="#" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i class="fas fa-chevron-right" style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
                             </div>
                             <div class="cs-card-right">
@@ -259,7 +259,7 @@
         </div>
 
         <div class="cs-explore-wrapper">
-            <button class="explore-all-btn">Explore All</button>
+            <a href="{{ route('case.studies') }}" class="explore-all-btn" style="text-decoration: none;">Explore All</a>
         </div>
     </section>
 

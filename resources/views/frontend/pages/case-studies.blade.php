@@ -48,7 +48,7 @@
                                     <h3 class="case-study-title">Case study 1</h3>
                                     <p class="case-study-description">Lorem ipsum dolor sit amet, consectetur
                                         adipiscing elit. Nisl, diam lectus sagittis, massa aliquam commodo.</p>
-                                    <a href="#" class="case-study-link">Learn More <i
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i
                                             class="fas fa-chevron-right"
                                             style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
@@ -84,7 +84,7 @@
                                     <h3 class="case-study-title">Case study 2</h3>
                                     <p class="case-study-description">Lorem ipsum dolor sit amet, consectetur
                                         adipiscing elit. Nisl, diam lectus sagittis, massa aliquam commodo.</p>
-                                    <a href="#" class="case-study-link">Learn More <i
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i
                                             class="fas fa-chevron-right"
                                             style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
@@ -120,7 +120,7 @@
                                     <h3 class="case-study-title">Case study 3</h3>
                                     <p class="case-study-description">Lorem ipsum dolor sit amet, consectetur
                                         adipiscing elit. Nisl, diam lectus sagittis, massa aliquam commodo.</p>
-                                    <a href="#" class="case-study-link">Learn More <i
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i
                                             class="fas fa-chevron-right"
                                             style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
@@ -156,7 +156,7 @@
                                     <h3 class="case-study-title">Case study 4</h3>
                                     <p class="case-study-description">Lorem ipsum dolor sit amet, consectetur
                                         adipiscing elit. Nisl, diam lectus sagittis, massa aliquam commodo.</p>
-                                    <a href="#" class="case-study-link">Learn More <i
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i
                                             class="fas fa-chevron-right"
                                             style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
@@ -192,7 +192,7 @@
                                     <h3 class="case-study-title">Case study 5</h3>
                                     <p class="case-study-description">Lorem ipsum dolor sit amet, consectetur
                                         adipiscing elit. Nisl, diam lectus sagittis, massa aliquam commodo.</p>
-                                    <a href="#" class="case-study-link">Learn More <i
+                                    <a href="{{ route('case.study.detail') }}" class="case-study-link">Learn More <i
                                             class="fas fa-chevron-right"
                                             style="font-size: 11px; margin-left: 4px"></i></a>
                                 </div>
