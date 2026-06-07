@@ -7,10 +7,15 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
-    public function about()
+    public function oldAbout()
     {
         $productTypes = \App\Models\ProductType::withCount('products')->get();
-        return view('frontend.pages.about', compact('productTypes'));
+        return view('frontend.pages.old-about', compact('productTypes'));
+    }
+
+    public function about()
+    {
+        return view('frontend.pages.about');
     }
 
     public function allProducts(Request $request)

@@ -81,7 +81,7 @@
                 <a href="{{ route('terms.conditions') }}" class="footer-bottom-link">Terms of use</a>
             </div>
             <div class="footer-credit">
-                Made with <span style="color: #383E42">❤</span> by tentwenty
+                Made with <span style="color: #383E42">❤</span> by thetotaloffice.ae
             </div>
         </div>
     </div>

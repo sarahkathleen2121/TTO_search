@@ -43,7 +43,7 @@
     </div>
 
     <!-- The overlapping search bar -->
-    <div class="container position-relative z-1 crt-search-wrapper">
+    <div class="container position-relative crt-search-wrapper" style="z-index: 1050; overflow: visible;">
         <link rel="stylesheet" href="{{ asset('frontend_assets/css/ai-search.css') }}">
         @include('frontend.components.ai-search-bar', ['style' => 'clean'])
     </div>

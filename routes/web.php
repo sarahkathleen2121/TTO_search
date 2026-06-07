@@ -25,6 +25,7 @@ Route::prefix('enquiry-basket')->group(function () {
 
 // Static Pages
 Route::controller(App\Http\Controllers\Frontend\PageController::class)->group(function () {
+    Route::get('/old-about', 'oldAbout')->name('old.about');
     Route::get('/about', 'about')->name('about');
     Route::get('/all-products', 'allProducts')->name('all.products');
     Route::get('/careers', 'careers')->name('careers');

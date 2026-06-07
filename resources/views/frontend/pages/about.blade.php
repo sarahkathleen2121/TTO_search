@@ -1,675 +1,324 @@
-@extends('frontend.layouts.master')
-@section('title', 'Home - Welcome')
-@section('content')
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/about.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/homepage.css') }}">
-        <!-- Hero -->
-    <section class="ab-hero">
-      <div class="container">
-        <div class="ab-breadcrumb"><a href="{{ route('home') }}">Home</a> / Our Story</div>
-        <h1 class="ab-hero-title">About Total Office</h1>
-        <div class="ab-hero-sub">
-          <b>N/A</b>
-        Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-          sint. Velit officia consequat.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crafting Custom Furniture | Stellar Works’ Bespoke Design Process</title>
+  
+  <!-- Premium Typography: Playfair Display for Serifs, Inter for Sans-Serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{{ asset('frontend_assets/css/about.css') }}">
+  
+  <!-- Stellar Works Favicon -->
+  <link href="https://cdn.prod.website-files.com/666864cc2e2e84bfc95881ec/66a3c89144867d540c7cda4b_Stellar-Works-Favicon.png" rel="shortcut icon" type="image/x-icon"/>
+</head>
+<body class="process-body">
+
+  <!-- Main Horizontal Timeline Track Container -->
+  <main class="timeline-container" id="timelineContainer">
+    
+    <!-- SLIDE 1: HERO SECTION -->
+    <section class="timeline-section hero-section">
+      <div class="hero-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/first_img.webp') }}" alt="Factory Imagery" class="hero-bg-img">
+      </div>
+      <div class="hero-overlay-dark"></div>
+      
+      <div class="hero-content">
+        <span class="hero-subtitle">Bespoke Production</span>
+        <h1 class="hero-title">Process</h1>
+        <p class="hero-desc">Discover the detailed journey of crafting custom-tailored luxury furniture solutions, from technical design specifications to final post-delivery support.</p>
+        <div class="swipe-indicator">
+          <span>Use mouse wheel or arrows to explore</span>
+          <svg class="arrow-icon-animate" viewBox="0 0 24 24" width="20" height="20">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
       </div>
     </section>
 
-    <!-- About Us with varying image widths/heights -->
-    <section class="ab-about">
-      <div class="container">
-        <div class="row g-4 mb-2">
-          <div class="col-lg-6">
-            <h3>About Us</h3>
-            <p style="color: #383E42">
-              For over 28 years, <b>The Total Office</b> has been at the forefront of delivering dynamic workplace and commercial solutions across the region. Our experience reflects decades of industry knowledge, refined expertise, and a deep understanding of how modern businesses work and evolve.
-            </p>
-            <p style="color: #383E42">
-              We believe workspaces are not static environments but dynamic ecosystems that adapt to the needs of people, technology, and culture. Our vision is to set the benchmark in the workspace industry by driving sustainability, innovation, and operational excellence. We achieve this by building meaningful partnerships, delivering locally produced and integrated solutions, and empowering high-performing teams to continuously enhance the workplace experience, creating lasting value for our clients and communities.
-            </p>
-            <p style="color: #383E42">Sustainability is central to everything we do. With the majority of our suppliers sourcing wood from FSC or PEFC-certified forests and LEED-accredited facilities in Dubai and Abu Dhabi, we support responsible sourcing and green building practices. Through partnerships with globally certified manufacturers and recycling initiatives with BEE’AH Tandeef, we continue to reduce environmental impact while creating workspaces that balance design, functionality, and environmental responsibility.</p>
-          </div>
-          <div class="col-lg-6">
-            <h3>Sustainability Approach</h3>
-            <p style="color: #383E42">
-             At The Total Office, sustainability isn’t just a practice, it’s part of who we are. Our people bring expertise and credibility, including three LEED Green Associate certifications and a WELL AP, and a commitment to continual learning in the sustainability space. Our places reflect this dedication, with LEED-certified offices in Abu Dhabi since 2010 and Dubai since 2011.
-            </p>
-            <p style="color: #383E42">
-             Our products are carefully curated with sustainability in mind, supported by a robust database of certificates integrated into every quote. Across our practice, we adhere to international standards with ISO 14001, ISO 9001, and ISO 45001 Environmental Management Systems, ensuring every process aligns with environmental responsibility.
+    <!-- SLIDE 2: STEP 1 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">01</span>
+          <span class="step-duration">GET STARTED</span>
+        </div>
+        <div class="step-body">
+          <h2 class="step-title">Design Specifications</h2>
+          <p class="step-text">Provide detailed specifications, drawings, dimensions, and materials to our team. Stellar Works can quote all upholstered, non-upholstered, and case goods FF&amp;E to match your custom aesthetic.</p>
+        </div>
+        <!-- Card bottom image completely removed as requested, card is pure white -->
+      </div>
+      
+      <!-- Sofa Floating Layer -->
+      <div class="layer-sofa-top scroll-parallax" data-speed="-0.15">
+        <img src="{{ asset('frontend_assets/images/about_images/upper_two.png') }}" alt="Design specifications sofa cutout">
+      </div>
+    </section>
 
-            </p>
-            <p style="color: #383E42">Our promise is clear: we are committed to achieving Net Zero Emissions by 2045 while continuously reducing our environmental impact, shaping a better future for our people, our clients, and the planet.</p>
-          </div>
+    <!-- SLIDE 3: SPACER SHOWCASE 1 (Full Image 2 - second_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/second_img.webp') }}" alt="Full Image Showcase 1" class="section-bg-img">
+      </div>
+    </section>
+
+    <!-- SLIDE 4: STEP 2 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">02</span>
+          <span class="step-duration">1 - 2 WEEKS</span>
+        </div>
+        <div class="step-body">
+          <h2 class="step-title">Quotation</h2>
+          <p class="step-text">Our dedicated engineering and pricing team reviews materials, structural integrity, and craftsmanship requirements to construct a highly detailed bespoke production quotation tailored specifically to your project requirements.</p>
         </div>
       </div>
     </section>
 
-    <!-- Category Slider (same as homepage) -->
-    <section class="slider-section">
-        <div class="slider-container">
-            <div class="slider-wrapper" id="sliderWrapper">
-                @foreach($productTypes as $index => $type)
-                @php
-                    $imageMap = [
-                        'furniture' => 'furniture.png',
-                        'acustic-products' => 'acoustic.png',
-                        'writable-surfaces' => 'writable.png',
-                        'fabrics' => 'fabrics.png',
-                        'greenwalls' => 'greenwalls.png',
-                    ];
-                    $imageName = $imageMap[$type->slug] ?? 'banner_img.png';
-                @endphp
-                <div class="category-card" data-index="{{ $index }}" onclick="window.location.href='{{ route('product_type.detail', $type->slug) }}'" style="cursor:pointer;">
-                    <div class="card-icon">
-                        <img src="{{ asset('frontend_assets/images/' . $imageName) }}" alt="{{ $type->name }}" />
-                    </div>
-                    <h3 class="card-title">{{ $type->name }}</h3>
-                    <p class="card-items">{{ $type->products_count > 0 ? $type->products_count . '+' : '40+' }} items</p>
-                </div>
-                @endforeach
-            </div>
+    <!-- SLIDE 5: SPACER SHOWCASE 2 (Full Image 3 - third_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/third_img.webp') }}" alt="Full Image Showcase 2" class="section-bg-img">
+      </div>
+    </section>
+
+    <!-- SLIDE 6: STEP 3 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">03</span>
+          <span class="step-duration">1 WEEK</span>
         </div>
+        <div class="step-body">
+          <h2 class="step-title">Order Placement</h2>
+          <p class="step-text">Upon receiving your official Purchase Order (PO) and initial deposit, our project managers initiate the project kickoff. We immediately schedule resources and begin creating technical shop drawings for your approval.</p>
+        </div>
+      </div>
+      
+      <!-- Sofa style sliding layer: Fabric Rolls -->
+      <div class="floating-layer layer-fabric-top scroll-parallax" data-speed="-0.15">
+        <img src="{{ asset('frontend_assets/images/about_images/upper_four_img.webp') }}" alt="Fabric rolls">
+      </div>
+    </section>
 
-        <div class="dots-container" id="dotsContainer"></div>
+    <!-- SLIDE 7: SPACER SHOWCASE 3 (Full Image 4 - fourth_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/fourth_img.webp') }}" alt="Full Image Showcase 3" class="section-bg-img">
+      </div>
+    </section>
 
-        <div class="text-center">
-            <a href="#" class="cta-button">SEE ALL PRODUCTS</a>
+    <!-- SLIDE 8: STEP 4 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">04</span>
+          <span class="step-duration">2 - 3 WEEKS</span>
+        </div>
+        <div class="step-body">
+          <h2 class="step-title">Shop Drawings &amp; Samples</h2>
+          <p class="step-text">Our draftspeople create exact shop drawings. Simultaneously, you send physical control samples to Stellar Works to initiate precise matching of wood finishes, lacquer, metal coatings, and custom upholstery textures.</p>
+        </div>
+      </div>
+
+      <!-- Shop Drawing Blueprint floating layer -->
+      <div class="floating-layer layer-six-right scroll-parallax" data-speed="-0.15">
+        <img src="{{ asset('frontend_assets/images/about_images/upper-sixth_img.webp') }}" alt="Shop drawings blueprint specification">
+      </div>
+    </section>
+
+    <!-- SLIDE 9: SPACER SHOWCASE 4 (Full Image 5 - fifth-img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/fifth-img.webp') }}" alt="Full Image Showcase 4" class="section-bg-img">
+      </div>
+      <!-- Spec Sheet Floating Layer -->
+      <div class="floating-layer layer-center layer-spec-sheet scroll-parallax" data-speed="0.1">
+        <img src="{{ asset('frontend_assets/images/about_images/upper_fifth_img.webp') }}" alt="Upholstery specification" class="spec-img">
+      </div>
+    </section>
+
+    <!-- SLIDE 10: STEP 5 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">05</span>
+          <span class="step-duration">2 - 4 WEEKS</span>
+        </div>
+        <div class="step-body">
+          <h2 class="step-title">Client Review Process</h2>
+          <p class="step-text">Collaborate dynamically with Stellar Works' engineers, designers, and project managers. We work together iteratively to review, adjust, and approve every detail of the shop drawings and structural material control blocks.</p>
         </div>
     </section>
 
-    <!-- USP Tabs -->
-    <section class="ab-usp">
-      <div class="container">
-        <h3><b>N/A</b>  USP's</h3>
-        <div class="ab-usp-sub">
-          With the new AirPlay 2, you can control your home audio system and the
-          speakers throughout your house 4 You can play a song in the living room
-          and your kitchen at the same time.
-        </div>
+    <!-- SLIDE 11: SPACER SHOWCASE 5 (Full Image 6 - sixth_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/sixth_img.webp') }}" alt="Full Image Showcase 5" class="section-bg-img">
+      </div>
+    </section>
 
-        <div class="row g-4">
-          <div class="col-md-4">
-            <div class="usp-title">USP 1</div>
-            <p class="usp-desc">
-              Eget neque lorem commodo sit. Viverra ut posuere consequat
-              nunc.
-            </p>
-          </div>
-          <div class="col-md-4">
-            <div class="usp-title">USP 2</div>
-            <p class="usp-desc">
-              Cum lacinia magna aliquet metus. Arcu tortor, nisi id dui
-              amet ac eu. Turpis erat ornare mauris, aliquet arcu.
-              facilisis eleifend.
-            </p>
-          </div>
-          <div class="col-md-4">
-            <div class="usp-title">USP 3</div>
-            <p class="usp-desc">
-              Id senectus semper id lacus. Risus a, erat arcu morbi
-              tortor. Nisl, vel mauris vulputate arcu venenatis.
-            </p>
-          </div>
+    <!-- SLIDE 12: STEP 6 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">06</span>
+          <span class="step-duration">6 - 8 WEEKS</span>
         </div>
+        <div class="step-body">
+          <h2 class="step-title">Prototype Production</h2>
+          <p class="step-text">Upon final approval of all shop drawings and materials, we construct physical prototypes for complex items or a Mock-Up Room. This allows real-world validation of sit comfort, proportions, and craftsmanship quality before volume manufacturing.</p>
+        </div>
+      </div>
 
-        <div class="row g-4 mt-2">
-          <div class="col-md-4">
-            <div class="ab-pattern ab-box-sm"></div>
-          </div>
-          <div class="col-md-8">
-            <div class="ab-pattern ab-box-lg"></div>
-          </div>
+      <!-- Interactive floating layer: Custom Wooden Chair -->
+      <div class="floating-layer layer-chair-top scroll-parallax" data-speed="-0.1">
+        <img src="{{ asset('frontend_assets/images/about_images/upper_seven_img.png') }}" alt="Floating wooden chair structure">
+      </div>
+    </section>
+
+    <!-- SLIDE 13: SPACER SHOWCASE 6 (Full Image 7 - seventh_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/seventh_img.webp') }}" alt="Full Image Showcase 6" class="section-bg-img">
+      </div>
+    </section>
+
+    <!-- SLIDE 14: STEP 7 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">07</span>
+          <span class="step-duration">8 WEEKS</span>
+        </div>
+        <div class="step-body">
+          <h2 class="step-title">Roll Out Production</h2>
+          <p class="step-text">This stage marks full-scale manufacturing in our advanced production facilities. We apply hand-finished wood joint details and premium upholstery techniques. Detailed step-by-step progress photos can be provided upon request.</p>
         </div>
       </div>
     </section>
 
-    <!-- History with tabs + timeline -->
-    <section class="ab-history">
-      <div class="container">
-        <div class="mb-2" style="color: #383E42; font-weight: 800">
-          Our History
+    <!-- SLIDE 15: SPACER SHOWCASE 7 (Full Image 8 - eighth_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/eighth_img.webp') }}" alt="Full Image Showcase 7" class="section-bg-img">
+      </div>
+    </section>
+
+    <!-- SLIDE 16: STEP 8 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">08</span>
+          <span class="step-duration">OCEAN OR AIR</span>
         </div>
-        <ul class="nav nav-pills" id="histTabs" role="tablist">
-          <li class="nav-item">
-            <button
-              class="nav-link active"
-              data-bs-toggle="pill"
-              data-bs-target="#hist1"
-            >
-              Our History
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link"
-              data-bs-toggle="pill"
-              data-bs-target="#hist2"
-            >
-              Future Roadmap
-            </button>
-          </li>
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane fade show active" id="hist1">
-            <h2>1997: The Foundation</h2>
-            <div class="row g-4">
-              <div class="col-md-4">
-                <p style="color: #383E42">
-                <b>Company Inception:</b> Established in the UAE with a mission to redefine the workplace experience.
-                </p>
-              </div>
-              <div class="col-md-4">
-                <p style="color: #383E42">
-                <b>The Original Team:</b> Started as a lean 4-person operation.
-                </p>
-              </div>
-              <div class="col-md-4">
-                <p style="color: #383E42">
-                <b>Teknion Partnership:</b> Launched primarily as a <b>Teknion Dealership</b>, introducing the region to high-end architectural and ergonomic furniture.
-                </p>
-              </div>
-              <div class="col-md-12">
-                <h4 style="color: #383E42">Late 1990s: Landmark Achievements</h4>
-                <p style="color: #383E42">
-               <b> The Emirates NBD HQ:</b> Secured its first landmark project—the Emirates NBD Headquarters. This success set the standard for the company’s future in large-scale corporate interiors.
-                </p>
-              </div>
-            </div>
-            <div class="ab-timeline row g-4 mt-3">
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2000s – 2010s: Growth & Evolution</div>
-                <ul class="list-unstyled" style="color: #383E42">
-                  <li><b>Regional Authority:</b> Expanded its portfolio to include global brands across acoustics, flooring, and lighting.</li>
-                  <li class="mt-2">
-                    <b>Human-Centric Design: </b> Shifted focus toward wellness-oriented workspaces, incorporating ergonomic research and sustainable materials into every project.
-                  </li>
-                </ul>
-              </div>
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2020 – 2023: Adaptation & Resilience</div>
-                <ul class="list-unstyled" style="color: #383E42">
-                  <li><b>The Hybrid Shift:</b> Successfully guided clients through the pandemic-era transition to hybrid and agile work models.</li>
-                  <li class="mt-2">
-                    <b>Sustainability Leadership:</b> Deepened commitment to LEED and WELL-certified standards, positioning the company as a leader in green workplace design.
-                  </li>
-                </ul>
-              </div>
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2024: Strategic Expansion to KSA</div>
-                <ul class="list-unstyled" style="color: #383E42">
-                  <li><b>The Saudi Launch:</b> In response to the massive growth of Vision 2030, The Total Office officially expanded into Saudi Arabia (KSA).</li>
-                  <li class="mt-2">
-                    <b>Regional Headquarters:</b> Establishing a presence in the Kingdom allowed the company to directly support the surge of multinational corporations setting up their regional HQs in Riyadh and beyond.
-                  </li>
-                </ul>
-              </div>
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2025: Innovation & The Future of Work</div>
-                <ul class="list-unstyled" style="color: #383E42">
-                  <li><b>Smart Office Integration:</b> (Current/Upcoming) Deploying AI-driven space utilization tools and IoT-integrated furniture to help firms optimize their real estate.</li>
-                  <li class="mt-2">
-                   <b> Net-Zero Focus:</b> Aiming to become the primary consultant for companies looking to achieve carbon-neutral workplaces through circular economy furniture practices.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="hist2">
-            <h2>Future Roadmap</h2>
-            <div class="ab-timeline row g-4 mt-3">
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2025</div>
-                <p>Key milestone one.</p>
-              </div>
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2026</div>
-                <p>Key milestone two.</p>
-              </div>
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2027</div>
-                <p>Key milestone three.</p>
-              </div>
-              <div class="col-6 col-md-3 ab-time-item">
-                <div class="year">2030</div>
-                <p>Key milestone four.</p>
-              </div>
-            </div>
-          </div>
+        <div class="step-body">
+          <h2 class="step-title">Transport &amp; Shipping</h2>
+          <p class="step-text">We pack each product with maximum-protection packaging material. Choose your preferred transport: 6 weeks via secure ocean freight (global) or fast air freight (1-2 weeks in US) directly to your project destination.</p>
         </div>
       </div>
     </section>
 
-    <!-- Team with tabs and stacked images groups -->
-    <section class="ab-team">
-      <div class="container">
-        <h3>The Team</h3>
-        <div class="d-flex justify-content-center mb-3">
-          <ul class="nav nav-pills" id="teamTabs" role="tablist">
-            <li class="nav-item">
-              <button
-                class="nav-link active"
-                data-bs-toggle="pill"
-                data-bs-target="#board"
-              >
-                Board Members
-              </button>
-            </li>
-            <li class="nav-item">
-              <button
-                class="nav-link"
-                data-bs-toggle="pill"
-                data-bs-target="#mgmt"
-              >
-                Management
-              </button>
-            </li>
-          </ul>
+    <!-- SLIDE 17: SPACER SHOWCASE 8 (Full Image 9 - nineth_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/nineth_img.webp') }}" alt="Full Image Showcase 8" class="section-bg-img">
+      </div>
+      <!-- Spec Sheet Floating Layer -->
+      <div class="floating-layer layer-center layer-spec-sheet scroll-parallax nine_img_height" data-speed="0.1">
+        <img src="{{ asset('frontend_assets/images/about_images/upper_nine_img.webp') }}" alt="Specification layout nine" class="spec-img">
+      </div>
+    </section>
+
+    <!-- SLIDE 18: STEP 9 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">09</span>
+          <span class="step-duration">UPON ARRIVAL</span>
         </div>
-        <div class="tab-content">
-          <div class="tab-pane fade show active" id="board">
-            <div class="row g-4 text-primary">
-              <div class="col-6 col-lg-3 ab-team-group">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team 1</div>
-              </div>
-              <div class="col-6 col-lg-3 ab-team-group ab-stagger">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team 2</div>
-              </div>
-              <div class="col-6 col-lg-3 ab-team-group">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team 3</div>
-              </div>
-              <div class="col-6 col-lg-3 ab-team-group ab-stagger">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team 4</div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="mgmt">
-            <div class="row g-4 text-primary">
-              <div class="col-6 col-lg-3 ab-team-group">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team A</div>
-              </div>
-              <div class="col-6 col-lg-3 ab-team-group ab-stagger">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team B</div>
-              </div>
-              <div class="col-6 col-lg-3 ab-team-group">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team C</div>
-              </div>
-              <div class="col-6 col-lg-3 ab-team-group ab-stagger">
-                <div class="ab-stack">
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                  <div class="ab-card"></div>
-                </div>
-                <div class="ab-team-name">Team D</div>
-              </div>
-            </div>
-          </div>
+        <div class="step-body">
+          <h2 class="step-title">Delivery &amp; Installation</h2>
+          <p class="step-text">Your dedicated Stellar Works project manager will be on-site or in close communication to assist with final destination logistics, smooth customs clearance, white-glove assembly, troubleshooting, and adjustments.</p>
         </div>
       </div>
     </section>
 
-    <!-- Sustainability list -->
-    <section class="ab-sus">
-      <div class="container">
-        <h3>Sustainability</h3>
-        <div class="ab-srow row g-3 align-items-start">
-          <div class="col-2 col-md-1 ab-snum">01</div>
-          <div class="col-10 col-md-5 ab-sname">Low Waste</div>
-          <div class="col-12 col-md-6 ab-sdesc">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-          </div>
+    <!-- SLIDE 19: SPACER SHOWCASE 9 (Full Image 10 - tenth_img.webp clear in gap) -->
+    <section class="timeline-section spacer-section">
+      <div class="section-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/tenth_img.webp') }}" alt="Full Image Showcase 9" class="section-bg-img">
+      </div>
+      <!-- Spec Sheet Floating Layer -->
+      <div class="floating-layer layer-center layer-spec-sheet scroll-parallax nine_img_height" data-speed="0.1">
+        <img src="{{ asset('frontend_assets/images/about_images/upper_ten_img.webp') }}" alt="Specification layout ten" class="spec-img">
+      </div>
+    </section>
+
+    <!-- SLIDE 20: STEP 10 (Pure White Card, No Image bottom) -->
+    <section class="timeline-section step-section">
+      <div class="step-card">
+        <div class="step-header">
+          <span class="step-number">10</span>
+          <span class="step-duration">ONGOING</span>
         </div>
-        <div class="ab-srow row g-3 align-items-start">
-          <div class="col-2 col-md-1 ab-snum">02</div>
-          <div class="col-10 col-md-5 ab-sname">
-            Our products are made from 100% <br/> recycled material.
-          </div>
-          <div class="col-12 col-md-6 ab-sdesc">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-          </div>
-        </div>
-        <div class="ab-srow row g-3 align-items-start">
-          <div class="col-2 col-md-1 ab-snum">03</div>
-          <div class="col-10 col-md-5 ab-sname">
-            Our goal is to have zero carbon <br/> footprint by 2030.
-          </div>
-          <div class="col-12 col-md-6 ab-sdesc">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-          </div>
-        </div>
-        <div class="ab-srow row g-3 align-items-start">
-          <div class="col-2 col-md-1 ab-snum">04</div>
-          <div class="col-10 col-md-5 ab-sname">
-            All our products made with <br/> sustainability in mind
-          </div>
-          <div class="col-12 col-md-6 ab-sdesc">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-          </div>
+        <div class="step-body">
+          <h2 class="step-title">Post Delivery Support</h2>
+          <p class="step-text">Our support never stops. Stellar Works stands firmly behind every handcrafted piece, offering an industry-leading standard 5-year commercial furniture structural warranty to ensure lifelong quality.</p>
         </div>
       </div>
     </section>
 
-    <!-- Testimonials Slider Section -->
-    <section class="testi-slider-section">
-        <div class="testi-slider-header">
-            <h2 class="testi-slider-title">Testimonials</h2>
-        </div>
+    <!-- SLIDE 21: CTA FULL SCREEN LANDING (No Card, Last Image as Background with content on top) -->
+    <section class="timeline-section cta-section">
+      <div class="cta-bg-wrapper">
+        <img src="{{ asset('frontend_assets/images/about_images/last_background_img.webp') }}" alt="Bespoke Guide CTA Background" class="cta-bg-img">
+      </div>
+      <div class="cta-overlay-dark"></div>
 
-        <div class="testi-slider-wrapper">
-            <button class="testi-nav-btn testi-nav-prev" onclick="testiPrev()">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-
-            <div class="testi-slider-inner">
-                <!-- Cards viewport -->
-                <div class="testi-cards-viewport">
-                    <div class="testi-cards-track" id="testiSliderTrack">
-                        <!-- Card 1 -->
-                        <div class="testi-slide-card">
-                            <p class="testi-slide-quote">
-                                "All base UI elements are made using Nested Symbols and shared
-                                styles that are logically connected. Gorgeous, high-quality
-                                video sharing on desktop, mobile, tablet.
-                                All base UI elements are made using Nested Symbols"
-                            </p>
-                            <div class="testi-slide-author">
-                                <img src="{{ asset('frontend_assets/images/testimonial_user.png') }}" class="testi-avatar" alt="avatar">
-                                <div>
-                                    <div class="testi-name">Name Surname</div>
-                                    <div class="testi-company">Founder, Acme Company</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div class="testi-slide-card">
-                            <p class="testi-slide-quote">
-                                "All base UI elements are made using Nested Symbols and shared
-                                styles that are logically connected. Gorgeous, high-quality
-                                video sharing on desktop, mobile, tablet.
-                                All base UI elements are made using Nested Symbols"
-                            </p>
-                            <div class="testi-slide-author">
-                                <img src="{{ asset('frontend_assets/images/testimonial_user.png') }}" class="testi-avatar" alt="avatar">
-                                <div>
-                                    <div class="testi-name">Name Surname</div>
-                                    <div class="testi-company">Founder, Acme Company</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="testi-slide-card">
-                            <p class="testi-slide-quote">
-                                "All base UI elements are made using Nested Symbols and shared
-                                styles that are logically connected. Gorgeous, high-quality
-                                video sharing on desktop, mobile, tablet.
-                                All base UI elements are made using Nested Symbols"
-                            </p>
-                            <div class="testi-slide-author">
-                                <img src="{{ asset('frontend_assets/images/testimonial_user.png') }}" class="testi-avatar" alt="avatar">
-                                <div>
-                                    <div class="testi-name">Name Surname</div>
-                                    <div class="testi-company">Founder, Acme Company</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 4 -->
-                        <div class="testi-slide-card">
-                            <p class="testi-slide-quote">
-                                "All base UI elements are made using Nested Symbols and shared
-                                styles that are logically connected. Gorgeous, high-quality
-                                video sharing on desktop, mobile, tablet.
-                                All base UI elements are made using Nested Symbols"
-                            </p>
-                            <div class="testi-slide-author">
-                                <img src="{{ asset('frontend_assets/images/testimonial_user.png') }}" class="testi-avatar" alt="avatar">
-                                <div>
-                                    <div class="testi-name">Name Surname</div>
-                                    <div class="testi-company">Founder, Acme Company</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="testi-nav-btn testi-nav-next" onclick="testiNext()">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
+      <div class="cta-card glass-glow">
+        <span class="cta-subtitle">Ready to Begin?</span>
+        <h2 class="cta-title">Bespoke Process Guide</h2>
+        <p class="cta-text">Download our detailed PDF guide which aggregates dimensions, material standards, and technical engineering workflows to get started today.</p>
+        
+        <a href="https://cdn.prod.website-files.com/666864cc2e2e84bfc95881ec/69a8b04a03df4360a539fe64_Ver4_OnePager_compressed%20(1).pdf" target="_blank" class="download-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="download-icon">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          <span>Download Process PDF</span>
+        </a>
+      </div>
     </section>
 
-    <script>
-        // Testimonials Slider
-        (function() {
-            const track = document.getElementById('testiSliderTrack');
-            if (!track) return;
-            const cards = track.querySelectorAll('.testi-slide-card');
-            const totalCards = cards.length;
-            let testiIndex = 0;
+  </main>
 
-            function getCardsPerView() {
-                if (window.innerWidth <= 576) return 1;
-                if (window.innerWidth <= 992) return 2;
-                return 3;
-            }
+  <!-- Sticky Left & Right Navigation Arrows (White/Light Theme Optimized) -->
+  <div class="navigation-controls">
+    <button id="navBtnLeft" class="nav-control-btn left" aria-label="Scroll left">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button id="navBtnRight" class="nav-control-btn right" aria-label="Scroll right">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
 
-            function updateTestiSlider() {
-                const perView = getCardsPerView();
-                const maxIndex = Math.max(0, totalCards - perView);
-                if (testiIndex > maxIndex) testiIndex = maxIndex;
-                const pct = (testiIndex / perView) * 100;
-                track.style.transform = 'translateX(-' + pct + '%)';
-            }
+  <!-- Custom subtle progress indicator -->
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progressBarFill"></div>
+  </div>
 
-            window.testiNext = function() {
-                const perView = getCardsPerView();
-                const maxIndex = Math.max(0, totalCards - perView);
-                testiIndex = Math.min(testiIndex + 1, maxIndex);
-                updateTestiSlider();
-            };
+  <!-- Script tags -->
+  <script src="{{ asset('frontend_assets/js/about/script_v2.js') }}"></script>
+</body>
+</html>
 
-            window.testiPrev = function() {
-                testiIndex = Math.max(testiIndex - 1, 0);
-                updateTestiSlider();
-            };
-
-            window.addEventListener('resize', updateTestiSlider);
-        })();
-    </script>
-
-    <script>
-        (function() {
-            const sliderWrapper = document.getElementById('sliderWrapper');
-            if (!sliderWrapper) return;
-            const dotsContainer = document.getElementById('dotsContainer');
-            const cardsContainer = sliderWrapper;
-
-            // Clone all cards for infinite loop
-            const originalCards = Array.from(cardsContainer.children);
-            if (originalCards.length === 0) return;
-            
-            originalCards.forEach(card => {
-                const clone = card.cloneNode(true);
-                cardsContainer.appendChild(clone);
-            });
-
-            const allCards = document.querySelectorAll('.category-card');
-            let currentIndex = 0;
-            const totalCards = originalCards.length;
-
-            // Calculate card width dynamically based on screen size
-            function getCardWidth() {
-                if (window.innerWidth <= 480) {
-                    return 215; // 200px card + 15px gap
-                } else if (window.innerWidth <= 768) {
-                    return 240; // 220px card + 20px gap
-                } else if (window.innerWidth <= 992) {
-                    return 290; // 260px card + 30px gap
-                }
-                return 310; // 280px card + 30px gap (desktop)
-            }
-
-            let cardWidth = getCardWidth();
-
-            // Update card width on window resize
-            window.addEventListener('resize', () => {
-                cardWidth = getCardWidth();
-                updateSlider(false);
-            });
-
-            // Create dots
-            for (let i = 0; i < totalCards; i++) {
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                if (i === 0) dot.classList.add('active');
-                dot.addEventListener('click', () => goToSlide(i));
-                dotsContainer.appendChild(dot);
-            }
-
-            const dots = dotsContainer.querySelectorAll('.dot');
-
-            function updateElevatedCard() {
-                // Remove elevated class from all cards
-                allCards.forEach(card => card.classList.remove('elevated'));
-
-                // Add elevated class to cards in 2nd and 4th positions
-                // 2nd visible card is at position currentIndex + 1
-                const secondPosition = (currentIndex + 1) % (totalCards * 2);
-                // 4th visible card is at position currentIndex + 3
-                const fourthPosition = (currentIndex + 3) % (totalCards * 2);
-
-                if (allCards[secondPosition]) {
-                    allCards[secondPosition].classList.add('elevated');
-                }
-                if (allCards[fourthPosition]) {
-                    allCards[fourthPosition].classList.add('elevated');
-                }
-            }
-
-            function updateSlider(smooth = true) {
-                if (!smooth) {
-                    sliderWrapper.style.transition = 'none';
-                } else {
-                    sliderWrapper.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                }
-
-                // Smooth slide animation
-                sliderWrapper.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
-
-                // Update dots (modulo for infinite loop)
-                dots.forEach((dot, index) => {
-                    dot.classList.remove('active');
-                    if (index === currentIndex % totalCards) {
-                        dot.classList.add('active');
-                    }
-                });
-
-                // Update elevated cards based on position
-                updateElevatedCard();
-
-                // Handle infinite loop - reset position when reaching cloned cards
-                if (currentIndex >= totalCards) {
-                    setTimeout(() => {
-                        currentIndex = 0;
-                        updateSlider(false);
-                    }, 600); // Wait for animation to complete
-                }
-            }
-
-            function goToSlide(index) {
-                currentIndex = index;
-                updateSlider();
-            }
-
-            // Auto-play slider with infinite loop
-            setInterval(() => {
-                currentIndex++;
-                updateSlider();
-            }, 2500); // Auto slides every 2.5 seconds
-
-            // Keyboard navigation
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft') {
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                    } else {
-                        currentIndex = totalCards - 1;
-                    }
-                    updateSlider();
-                } else if (e.key === 'ArrowRight') {
-                    currentIndex++;
-                    updateSlider();
-                }
-            });
-
-            // Touch/Swipe support for mobile
-            let touchStartX = 0;
-            let touchEndX = 0;
-
-            sliderWrapper.addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-            });
-
-            sliderWrapper.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            });
-
-            function handleSwipe() {
-                if (touchEndX < touchStartX - 50) {
-                    currentIndex++;
-                    updateSlider();
-                }
-                if (touchEndX > touchStartX + 50) {
-                    if (currentIndex > 0) {
-                        currentIndex--;
-                    } else {
-                        currentIndex = totalCards - 1;
-                    }
-                    updateSlider();
-                }
-            }
-
-            // Initialize
-            updateSlider();
-        })();
-    </script>
-@endsection

@@ -150,7 +150,7 @@
                     
                         Separated they live in Bookmarks right
                     </p>
-                    <a href="#" class="services-process-link">
+                    <a href="{{ route('ideal.workspace') }}" class="services-process-link">
                         <span>Explore More</span>
                         <i class="fas fa-chevron-right"></i>
                     </a>

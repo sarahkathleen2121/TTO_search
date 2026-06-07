@@ -1,0 +1,649 @@
+/* About Page Variables */
+:root {
+    --ab-soft: #edf4fe;
+    --ab-border: #d6e4f5;
+}
+
+/* ===== Hero ===== */
+.ab-hero {
+    background: #eff0f0;
+    border: none;
+    padding: 30px 0 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 400px;
+    justify-content: center;
+}
+/*
+.category-card {
+    min-width: 280px;
+    min-height: 320px;
+    background: #eff0f0;
+    border-radius: 0px;
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: start;
+    justify-content: center !important;
+}
+.card-icon img {
+    opacity: 0.5;
+}
+*/
+.ab-breadcrumb {
+    color: var(--primary-color);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.ab-hero-title {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 48px;
+    text-align: center;
+    margin: 0 0 14px;
+}
+
+.ab-hero-sub {
+    color: #383E42;
+    text-align: center;
+    font-size: 14px;
+    max-width: 450px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* ===== About Us ===== */
+.ab-about {
+    padding: 50px 0 40px;
+    background: #fff;
+}
+
+.ab-about h3 {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 28px;
+    font-style: italic;
+    margin-bottom: 14px;
+}
+
+/* Image gallery row */
+.ab-img {
+    background: #eef5ff;
+    border: 1px solid var(--ab-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0px;
+}
+
+.ab-img i {
+    color: #383E42;
+    font-size: 38px;
+}
+
+.ab-h-1 {
+    height: 220px;
+}
+
+.ab-h-2 {
+    height: 300px;
+}
+
+/* ===== USP Section ===== */
+.ab-usp {
+    padding: 40px 0 50px;
+    background: #fff;
+}
+
+.ab-usp h3 {
+    color: var(--primary-color);
+    font-weight: 800;
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.ab-usp-sub {
+    color: #383E42;
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 30px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* USP Content */
+.ab-usp .usp-title {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 15px;
+    border-bottom: 2px solid #cfe0ff;
+    display: block;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+}
+
+.usp-desc {
+    color: #383E42;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.7;
+    font-weight: 400;
+}
+
+/* Striped pattern boxes */
+.ab-pattern {
+    /* background: repeating-linear-gradient(
+        45deg,
+        #eff5ff 0,
+        #eff5ff 12px,
+        #e4eeff 12px,
+        #e4eeff 24px
+    ); */
+    background: url("../images/linning_image.png");
+    /* border: 1px solid var(--ab-border); */
+    border-radius: 0px;
+    background-size: cover;
+}
+
+.ab-box-sm {
+    height: 260px;
+}
+
+.ab-box-lg {
+    height: 360px;
+}
+
+/* ===== History Section ===== */
+.ab-history {
+    padding: 40px 0 50px;
+    background: #fff;
+}
+
+.ab-history .nav-pills {
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.ab-history .nav-link {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 13px;
+    border: 2px solid var(--primary-color);
+    border-radius: 0px;
+    padding: 8px 20px;
+    background: transparent;
+    transition: all 0.3s;
+}
+
+.ab-history .nav-link.active {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.ab-history h2 {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 36px;
+    font-style: italic;
+    margin: 10px 0 16px;
+}
+
+/* Timeline */
+.ab-timeline {
+    border-top: 2px solid #cfe0ff;
+    padding-top: 20px;
+    margin-top: 30px;
+}
+
+.ab-time-item .year {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.ab-time-item p {
+    color: #383E42;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ===== Team Section ===== */
+.ab-team {
+    background: #eff0f0;
+    padding: 80px 0 100px;
+}
+
+.ab-team h3 {
+    text-align: center;
+    color: #383E42;
+    font-weight: 800;
+    font-size: 42px;
+    margin-bottom: 30px;
+}
+
+.ab-team .nav-pills {
+    gap: 8px;
+}
+
+.ab-team .nav-link {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 13px;
+    border: 2px solid #383E42;
+    border-radius: 0px;
+    padding: 8px 20px;
+    background: transparent;
+    transition: all 0.3s;
+}
+
+.ab-team .nav-link.active {
+    background: #383E42;
+    color: #fff;
+}
+
+.ab-team .tab-content {
+    margin-top: 50px;
+}
+
+.ab-team-group {
+    text-align: left;
+    color: #383E42;
+    font-weight: 800;
+    font-size: 22px;
+}
+
+.ab-team-name {
+    margin-top: 20px;
+    padding-left: 10px;
+    text-align: center;
+}
+
+/* For the staggered columns */
+.ab-stagger {
+    margin-top: 60px;
+}
+
+/* Stacked cards with rotation */
+.ab-stack {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    margin: 0 0 12px;
+}
+
+.ab-card {
+    position: absolute;
+    background: #dcdede;
+    border: 1px solid #c1c4c5;
+    border-radius: 0;
+    background-image: url("../images/banner_img.png");
+    background-size: 70%;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
+    background-repeat: no-repeat;
+}
+
+/* Card positions for scattered look */
+.ab-card:nth-child(1) {
+    left: 5%;
+    top: 15%;
+    width: 55%;
+    height: 50%;
+    z-index: 1;
+    animation: cardFloat1 4s ease-in-out infinite;
+}
+
+.ab-card:nth-child(2) {
+    right: 5%;
+    top: 0%;
+    width: 60%;
+    height: 55%;
+    z-index: 2;
+    animation: cardFloat2 5s ease-in-out infinite;
+}
+
+.ab-card:nth-child(3) {
+    left: 15%;
+    top: 40%;
+    width: 65%;
+    height: 60%;
+    z-index: 3;
+    animation: cardFloat3 4.5s ease-in-out infinite;
+}
+
+/* Card float/rotate animations */
+@keyframes cardFloat1 {
+    0%,
+    100% {
+        transform: rotate(-8deg) translateY(0);
+    }
+
+    50% {
+        transform: rotate(-3deg) translateY(-8px);
+    }
+}
+
+@keyframes cardFloat2 {
+    0%,
+    100% {
+        transform: rotate(5deg) translateY(0);
+    }
+
+    50% {
+        transform: rotate(2deg) translateY(-10px);
+    }
+}
+
+@keyframes cardFloat3 {
+    0%,
+    100% {
+        transform: rotate(-3deg) translateY(0);
+    }
+
+    50% {
+        transform: rotate(3deg) translateY(-6px);
+    }
+}
+
+/* ===== Sustainability ===== */
+.ab-sus {
+    padding: 40px 0 50px;
+    background: #fff;
+}
+
+.ab-sus h3 {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.ab-srow {
+    padding: 18px 0;
+    border-bottom: 1px solid #e9f0ff;
+}
+
+.ab-snum {
+    color: #383E42;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.ab-sname {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 20px;
+    font-family: "Roboto", sans-serif;
+}
+
+.ab-sdesc {
+    color: #383E42;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* ===== Testimonials Slider (same as homepage) ===== */
+/*
+.testi-slider-section {
+    background: #eff0f0b2;
+    padding: 60px 0;
+    /* border-top: 3px solid var(--primary-color); */
+}
+
+.testi-slider-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.testi-slider-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.testi-slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.testi-slider-inner {
+    flex: 1;
+    display: flex;
+    gap: 30px;
+    align-items: stretch;
+    overflow: hidden;
+}
+
+.testi-slider-image {
+    flex: 0 0 260px;
+    min-height: 280px;
+    background-color: #e6ebeb !important;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    color: var(--primary-color);
+}
+
+.testi-cards-viewport {
+    flex: 1;
+    overflow: hidden;
+}
+
+.testi-cards-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.testi-slide-card {
+    flex: 0 0 50%;
+    min-width: 50%;
+    padding: 0 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.testi-slide-quote {
+    font-size: 13px;
+    color: var(--primary-color);
+    line-height: 1.7;
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.testi-slide-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.testi-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #d8e8fa;
+    flex-shrink: 0;
+}
+
+.testi-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.testi-company {
+    font-size: 12px;
+    color: var(--primary-color);
+    opacity: 0.7;
+}
+
+.testi-nav-btn {
+    width: 36px;
+    height: 36px;
+    border: 0px solid var(--primary-color) !important;
+    background-color: transparent !important;
+    color: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+.testi-nav-btn i {
+    font-size: 30px;
+    opacity: 0.6;
+}
+*/
+
+/* ===== Responsive ===== */
+@media (max-width: 992px) {
+    .ab-hero-title {
+        font-size: 38px;
+    }
+
+    .ab-history h2 {
+        font-size: 30px;
+    }
+
+    /*
+    .testi-slider-image {
+        flex: 0 0 200px;
+        min-height: 240px;
+        font-size: 45px;
+    }
+    */
+}
+
+@media (max-width: 768px) {
+    .ab-hero {
+        padding: 40px 0 30px;
+    }
+
+    .ab-hero-title {
+        font-size: 32px;
+    }
+
+    .ab-about,
+    .ab-usp,
+    .ab-history,
+    .ab-sus {
+        padding: 30px 0;
+    }
+
+    /*
+    .testi-slider-section {
+        padding: 50px 0;
+    }
+
+    .testi-slider-title {
+        font-size: 28px;
+    }
+
+    .testi-slider-inner {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .testi-slider-image {
+        flex: 0 0 auto;
+        min-height: 180px;
+        font-size: 40px;
+    }
+
+    .testi-slide-card {
+        flex: 0 0 100%;
+        min-width: 100%;
+    }
+    */
+
+    .ab-h-1 {
+        height: 180px;
+    }
+
+    .ab-h-2 {
+        height: 220px;
+    }
+
+    .ab-box-sm {
+        height: 180px;
+    }
+
+    .ab-box-lg {
+        height: 250px;
+    }
+
+    .ab-history h2 {
+        font-size: 26px;
+    }
+
+    .ab-team {
+        padding: 30px 0 40px;
+    }
+}
+
+@media (max-width: 576px) {
+    .ab-hero-title {
+        font-size: 26px;
+    }
+
+    .ab-hero-sub {
+        font-size: 12px;
+    }
+
+    .ab-h-1 {
+        height: 150px;
+    }
+
+    .ab-h-2 {
+        height: 180px;
+    }
+
+    /*
+    .testi-slider-section {
+        padding: 40px 0;
+    }
+
+    .testi-slider-title {
+        font-size: 24px;
+    }
+
+    .testi-slider-wrapper {
+        gap: 8px;
+        padding: 0 10px;
+    }
+
+    .testi-nav-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .testi-slide-quote {
+        font-size: 12px;
+    }
+    */
+
+    .ab-history h2 {
+        font-size: 22px;
+    }
+}

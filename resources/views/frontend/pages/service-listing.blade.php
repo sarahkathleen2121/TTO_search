@@ -61,7 +61,7 @@
           <div class="service-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
             laboris nisi ut aliquip ex ea commodo consequat Lorem ipsum dolor sit amet...</div>
-          <a class="service-link" href="#">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
+          <a class="service-link" href="{{route('service.detail')}}">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
         </div>
       </div>
     </div>
@@ -75,7 +75,7 @@
           <div class="service-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
             laboris nisi ut aliquip ex ea commodo consequat...</div>
-          <a class="service-link" href="#">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
+          <a class="service-link" href="{{route('service.detail')}}">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
         </div>
       </div>
     </div>
@@ -89,7 +89,7 @@
           <div class="service-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
             laboris nisi ut aliquip ex ea commodo consequat...</div>
-          <a class="service-link" href="#">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
+          <a class="service-link" href="{{route('service.detail')}}">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
         </div>
       </div>
     </div>
@@ -102,7 +102,7 @@
           <div class="service-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
             laboris nisi ut aliquip ex ea commodo consequat...</div>
-          <a class="service-link" href="#">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
+          <a class="service-link" href="{{route('service.detail')}}">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@
           <div class="service-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
             laboris nisi ut aliquip ex ea commodo consequat...</div>
-          <a class="service-link" href="#">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
+          <a class="service-link" href="{{route('service.detail')}}">Explore <i class="fa-solid fa-angle-right ms-1"></i></a>
         </div>
       </div>
     </div>

@@ -264,6 +264,12 @@ window.TtoAiSearch = window.TtoAiSearch || {};
                 if (!q) return;
                 window.location.href = `/search-results?q=${encodeURIComponent(q)}&mode=text`;
             });
+            queryInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    textBtn.click();
+                }
+            });
         }
 
         if (imageInput) {
