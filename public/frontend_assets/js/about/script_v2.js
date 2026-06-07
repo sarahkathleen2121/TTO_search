@@ -1,10 +1,11 @@
 /* ----------------------------------------------------
-   STELLAR WORKS BESPOKE PROCESS - CUSTOM PREMIUM SCRIPT
-   ZERO-DRIFT SMOOTH LERP INTERPOLATION HORIZONTAL SCROLL
+   THE TOTAL OFFICE OUR STORY - CUSTOM PREMIUM SCRIPT
+   VERTICAL-TO-HORIZONTAL SCROLL STICKY INTERPOLATION
    ---------------------------------------------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('timelineContainer');
+  const scrollPinTrack = document.getElementById('scrollPinTrack');
   const btnLeft = document.getElementById('navBtnLeft');
   const btnRight = document.getElementById('navBtnRight');
   const progressBarFill = document.getElementById('progressBarFill');
@@ -12,25 +13,43 @@ document.addEventListener('DOMContentLoaded', () => {
   let maxTranslate = 0;
   let targetX = 0;
   let currentX = 0;
-  const easeFactor = 0.08; // Adjust to control scroll inertia (smaller = smoother, larger = faster)
+  const easeFactor = 0.08; // Buttery smooth inertia
   let animFrameId = null;
 
   /* -----------------------------------------
-     1. CALCULATE LIMITS
+     1. CALCULATE LIMITS & SET HEIGHT
      ----------------------------------------- */
   const calculateSizes = () => {
-    if (window.innerWidth > 768) {
-      // Max translation is total container width minus screen width
-      maxTranslate = container.scrollWidth - window.innerWidth;
-      // Clamp targets on resize
-      targetX = Math.max(0, Math.min(targetX, maxTranslate));
+    if (window.innerWidth > 768 && container && scrollPinTrack) {
+      // Max translation is total horizontal container width minus viewport width
+      maxTranslate = Math.max(0, container.scrollWidth - window.innerWidth);
+      // Set the vertical scroll track height to allow scrolling the full horizontal length
+      scrollPinTrack.style.height = (maxTranslate + window.innerHeight) + 'px';
+      
+      // Update target based on current scroll position
+      const rect = scrollPinTrack.getBoundingClientRect();
+      const scrolledY = -rect.top;
+      targetX = Math.max(0, Math.min(scrolledY, maxTranslate));
     } else {
       // Clear inline styles on mobile fallback
-      container.style.transform = 'none';
+      if (container) container.style.transform = 'none';
+      if (scrollPinTrack) scrollPinTrack.style.height = 'auto';
     }
   };
 
+  // Run initial size calculations
   calculateSizes();
+  
+  // Use ResizeObserver to recalculate sizes dynamically as images/assets load and layout shifts
+  if (container && typeof ResizeObserver !== 'undefined') {
+    const resizeObserver = new ResizeObserver(() => {
+      calculateSizes();
+    });
+    resizeObserver.observe(container);
+  }
+
+  // Also listen to window load event as a backup
+  window.addEventListener('load', calculateSizes);
   
   // Re-calculate on window resize
   let resizeTimeout;
@@ -45,10 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
      2. LERP INTERPOLATION LOOP (BUTTERY SMOOTH)
      ----------------------------------------- */
   const updateScrollLerp = () => {
-    if (window.innerWidth > 768) {
-      // Dynamic recalculation prevents layout race conditions where scrollWidth is 0 on load
-      maxTranslate = Math.max(0, container.scrollWidth - window.innerWidth);
-      
+    if (window.innerWidth > 768 && container) {
       // Smooth interpolation formula (Lerp)
       currentX += (targetX - currentX) * easeFactor;
       
@@ -57,12 +73,14 @@ document.addEventListener('DOMContentLoaded', () => {
         currentX = targetX;
       }
       
-      // Apply exact horizontal transformation ONLY - completely locked in vertical plane
+      // Apply exact horizontal transformation
       container.style.transform = `translateX(-${currentX}px)`;
       
-      // Update custom top/bottom progress bar
-      const progressPercent = (currentX / maxTranslate) * 100;
-      progressBarFill.style.width = `${progressPercent}%`;
+      // Update progress bar
+      if (maxTranslate > 0) {
+        const progressPercent = (currentX / maxTranslate) * 100;
+        if (progressBarFill) progressBarFill.style.width = `${progressPercent}%`;
+      }
       
       // Update scroll-parallax floating textures
       const parallaxLayers = document.querySelectorAll('.scroll-parallax');
@@ -70,11 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const speed = parseFloat(layer.getAttribute('data-speed')) || 0.1;
         const parentSection = layer.closest('.timeline-section');
         
-        // Restrict local section relative offset to only new layers to prevent breaking previous layouts
         const isNewRelativeLayer = layer.classList.contains('layer-sofa-top') || 
                                    layer.classList.contains('layer-spec-sheet') || 
                                    layer.classList.contains('layer-six-right') ||
-                                   layer.classList.contains('layer-leather-right') ||
                                    layer.classList.contains('layer-fabric-top') ||
                                    layer.classList.contains('layer-chair-top');
                                    
@@ -95,16 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
 
-      // Update background images parallax relative to their parent section's offset to create "cards sliding over background" effect!
+      // Update background images parallax relative to parent section's offset
       const bgImages = document.querySelectorAll('.section-bg-img, .hero-bg-img, .cta-bg-img');
       bgImages.forEach((img) => {
         const parentSection = img.closest('.timeline-section');
         if (parentSection) {
           const sectionLeft = parentSection.offsetLeft;
-          // Calculate scroll offset relative to the section's position
-          const relativeX = currentX - sectionLeft;
-          // Gentle parallax factor: 0.35 (background moves 35% slower than container, giving "cards slide on top" illusion)
-          const bgOffset = relativeX * 0.35;
+          const sectionWidth = parentSection.offsetWidth || window.innerWidth;
+          
+          // Clamp relativeX to visible range to prevent infinite translation when scrolled far away
+          const minRelative = -window.innerWidth;
+          const maxRelative = sectionWidth;
+          const relativeX = Math.max(minRelative, Math.min(maxRelative, currentX - sectionLeft));
+          
+          const bgOffset = relativeX * 0.35; // Gentle 35% parallax
           img.style.transform = `translateX(${bgOffset}px) scale(1.2)`;
         }
       });
@@ -113,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // standard scroll update on mobile vertical list
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight > 0) {
+      if (docHeight > 0 && progressBarFill) {
         const progressPercent = (scrollTop / docHeight) * 100;
         progressBarFill.style.width = `${progressPercent}%`;
       }
@@ -127,42 +147,40 @@ document.addEventListener('DOMContentLoaded', () => {
   animFrameId = requestAnimationFrame(updateScrollLerp);
 
   /* -----------------------------------------
-     3. DIRECT WHEEL INTERCEPT (ZERO VERTICAL SCROLL)
+     3. NATIVE WINDOW SCROLL LISTENER
      ----------------------------------------- */
-  window.addEventListener('wheel', (e) => {
-    if (window.innerWidth > 768) {
-      // Prevent browser default vertical window scroll completely
-      e.preventDefault();
-      
-      // Map vertical wheel delta directly to target horizontal offset
-      targetX += e.deltaY * 0.95; // Multiplier adjusts scrolling sensitivity
-      targetX = Math.max(0, Math.min(targetX, maxTranslate));
+  window.addEventListener('scroll', () => {
+    if (window.innerWidth > 768 && scrollPinTrack) {
+      const rect = scrollPinTrack.getBoundingClientRect();
+      const scrolledY = -rect.top;
+      targetX = Math.max(0, Math.min(scrolledY, maxTranslate));
     }
-  }, { passive: false });
+  });
 
   /* -----------------------------------------
-     4. NAVIGATION ARROWS (INCREMENTS TARGET DIRECTLY)
+     4. NAVIGATION ARROWS (SCROLL THE PAGE VERTICALLY)
      ----------------------------------------- */
-  // Incremented step size to match expanded step section paddings and larger card widths
-  btnRight.addEventListener('click', () => {
-    const scrollAmount = window.innerWidth; // Moves by exactly 100% of viewport width for perfect slide alignment
-    targetX = Math.max(0, Math.min(targetX + scrollAmount, maxTranslate));
-  });
+  if (btnRight && btnLeft) {
+    btnRight.addEventListener('click', () => {
+      if (!scrollPinTrack) return;
+      const scrollAmount = window.innerWidth;
+      const trackTop = scrollPinTrack.offsetTop;
+      const newTargetX = Math.max(0, Math.min(targetX + scrollAmount, maxTranslate));
+      window.scrollTo({
+        top: trackTop + newTargetX,
+        behavior: 'smooth'
+      });
+    });
 
-  btnLeft.addEventListener('click', () => {
-    const scrollAmount = window.innerWidth;
-    targetX = Math.max(0, Math.min(targetX - scrollAmount, maxTranslate));
-  });
-
-  // Dynamic vertical tracking listener for mobile scrollbar representation
-  window.addEventListener('scroll', () => {
-    if (window.innerWidth <= 768) {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight > 0) {
-        const progressPercent = (scrollTop / docHeight) * 100;
-        progressBarFill.style.width = `${progressPercent}%`;
-      }
-    }
-  });
+    btnLeft.addEventListener('click', () => {
+      if (!scrollPinTrack) return;
+      const scrollAmount = window.innerWidth;
+      const trackTop = scrollPinTrack.offsetTop;
+      const newTargetX = Math.max(0, Math.min(targetX - scrollAmount, maxTranslate));
+      window.scrollTo({
+        top: trackTop + newTargetX,
+        behavior: 'smooth'
+      });
+    });
+  }
 });

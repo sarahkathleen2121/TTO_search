@@ -166,10 +166,88 @@ class VectorSearchService:
         limit: int,
         include_related: bool = True,
     ) -> SearchResponse:
-        vector = self.embeddings.embed_text(query)
-        top_k = self.settings.text_top_k_filtered if filters else self.settings.text_top_k
-        where = build_where(filters)
-        matches = self.store.query_text(vector, top_k=top_k, where=where)
+        # If skip_model_load is True or models are not loaded, use a smart keyword fallback search over Chroma metadata
+        if self.settings.skip_model_load or self.embeddings._text_model is None:
+            if hasattr(self.store, "_text") and hasattr(self.store._text, "get"):
+                data = self.store._text.get(include=["metadatas"])
+                ids = data.get("ids", [])
+                metadatas = data.get("metadatas", [])
+                
+                stop_words = {
+                    "i", "me", "my", "we", "our", "you", "your", "he", "she", "it", "they",
+                    "a", "an", "the", "this", "that", "these", "those",
+                    "is", "am", "are", "was", "were", "be", "been", "being",
+                    "have", "has", "had", "do", "does", "did",
+                    "will", "would", "shall", "should", "can", "could", "may", "might",
+                    "want", "need", "looking", "find", "get", "show",
+                    "for", "of", "in", "on", "at", "to", "with", "from", "by", "about",
+                    "and", "or", "but", "not", "no", "so", "if", "then",
+                    "some", "any", "all", "very", "just", "also", "please", "thanks"
+                }
+                
+                import re
+                words = re.findall(r'\w+', query.lower())
+                keywords = [w for w in words if len(w) >= 2 and w not in stop_words]
+                
+                scored_matches = []
+                for pid, meta in zip(ids, metadatas):
+                    if not meta:
+                        continue
+                    
+                    if filters:
+                        if filters.category and meta.get("category") != filters.category:
+                            continue
+                        if filters.brand and meta.get("brand") != filters.brand:
+                            continue
+                        if filters.availability and meta.get("availability") != filters.availability:
+                            continue
+                    
+                    if not keywords:
+                        scored_matches.append((pid, 0.5, meta))
+                        continue
+                    
+                    score = 0
+                    title = (meta.get("title") or "").lower()
+                    description = (meta.get("description") or "").lower()
+                    category = (meta.get("category") or "").lower()
+                    brand = (meta.get("brand") or "").lower()
+                    
+                    matched_kws = 0
+                    for kw in keywords:
+                        kw_score = 0
+                        pattern = kw
+                        if kw.endswith('s') and len(kw) > 3:
+                            pattern = kw[:-1]
+                        
+                        if pattern in title:
+                            kw_score += 15.0 if re.search(rf'\b{pattern}', title) else 7.0
+                        if pattern in category:
+                            kw_score += 10.0 if re.search(rf'\b{pattern}', category) else 5.0
+                        if pattern in brand:
+                            kw_score += 6.0 if re.search(rf'\b{pattern}', brand) else 3.0
+                        if pattern in description:
+                            kw_score += 2.0 if re.search(rf'\b{pattern}', description) else 1.0
+                        
+                        if kw_score > 0:
+                            score += kw_score
+                            matched_kws += 1
+                    
+                    if matched_kws > 0:
+                        normalized_score = 0.5 + (0.45 * (matched_kws / len(keywords))) * min(1.0, score / 20.0)
+                        scored_matches.append((pid, normalized_score, meta))
+                
+                matches = sorted(scored_matches, key=lambda m: -m[1])
+            else:
+                vector = self.embeddings.embed_text(query)
+                top_k = self.settings.text_top_k_filtered if filters else self.settings.text_top_k
+                where = build_where(filters)
+                matches = self.store.query_text(vector, top_k=top_k, where=where)
+        else:
+            vector = self.embeddings.embed_text(query)
+            top_k = self.settings.text_top_k_filtered if filters else self.settings.text_top_k
+            where = build_where(filters)
+            matches = self.store.query_text(vector, top_k=top_k, where=where)
+
         matches = self._sort_matches(matches, sort)
         response = paginate_matches(matches, page, limit)
         if matches:
@@ -207,9 +285,45 @@ class VectorSearchService:
         seen = set(exclude_ids)
         related: list[ProductResult] = []
 
+        all_docs = []
+        if (self.settings.skip_model_load or self.embeddings._text_model is None) and hasattr(self.store, "_text") and hasattr(self.store._text, "get"):
+            data = self.store._text.get(include=["metadatas"])
+            ids = data.get("ids", [])
+            metadatas = data.get("metadatas", [])
+            all_docs = list(zip(ids, metadatas))
+
         for phrase in phrases:
-            vector = self.embeddings.embed_text(phrase)
-            matches = self.store.query_text(vector, top_k=40, where=None)
+            if all_docs:
+                words = [w for w in phrase.lower().split() if len(w) >= 2]
+                phrase_matches = []
+                for pid, meta in all_docs:
+                    if not meta:
+                        continue
+                    score = 0
+                    title = (meta.get("title") or "").lower()
+                    description = (meta.get("description") or "").lower()
+                    category = (meta.get("category") or "").lower()
+                    
+                    for w in words:
+                        pattern = w
+                        if w.endswith('s') and len(w) > 3:
+                            pattern = w[:-1]
+                        
+                        if pattern in title:
+                            score += 10.0
+                        if pattern in category:
+                            score += 8.0
+                        if pattern in description:
+                            score += 2.0
+                    
+                    if score > 0:
+                        sim_score = min(0.95, 0.3 + (score / 30.0))
+                        phrase_matches.append((pid, sim_score, meta))
+                matches = sorted(phrase_matches, key=lambda m: -m[1])
+            else:
+                vector = self.embeddings.embed_text(phrase)
+                matches = self.store.query_text(vector, top_k=40, where=None)
+
             for pid, score, meta in matches:
                 if pid in seen or score < min_score:
                     continue

@@ -665,13 +665,14 @@
             // Initialize modal
             bookModal = new bootstrap.Modal(document.getElementById("bookModal"));
 
-            // Add click event to the book button
-            document
-                .querySelector(".btn-book")
-                .addEventListener("click", function() {
+            // Add click event to all book buttons
+            document.querySelectorAll(".btn-book").forEach((btn) => {
+                btn.addEventListener("click", function(e) {
+                    if (e) e.preventDefault();
                     showStep(1);
                     bookModal.show();
                 });
+            });
 
             // Set minimum date to today for date inputs
             const today = new Date().toISOString().split("T")[0];

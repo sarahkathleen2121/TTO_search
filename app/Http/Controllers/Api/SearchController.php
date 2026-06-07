@@ -250,11 +250,116 @@ class SearchController extends Controller
 
     protected function fallbackTextSearch(array $validated): array
     {
-        $query = $validated['query'];
-        $products = Product::query()
-            ->where('name', 'like', "%{$query}%")
-            ->orWhere('description', 'like', "%{$query}%")
-            ->paginate($validated['limit'] ?? 20);
+        $rawQuery = $validated['query'];
+
+        // Extract meaningful keywords by removing stop words
+        $stopWords = [
+            'i', 'me', 'my', 'we', 'our', 'you', 'your', 'he', 'she', 'it', 'they',
+            'a', 'an', 'the', 'this', 'that', 'these', 'those',
+            'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
+            'have', 'has', 'had', 'do', 'does', 'did',
+            'will', 'would', 'shall', 'should', 'can', 'could', 'may', 'might',
+            'want', 'need', 'looking', 'looking', 'find', 'get', 'show',
+            'for', 'of', 'in', 'on', 'at', 'to', 'with', 'from', 'by', 'about',
+            'and', 'or', 'but', 'not', 'no', 'so', 'if', 'then',
+            'some', 'any', 'all', 'very', 'just', 'also', 'please', 'thanks',
+        ];
+
+        $words = preg_split('/\s+/', strtolower(trim($rawQuery)));
+        $keywords = array_values(array_filter($words, function ($w) use ($stopWords) {
+            return strlen($w) >= 2 && !in_array($w, $stopWords, true);
+        }));
+
+        // Build query: search each keyword in name, description, product type name, and brand name
+        $productsQuery = Product::query()
+            ->with('productType')
+            ->select('products.*');
+
+        if (!empty($keywords)) {
+            // Left join product types and brands so we can search their names too
+            $productsQuery->leftJoin('product_types', 'products.product_type_id', '=', 'product_types.id')
+                ->leftJoin('brands', 'products.brand_id', '=', 'brands.id');
+
+            // Build a relevance score: count how many keywords match
+            $relevanceParts = [];
+            $bindings = [];
+            foreach ($keywords as $kw) {
+                $like = "%{$kw}%";
+                $relevanceParts[] = '(CASE WHEN products.name LIKE ? THEN 2 ELSE 0 END)';
+                $bindings[] = $like;
+                $relevanceParts[] = '(CASE WHEN product_types.name LIKE ? THEN 2 ELSE 0 END)';
+                $bindings[] = $like;
+                $relevanceParts[] = '(CASE WHEN brands.name LIKE ? THEN 1 ELSE 0 END)';
+                $bindings[] = $like;
+                $relevanceParts[] = '(CASE WHEN products.description LIKE ? THEN 1 ELSE 0 END)';
+                $bindings[] = $like;
+            }
+            $relevanceExpr = implode(' + ', $relevanceParts);
+            $productsQuery->selectRaw("({$relevanceExpr}) as relevance_score", $bindings);
+
+            // At least one keyword must match somewhere
+            $productsQuery->where(function ($q) use ($keywords) {
+                foreach ($keywords as $kw) {
+                    $like = "%{$kw}%";
+                    $q->orWhere('products.name', 'like', $like)
+                      ->orWhere('products.description', 'like', $like)
+                      ->orWhere('product_types.name', 'like', $like)
+                      ->orWhere('brands.name', 'like', $like);
+                }
+            });
+
+            $productsQuery->orderByDesc('relevance_score');
+        } else {
+            // No meaningful keywords, fall back to full phrase search
+            $productsQuery->where('name', 'like', "%{$rawQuery}%")
+                ->orWhere('description', 'like', "%{$rawQuery}%");
+        }
+
+        $products = $productsQuery->paginate($validated['limit'] ?? 20);
+
+        $resultIds = $products->pluck('id')->all();
+
+        // Build related products from same product types / brands as the results
+        $relatedProducts = collect();
+        if ($products->isNotEmpty()) {
+            $typeIds = $products->pluck('product_type_id')->filter()->unique()->all();
+            $brandIds = $products->pluck('brand_id')->filter()->unique()->all();
+
+            $relatedProducts = Product::query()
+                ->with('productType')
+                ->whereNotIn('id', $resultIds)
+                ->where(function ($q) use ($typeIds, $brandIds) {
+                    if ($typeIds) {
+                        $q->whereIn('product_type_id', $typeIds);
+                    }
+                    if ($brandIds) {
+                        $q->orWhereIn('brand_id', $brandIds);
+                    }
+                })
+                ->inRandomOrder()
+                ->take(8)
+                ->get();
+        }
+
+        // If still no related products, show random featured or latest products
+        if ($relatedProducts->isEmpty()) {
+            $relatedProducts = Product::query()
+                ->with('productType')
+                ->whereNotIn('id', $resultIds)
+                ->where('is_featured', true)
+                ->inRandomOrder()
+                ->take(8)
+                ->get();
+        }
+
+        if ($relatedProducts->isEmpty()) {
+            $relatedProducts = Product::query()
+                ->with('productType')
+                ->whereNotIn('id', $resultIds)
+                ->latest()
+                ->take(8)
+                ->get();
+        }
 
         return [
             'results' => $products->map(fn (Product $p) => [
@@ -264,6 +369,7 @@ class SearchController extends Controller
                 'url' => route('product.detail', $p->slug),
                 'image_url' => $p->referenceImageUrl(),
                 'price' => $p->price,
+                'category' => $p->productType?->name ?? '',
                 'similarity_score' => 0.5,
             ])->values()->all(),
             'total' => $products->total(),
@@ -271,8 +377,17 @@ class SearchController extends Controller
             'limit' => $products->perPage(),
             'confidence' => 'medium',
             'message' => 'Showing keyword results (AI search offline).',
-            'related_results' => [],
-            'related_heading' => null,
+            'related_results' => $relatedProducts->map(fn (Product $p) => [
+                'id' => (string) $p->id,
+                'title' => $p->name,
+                'slug' => $p->slug,
+                'url' => route('product.detail', $p->slug),
+                'image_url' => $p->referenceImageUrl(),
+                'price' => $p->price,
+                'category' => $p->productType?->name ?? '',
+                'similarity_score' => 0.4,
+            ])->values()->all(),
+            'related_heading' => 'Related Products',
         ];
     }
 }
