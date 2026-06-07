@@ -83,9 +83,7 @@ class ProductController extends Controller
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('thumbnail')) {
-            // Delete old thumbnail if it exists
-            $this->deleteOldThumbnail($product->thumbnail);
-
+            $this->deleteOldThumbnail($product->thumbnail, $product->id);
             $data['thumbnail'] = $this->uploadThumbnail($request->file('thumbnail'));
         }
 
@@ -101,7 +99,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $this->deleteOldThumbnail($product->thumbnail);
+        $this->deleteOldThumbnail($product->thumbnail, $product->id);
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
@@ -123,11 +121,19 @@ class ProductController extends Controller
     }
 
     /**
-     * Delete old thumbnail file from both possible locations.
+     * Delete thumbnail file only when no other product still uses the same path.
      */
-    protected function deleteOldThumbnail(?string $path): void
+    protected function deleteOldThumbnail(?string $path, ?int $exceptProductId = null): void
     {
         if (!$path) {
+            return;
+        }
+
+        $query = Product::where('thumbnail', $path);
+        if ($exceptProductId) {
+            $query->where('id', '!=', $exceptProductId);
+        }
+        if ($query->exists()) {
             return;
         }
 

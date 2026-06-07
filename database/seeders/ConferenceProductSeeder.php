@@ -20,44 +20,18 @@ class ConferenceProductSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Copy generated images to storage/app/public/products/
-        $storageDir = storage_path('app/public/products');
-        if (!File::exists($storageDir)) {
-            File::makeDirectory($storageDir, 0755, true);
+        $uploadDir = public_path('uploads/products');
+        if (!File::isDirectory($uploadDir)) {
+            File::makeDirectory($uploadDir, 0755, true);
         }
 
-        $sourceImages = [
-            'table_marble' => 'C:\Users\Nabil_Ahmad\.gemini\antigravity-ide\brain\b5d42b6b-5911-4216-9156-7128be5d6925\table_marble_1780661635422.png',
-            'table_wood' => 'C:\Users\Nabil_Ahmad\.gemini\antigravity-ide\brain\b5d42b6b-5911-4216-9156-7128be5d6925\table_wood_1780661664472.png',
-            'table_dark' => 'C:\Users\Nabil_Ahmad\.gemini\antigravity-ide\brain\b5d42b6b-5911-4216-9156-7128be5d6925\table_dark_1780661696335.png'
-        ];
-
-        $copiedImages = [];
-        foreach ($sourceImages as $key => $srcPath) {
-            if (File::exists($srcPath)) {
-                $filename = $key . '.png';
-                $destPath = $storageDir . '/' . $filename;
-                File::copy($srcPath, $destPath);
-                $copiedImages[] = 'products/' . $filename;
-            }
-        }
-
-        // Fallback to copying public frontend assets if gemini cache paths are missing
-        if (empty($copiedImages)) {
-            $fallbackImages = [
-                'conference_room.png' => public_path('frontend_assets/images/conference_room.png'),
-                'offie_cabins.png' => public_path('frontend_assets/images/offie_cabins.png'),
-                'work_space.png' => public_path('frontend_assets/images/work_space.png'),
-                'cafe_space.png' => public_path('frontend_assets/images/cafe_space.png')
-            ];
-            foreach ($fallbackImages as $filename => $srcPath) {
-                if (File::exists($srcPath)) {
-                    $destPath = $storageDir . '/' . $filename;
-                    File::copy($srcPath, $destPath);
-                    $copiedImages[] = 'products/' . $filename;
-                }
-            }
-        }
+        $sourceImages = array_values(array_filter([
+            public_path('frontend_assets/images/conference_room.png'),
+            public_path('frontend_assets/images/offie_cabins.png'),
+            public_path('frontend_assets/images/work_space.png'),
+            public_path('frontend_assets/images/cafe_space.png'),
+            public_path('frontend_assets/images/banner_img.png'),
+        ], fn ($path) => File::exists($path)));
 
         // 2. Ensure basic Category records exist
         $ptData = [
@@ -152,7 +126,7 @@ class ConferenceProductSeeder extends Seeder
                 'slug' => Str::slug($name) . '-' . rand(1000, 9999),
                 'description' => "A premium contemporary collaborative workspace solution designed with ergonomic comfort and clean aesthetics.",
                 'price' => rand(1500, 8500),
-                'thumbnail' => !empty($copiedImages) ? $copiedImages[$i % count($copiedImages)] : null,
+                'thumbnail' => $this->copyUniqueThumbnail($sourceImages, $uploadDir, $i),
                 'is_featured' => ($i < 10),
                 'brand_id' => $br->id,
                 'product_type_id' => $pt->id
@@ -180,5 +154,24 @@ class ConferenceProductSeeder extends Seeder
                 $product->update(['brand_id' => $seededBrandIds[array_rand($seededBrandIds)]]);
             });
         }
+    }
+
+    /**
+     * Each product gets its own image file so editing one product never breaks others.
+     */
+    private function copyUniqueThumbnail(array $sourceImages, string $uploadDir, int $index): ?string
+    {
+        if (empty($sourceImages)) {
+            return null;
+        }
+
+        $source = $sourceImages[$index % count($sourceImages)];
+        $extension = pathinfo($source, PATHINFO_EXTENSION) ?: 'png';
+        $filename = Str::random(40) . '.' . $extension;
+        $destination = $uploadDir . DIRECTORY_SEPARATOR . $filename;
+
+        File::copy($source, $destination);
+
+        return 'uploads/products/' . $filename;
     }
 }
