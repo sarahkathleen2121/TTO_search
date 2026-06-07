@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Moodboard;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class MoodboardController extends Controller
 {
@@ -32,7 +33,7 @@ class MoodboardController extends Controller
         $data = $request->only(['title', 'description', 'status']);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('moodboards', 'public');
+            $data['image'] = $this->uploadImage($request->file('image'));
         }
 
         Moodboard::create($data);
@@ -57,11 +58,8 @@ class MoodboardController extends Controller
         $data = $request->only(['title', 'description', 'status']);
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($moodboard->image && Storage::disk('public')->exists($moodboard->image)) {
-                Storage::disk('public')->delete($moodboard->image);
-            }
-            $data['image'] = $request->file('image')->store('moodboards', 'public');
+            $this->deleteOldImage($moodboard->image);
+            $data['image'] = $this->uploadImage($request->file('image'));
         }
 
         $moodboard->update($data);
@@ -71,13 +69,41 @@ class MoodboardController extends Controller
 
     public function destroy(Moodboard $moodboard)
     {
-        // Delete image if exists
-        if ($moodboard->image && Storage::disk('public')->exists($moodboard->image)) {
-            Storage::disk('public')->delete($moodboard->image);
-        }
-
+        $this->deleteOldImage($moodboard->image);
         $moodboard->delete();
 
         return redirect()->route('moodboards.index')->with('success', 'Moodboard deleted successfully.');
+    }
+
+    protected function uploadImage($file): string
+    {
+        $dir = public_path('uploads/moodboards');
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true);
+        }
+
+        $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+        $file->move($dir, $filename);
+
+        return 'uploads/moodboards/' . $filename;
+    }
+
+    protected function deleteOldImage(?string $path): void
+    {
+        if (!$path) {
+            return;
+        }
+
+        $candidates = [
+            public_path($path),
+            storage_path('app/public/' . $path),
+        ];
+
+        foreach ($candidates as $file) {
+            if (File::exists($file)) {
+                File::delete($file);
+                return;
+            }
+        }
     }
 }

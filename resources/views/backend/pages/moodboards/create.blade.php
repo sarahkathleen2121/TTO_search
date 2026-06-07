@@ -42,7 +42,7 @@
                         @if(isset($moodboard) && $moodboard->image)
                             <div class="mt-3">
                                 <label class="form-label d-block text-muted">Current Image:</label>
-                                <img src="{{ asset('storage/'.$moodboard->image) }}" width="120" height="120" style="object-fit: cover; border-radius: 10px; border: 1px solid #ddd;">
+                                <img src="{{ $moodboard->imageUrl() }}" width="120" height="120" style="object-fit: cover; border-radius: 10px; border: 1px solid #ddd;">
                             </div>
                         @endif
                     </div>

@@ -178,7 +178,7 @@
                             <div class="moodboard-card">
                                 <div class="moodboard-img-container">
                                     @if($moodboard->image)
-                                        <img src="{{ asset('storage/' . $moodboard->image) }}" alt="{{ $moodboard->title }}">
+                                        <img src="{{ $moodboard->imageUrl() }}" alt="{{ $moodboard->title }}">
                                     @endif
                                     <span class="moodboard-bookmark">
                                         <i class="fa-regular fa-bookmark"></i>

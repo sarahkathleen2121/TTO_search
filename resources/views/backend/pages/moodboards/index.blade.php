@@ -28,7 +28,7 @@
                             <tr>
                                 <td>
                                     @if($moodboard->image)
-                                        <img src="{{ asset('storage/'.$moodboard->image) }}" width="60" height="60" style="object-fit: cover; border-radius: 8px;">
+                                        <img src="{{ $moodboard->imageUrl() }}" width="60" height="60" style="object-fit: cover; border-radius: 8px;">
                                     @else
                                         <div style="width: 60px; height: 60px; background-color: #eff0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #aaa;">N/A</div>
                                     @endif

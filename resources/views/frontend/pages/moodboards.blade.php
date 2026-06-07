@@ -66,7 +66,7 @@
                         <i class="fa-regular fa-bookmark mb-pin"></i>
                     @endif
                     @if($moodboard->image)
-                        <img src="{{ asset('storage/' . $moodboard->image) }}" alt="{{ $moodboard->title }}">
+                        <img src="{{ $moodboard->imageUrl() }}" alt="{{ $moodboard->title }}">
                     @endif
                 </div>
                 <div class="mb-card-body">
