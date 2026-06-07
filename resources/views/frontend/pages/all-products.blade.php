@@ -35,7 +35,7 @@
                     <div class="ap-card">
                         <div class="ap-card-top">
                             <i class="fa-regular fa-heart ap-card-fav" style="cursor:pointer; z-index: 10;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
-                            <img src="{{ $product->thumbnail ? asset('storage/'.$product->thumbnail) : asset('frontend_assets/images/banner_img.png') }}" class="ap-card-img" alt="{{ $product->name }}">
+                            <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" class="ap-card-img" alt="{{ $product->name }}">
                             <a href="{{ route('product.detail', $product->slug) }}" class="ap-card-link-overlay"></a>
                         </div>
                         <div class="ap-card-body">

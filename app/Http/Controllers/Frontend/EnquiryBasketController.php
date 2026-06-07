@@ -25,6 +25,7 @@ class EnquiryBasketController extends Controller
                 'slug' => $product->slug,
                 'price' => $product->price,
                 'thumbnail' => $product->thumbnail,
+                'thumbnail_url' => $product->referenceImageUrl(),
                 'qty' => $basket[$product->id]['qty'] ?? 1,
             ];
         }

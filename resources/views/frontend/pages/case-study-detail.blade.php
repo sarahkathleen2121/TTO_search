@@ -205,7 +205,7 @@
                         <div class="cd-card-top position-relative">
                                 <i class="fa-regular fa-bookmark cd-card-bookmark text-white" style="text-shadow: 0 0 5px rgba(0,0,0,0.3); cursor:pointer;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
                             <a href="{{ route('product.detail', $product->slug) }}">
-                                <img src="{{ $product->thumbnail ? asset('storage/'.$product->thumbnail) : asset('frontend_assets/images/banner_img.png') }}" alt="{{ $product->name }}">
+                                <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" alt="{{ $product->name }}">
                             </a>
                         </div>
                         <div class="cd-card-body">

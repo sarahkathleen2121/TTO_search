@@ -24,7 +24,7 @@
                     <div class="row eb-item align-items-center" data-id="{{ $item['id'] }}" data-price="{{ $item['price'] }}">
                         <div class="col-9 col-lg-6 d-flex align-items-center gap-4">
                             <div class="eb-thumb">
-                                <img src="{{ $item['thumbnail'] ? asset('storage/'.$item['thumbnail']) : asset('frontend_assets/images/banner_img.png') }}" style="width:100%;height:100%;object-fit:cover;" alt="{{ $item['name'] }}">
+                                <img src="{{ $item['thumbnail_url'] ?? asset('frontend_assets/images/banner_img.png') }}" style="width:100%;height:100%;object-fit:cover;" alt="{{ $item['name'] }}">
                             </div>
                             <div>
                                 <p class="eb-name"><a href="{{ route('product.detail', $item['slug']) }}" class="text-decoration-none text-dark">{{ $item['name'] }}</a></p>

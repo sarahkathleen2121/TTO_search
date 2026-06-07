@@ -56,9 +56,9 @@
 }
 
 /* Box slider (text only) */
-.pt-box-viewport {
-    /* static positioning to allow next button to position to hero */
-}
+/* .pt-box-viewport {
+    /* static positioning to allow next button to position to hero
+} */
 
 .pt-box-track {
     display: flex;

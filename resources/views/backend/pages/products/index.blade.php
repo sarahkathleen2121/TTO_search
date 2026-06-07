@@ -29,7 +29,7 @@
                             <tr>
                                 <td>
                                     @if($product->thumbnail)
-                                        <img src="{{ asset('storage/'.$product->thumbnail) }}" alt="img" width="50">
+                                        <img src="{{ $product->referenceImageUrl() }}" alt="img" width="50">
                                     @else
                                         N/A
                                     @endif

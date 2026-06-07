@@ -278,7 +278,7 @@
                         'fabrics' => 'fabrics.png',
                         'greenwalls' => 'greenwalls.png',
                     ];
-                    $imageName = $imageMap[$type->slug] ?? 'banner_img.png';
+                    $imageName = $imageMap[$type->slug] ?? 'acoustic_product.png';
                 @endphp
                 <div class="category-card" data-index="{{ $index }}" onclick="window.location.href='{{ route('product_type.detail', $type->slug) }}'" style="cursor:pointer;">
                     <div class="card-icon">
@@ -311,7 +311,7 @@
                     <div class="fp-card">
                         <div class="fp-card-top position-relative">
                             <a href="{{ route('product.detail', ['slug' => $product->slug]) }}">
-                                <img src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : asset('frontend_assets/images/banner_img.png') }}" alt="{{ $product->name }}" onerror="this.src='{{ asset('frontend_assets/images/banner_img.png') }}'">
+                                <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/esg.png') }}" alt="{{ $product->name }}" onerror="this.src='{{ asset('frontend_assets/images/banner_img.png') }}'">
                             </a>
                         </div>
                         <div class="fp-card-body">

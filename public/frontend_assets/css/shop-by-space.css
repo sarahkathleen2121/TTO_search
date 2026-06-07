@@ -51,9 +51,9 @@
     }
 }
 
-.sp-box-viewport {
-    /* static positioning to allow next button to position to hero */
-}
+/* .sp-box-viewport {
+    /* static positioning to allow next button to position to her
+} */
 
 .sp-box-track {
     display: flex;

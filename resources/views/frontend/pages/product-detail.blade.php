@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('frontend_assets/css/product-detail.css') }}?v={{ time() }}">
 
     @php
-        $bgImage = ($product && $product->thumbnail) ? asset('storage/' . $product->thumbnail) : asset('frontend_assets/images/banner_img.png');
+        $bgImage = ($product && $product->referenceImageUrl()) ? $product->referenceImageUrl() : asset('frontend_assets/images/banner_img.png');
     @endphp
 
     <!-- Hero -->
@@ -215,7 +215,7 @@
                             <div class="pd-card-top position-relative">
                                 <i class="fa-regular fa-bookmark pd-card-fav text-white" style="text-shadow: 0 0 5px rgba(0,0,0,0.3); cursor:pointer;" onclick="addToBasket({{ $related->id }})" title="Add to Enquiry Basket"></i>
                                 <a href="{{ route('product.detail', $related->slug) }}">
-                                    <img src="{{ $related->thumbnail ? asset('storage/'.$related->thumbnail) : asset('frontend_assets/images/banner_img.png') }}" class="pd-card-img" alt="{{ $related->name }}">
+                                    <img src="{{ $related->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" class="pd-card-img" alt="{{ $related->name }}">
                                 </a>
                             </div>
                             <div class="pd-card-body px-0">

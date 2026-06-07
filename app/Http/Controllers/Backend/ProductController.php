@@ -131,24 +131,16 @@ class ProductController extends Controller
             return;
         }
 
-        // Check in public/ directory (new upload location)
-        $publicPath = public_path($path);
-        if (File::exists($publicPath)) {
-            File::delete($publicPath);
-            return;
-        }
+        $candidates = [
+            public_path($path),
+            storage_path('app/public/' . $path),
+        ];
 
-        // Check in storage/ directory (old upload location via symlink)
-        $storagePath = storage_path('app/public/' . str_replace('products/', '', $path));
-        if (File::exists($storagePath)) {
-            File::delete($storagePath);
-            return;
-        }
-
-        // Also try direct storage path
-        $directPath = storage_path('app/public/' . $path);
-        if (File::exists($directPath)) {
-            File::delete($directPath);
+        foreach ($candidates as $file) {
+            if (File::exists($file)) {
+                File::delete($file);
+                return;
+            }
         }
     }
 }
