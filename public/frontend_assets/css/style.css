@@ -1,0 +1,301 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+    --primary-color: #383E42;
+    --primary-dark: #383E42
+    --light-bg: #cce5ff;
+    --border-color: #e0e0e0;
+}
+.container {
+    max-width: 1140px !important;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5.h6 {
+    font-family: "Roboto", sans-serif !important;
+}
+
+/* Modal Styles */
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 1px solid #e9ecef;
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-title {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Step Navigation */
+.btn-back {
+    background: none;
+    border: none;
+    color: #383E42;
+    font-size: 1.25rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.btn-back:hover {
+    background-color: #f8f9fa;
+}
+
+.modal-step-title {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* Person Selection */
+.person-card {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.person-card:hover {
+    background-color: #f8f9fa;
+}
+
+.person-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+}
+
+.person-card .fa-check-circle {
+    display: none;
+    font-size: 1.25rem;
+}
+
+.person-card.selected {
+    border-color: #383E42;
+    background-color: #eff0f0;
+}
+
+.person-card.selected .fa-check-circle {
+    display: block;
+}
+
+.person-card.selected .fa-circle {
+    display: none;
+}
+
+/* Form Styles */
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.form-control,
+.form-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #383E42;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    border-radius: 0px;
+}
+
+.btn-primary:hover {
+    background-color: #383E42
+}
+
+.btn-outline-primary {
+    border: 1px solid #dee2e6;
+    color: #1a1a1a;
+    text-align: left;
+}
+
+.btn-outline-primary:hover {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #1a1a1a;
+}
+
+/* Checkmark Animation */
+.checkmark-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #e8f3ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.checkmark-circle i {
+    font-size: 2.5rem;
+    color: #383E42;
+}
+
+/* Modal Styles */
+#rescheduleModal .modal-header,
+#cancelModal .modal-header {
+    border-bottom: 1px solid #e9ecef;
+    padding: 1.25rem 1.5rem;
+}
+
+#rescheduleModal .modal-footer,
+#cancelModal .modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 1rem 1.5rem;
+}
+
+#rescheduleModal .btn-primary {
+    background-color: #383E42;
+    border: none;
+}
+
+#rescheduleModal .btn-primary:hover,
+#cancelModal .btn-danger:hover {
+    background-color: #c82333;
+}
+
+#rescheduleModal .form-label,
+#cancelModal .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Cancel Modal Specific Styles */
+#cancelModal .modal-dialog {
+    max-width: 500px;
+}
+
+#cancelModal .cancel-icon {
+    font-size: 64px;
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+#cancelModal .btn-danger {
+    background-color: #dc3545;
+    border: none;
+    min-width: 180px;
+}
+
+#cancelModal .btn-outline-secondary {
+    min-width: 120px;
+}
+
+#cancelModal .modal-body {
+    padding: 2rem;
+}
+
+/* Global Custom Pagination Style */
+.custom-pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 60px 0;
+    width: 100%;
+}
+
+.custom-pagination {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 24px;
+    flex-wrap: nowrap;
+}
+
+.custom-pagination .page-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-pagination .page-link {
+    color: #677389;
+    font-weight: 500;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.custom-pagination .page-link:hover {
+    color: #383E42;
+    background: transparent;
+}
+
+/* Base styles for page numbers (circles) */
+.custom-pagination .page-num .page-link {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-pagination .page-num:not(.active) .page-link:hover {
+    background: #f1f3f5;
+}
+
+.custom-pagination .page-item.active.page-num .page-link {
+    background: #677389;
+    color: #ffffff !important;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+    color: #a0aec0;
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.6;
+}

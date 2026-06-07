@@ -1,0 +1,73 @@
+/* Thank You Page */
+.ty-section {
+    padding: 80px 0 120px;
+    background: #fff;
+}
+
+.ty-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.ty-title {
+    color: #383E42;
+    font-weight: 800;
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+.ty-info {
+    color: #383E42;
+    font-size: 15px;
+    margin-bottom: 4px;
+    line-height: 1.6;
+}
+
+.ty-info strong {
+    font-weight: 800;
+}
+
+.ty-address {
+    color: #383E42;
+    font-size: 15px;
+    margin-bottom: 24px;
+}
+
+.ty-address strong {
+    font-weight: 800;
+}
+
+.ty-reminder {
+    color: #383E42;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+
+.ty-btn {
+    display: inline-block;
+    background: #383E42;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.ty-btn:hover {
+    background: #383E42;
+    color: #fff;
+}
+
+@media (max-width: 576px) {
+    .ty-title {
+        font-size: 32px;
+    }
+
+    .ty-section {
+        padding: 60px 0 80px;
+    }
+}

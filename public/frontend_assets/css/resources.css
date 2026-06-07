@@ -1,0 +1,256 @@
+/* Hero */
+.rc-hero {
+    background: #eff0f0;
+    border: none;
+    padding: 80px 0 60px;
+}
+
+.rc-breadcrumb {
+    color: #383E42;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.rc-title {
+    color: #383E42;
+    font-weight: 800;
+    font-size: 48px;
+    margin: 0 0 24px;
+}
+
+.rc-sub {
+    color: #383E42;
+    max-width: 500px;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Toolbar */
+.rc-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 40px 0;
+}
+
+.rc-search {
+    display: flex;
+    border: none;
+    background-color: #eff0f0;
+    border-radius: 0px;
+    overflow: hidden;
+    width: 320px;
+    max-width: 100%;
+}
+
+.rc-search input {
+    border: 0;
+    outline: 0;
+    padding: 12px 18px;
+    flex: 1;
+    background: transparent;
+    color: #383E42;
+    font-size: 14px;
+}
+
+.rc-search input::placeholder {
+    color: #383E42;
+    opacity: 0.8;
+}
+
+.rc-search button {
+    width: 50px;
+    border: 0;
+    background: transparent;
+    color: #383E42;
+    font-size: 16px;
+}
+
+.rc-select-wrapper {
+    position: relative;
+    width: 160px;
+}
+
+.rc-select-wrapper .rc-select-arrow {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #383E42;
+    pointer-events: none;
+    font-size: 14px;
+}
+
+.rc-select {
+    background: #eff0f0;
+    border: none;
+    color: #383E42;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 12px 20px;
+    border-radius: 0px;
+    box-shadow: none;
+    appearance: none;
+    /* Hide default dropdown arrow */
+    cursor: pointer;
+}
+
+.rc-select:focus {
+    box-shadow: none;
+    background: #eff0f0;
+    border: none;
+}
+
+.rc-select-wrapper:nth-child(2) {
+    margin-left: auto;
+    margin-right: 18px;
+}
+
+/* Cards */
+.rc-card {
+    position: relative;
+    background: #fff;
+    border: none;
+    /* No outer border in mockup */
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rc-card-link-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    cursor: pointer;
+}
+
+.rc-card-top {
+    background: #eff0f0;
+    /* Solid light blue */
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: none;
+    padding: 0;
+    overflow: hidden;
+}
+.rc-card-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rc-badge {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background: #fff;
+    color: #383E42;
+    font-size: 11px;
+    border-radius: 0;
+    border: 1px solid #383E42;
+    padding: 5px 12px;
+    font-weight: 700;
+    z-index: 5;
+}
+
+.rc-pin {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    color: #fff;
+    font-size: 16px;
+    text-shadow: 0 0 4px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.rc-card-body {
+    padding: 24px 0;
+    /* Padding mostly on top/bottom, let text align left with no side padding like mockup */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eff0f0;
+    padding: 10px 20px;
+}
+.learn-more-btn {
+    color: #fff;
+    background-color: #383E42;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 0px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.rc-name {
+    color: #383E42;
+    /* bright blue */
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1.4;
+    margin: 0 0 12px;
+}
+
+.rc-desc {
+    color: #383E42;
+    /* muted blue */
+    font-size: 13px;
+    line-height: 1.6;
+    flex-grow: 1;
+    /* Pushes the 'Read More' link to the bottom */
+}
+
+.rc-link {
+    color: #383E42;
+    /* bright blue */
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.rc-link:hover {
+    opacity: 0.8;
+    color: #383E42;
+}
+
+@media (max-width: 992px) {
+    .rc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .rc-search {
+        width: 100%;
+    }
+
+    .rc-select-wrapper {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .rc-title {
+        font-size: 32px;
+    }
+
+    .rc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

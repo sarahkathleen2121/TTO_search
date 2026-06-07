@@ -1,0 +1,200 @@
+.cr-nav {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0;
+}
+
+.cr-nav .navbar-brand,
+.cr-nav .nav-link {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+.cr-hero {
+    position: relative;
+    padding: 100px 0 80px;
+    /* background-image: url('../images/conference_hero.png'); */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+}
+
+/* .cr-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+} */
+
+.cr-hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.cr-breadcrumb {
+    color: #383E42;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.cr-title {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 42px;
+    margin: 0;
+}
+
+/* Slider blocks */
+.cr-blocks-wrap {
+    padding-bottom: 80px;
+}
+
+.cr-block {
+    background: #ffffff;
+    padding: 60px 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.cr-head {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.3;
+    margin-bottom: 0;
+}
+
+.cr-navbtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+    color: #383E42;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s;
+    outline: none;
+    cursor: pointer;
+}
+
+.cr-navbtn:hover {
+    background: #f8fbff;
+    border-color: #383E42;
+}
+
+.cr-view-all {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.cr-view-all:hover {
+    transform: translateX(4px);
+}
+
+.cr-view-all i {
+    font-size: 12px;
+}
+
+.cr-viewport {
+    overflow: hidden;
+    padding-bottom: 10px;
+}
+
+.cr-track {
+    display: flex;
+    gap: 24px;
+    transition: transform 350ms ease;
+}
+
+.cr-card {
+    min-width: 280px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out;
+}
+
+.cr-card:hover {
+    transform: translateY(-4px);
+}
+
+.cr-card-top {
+    height: 280px;
+    background: transparent;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.cr-card-heart {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    transition: transform 0.2s;
+}
+
+.cr-card-heart:hover {
+    transform: scale(1.15);
+}
+
+.cr-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: transform 0.3s ease;
+}
+
+.cr-card-img:hover {
+    transform: scale(1.03);
+}
+
+.cr-card-body {
+    padding: 16px 0;
+    text-align: left;
+    background: transparent;
+}
+
+.cr-name {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0 0 4px;
+}
+
+.cr-brand {
+    color: #6c757d;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+@media (max-width: 991px) {
+    .cr-head {
+        font-size: 24px;
+    }
+}

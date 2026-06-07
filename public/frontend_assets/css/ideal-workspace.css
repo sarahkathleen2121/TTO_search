@@ -1,0 +1,132 @@
+.iw-nav {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 12px 0;
+}
+
+.iw-nav .navbar-brand,
+.iw-nav .nav-link {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+}
+
+.iw-hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../images/the_ideal_workspace.png") no-repeat center center/cover;
+    /* padding: 100px 0 80px; */
+    min-height: 410px;
+    color: #ffffff;
+    transform: scaleX(-1);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.iw-breadcrumb {
+    color: #ffffff;
+    font-size: 14px;
+    opacity: 0.8;
+    transform: scaleX(-1);
+}
+
+.iw-title {
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 800;
+    margin-top: 10px;
+    transform: scaleX(-1);
+}
+
+.iw-process-wrap {
+    padding: 56px 0;
+}
+
+.iw-process-heading {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 26px;
+}
+
+.iw-step {
+    /* background: #eff0f0; */
+    border: none;
+    border-radius: 0px;
+    padding: 15px 40px;
+    margin-bottom: 16px;
+    transition: background 200ms;
+}
+
+.iw-step-header {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+}
+
+.iw-step-title {
+    color: #383E42;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.iw-step-desc {
+    display: none;
+    color: #383E42;
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.iw-step.open .iw-step-desc {
+    display: block;
+}
+
+.iw-step-icon {
+    font-size: 28px;
+    font-weight: 300;
+    color: #383E42;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iw-cta {
+    margin: 46px 0 80px;
+    background: #eff0f0;
+    border: 1px solid var(--iw-border);
+    border-radius: 0px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.iw-cta-title {
+    color: var(--primary-color);
+    font-weight: 800;
+    font-size: 22px;
+    margin: 0;
+}
+
+.iw-cta-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+    .iw-title {
+        font-size: 32px;
+    }
+
+    .iw-cta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

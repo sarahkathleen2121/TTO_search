@@ -1,0 +1,139 @@
+/* Hero */
+.ja-hero {
+    background: #eff0f0;
+    padding: 50px 0 30px;
+    text-align: center;
+}
+
+.ja-title {
+    color: #383E42;
+    font-weight: 800;
+    font-size: 42px;
+    margin: 0 0 8px;
+}
+
+.ja-subtitle {
+    color: #383E42;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Form */
+.ja-form-section {
+    padding: 50px 0 80px;
+    background: #fff;
+}
+
+.ja-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.ja-field {
+    margin-bottom: 0;
+}
+
+.ja-field input,
+.ja-field textarea {
+    width: 100%;
+    background: #eff0f0;
+    height: 46px;
+    border-radius: 0px;
+    border: none;
+    color: #383E42;
+    padding: 18px 8px;
+    font-size: 15px;
+    outline: none;
+    margin-bottom: 10px;
+    font-weight: 400;
+}
+
+.ja-field input::placeholder,
+.ja-field textarea::placeholder {
+    color: #383E42;
+    font-weight: 400;
+}
+
+.ja-field input:focus,
+.ja-field textarea:focus {
+    border-bottom-color: #383E42;
+}
+
+.ja-field textarea {
+    resize: vertical;
+    min-height: 100px;
+    background: #eff0f0;
+    border-radius: 0;
+    margin-top: 4px;
+    padding: 16px;
+}
+
+/* Attach */
+.ja-attach {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 24px 0 28px;
+}
+
+.ja-attach-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #d1e2ff;
+    border-radius: 0;
+    padding: 10px 20px;
+    color: #383E42;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ja-attach-btn:hover {
+    background: #eff0f0;
+}
+
+.ja-attach-btn i {
+    font-size: 16px;
+}
+
+.ja-file-name {
+    color: #383E42;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ja-remove-file {
+    color: #e63b3b;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 6px;
+    font-weight: 700;
+}
+
+/* Submit */
+.ja-submit {
+    width: 100%;
+    background: #383E42;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ja-submit:hover {
+    background: #383E42;
+}
+
+@media (max-width: 576px) {
+    .ja-title {
+        font-size: 32px;
+    }
+}

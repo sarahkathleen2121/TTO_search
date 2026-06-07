@@ -1,0 +1,150 @@
+/* Wrapper to center the form on page */
+.me-wrapper {
+    background: #ffffff;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Form Container */
+.me-container {
+    width: 100%;
+    max-width: 540px;
+    text-align: center;
+}
+
+/* Titles */
+.me-title {
+    color: #1a1e21;
+    font-size: 38px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+}
+
+.me-subtitle {
+    color: #72777b;
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 40px;
+}
+
+/* Inputs & Form Fields */
+.me-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.me-field {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.me-field input {
+    width: 100%;
+    background: #e8eaed;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: #1a1e21;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.me-field textarea {
+    width: 100%;
+    background: #e8eaed;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: #1a1e21;
+    outline: none;
+    resize: none;
+    box-sizing: border-box;
+    min-height: 140px;
+}
+
+.me-field input::placeholder,
+.me-field textarea::placeholder {
+    color: #72777b;
+    font-weight: 400;
+}
+
+/* Attach CV Area */
+.me-attach {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0 24px;
+    text-align: left;
+}
+
+.me-attach-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid #d0d4d9;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: #4a4e51;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.me-attach-btn:hover {
+    background: #f5f6f7;
+}
+
+.me-attach-btn i {
+    font-size: 14px;
+    transform: rotate(45deg);
+}
+
+.me-file-name {
+    color: #72777b;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.me-remove-file {
+    cursor: pointer;
+    color: #383e42;
+    font-weight: 700;
+    font-size: 14px;
+    margin-left: 2px;
+}
+
+.me-remove-file:hover {
+    color: #ff0000;
+}
+
+/* Submit Button */
+.me-submit {
+    width: 100%;
+    background: #707582;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background 0.2s;
+}
+
+.me-submit:hover {
+    background: #5e636f;
+}

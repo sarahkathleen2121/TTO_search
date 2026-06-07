@@ -1,0 +1,357 @@
+/* user-profile.css */
+
+.profile-header-section {
+    background-color: #f4f9ff;
+    padding: 60px 0;
+    position: relative;
+    border-bottom: 1px solid #e1efff;
+}
+
+.profile-user-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    background-color: #e1efff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar i {
+    font-size: 50px;
+    color: #383E42;
+}
+
+.profile-details h1 {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.profile-details p {
+    color: #3b82f6;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.profile-header-actions {
+    position: absolute;
+    bottom: 30px;
+    right: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.btn-profile-outline {
+    background-color: transparent;
+    border: 1px solid #93c5fd;
+    color: #383E42;
+    padding: 8px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 0;
+    transition: all 0.2s;
+}
+
+.btn-profile-outline:hover {
+    background-color: #e1efff;
+    color: #383E42;
+}
+
+/* Tabs Section */
+.profile-tabs-section {
+    padding: 40px 0;
+}
+
+.profile-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.profile-tab {
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #383E42;
+    background-color: transparent;
+    border: 1px solid #93c5fd;
+    text-decoration: none;
+    border-radius: 0;
+    transition: all 0.2s;
+}
+
+.profile-tab.active,
+.profile-tab:hover {
+    background-color: #383E42;
+    color: #fff;
+    border-color: #383E42;
+}
+
+/* Board Cards */
+.board-card {
+    margin-bottom: 40px;
+}
+
+.board-card-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 240px 80px;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.board-main-image {
+    grid-column: 1 / -1;
+    background-color: #f4f9ff;
+    width: 100%;
+    height: 100%;
+}
+
+.board-sub-image {
+    background-color: #f4f9ff;
+    width: 100%;
+    height: 100%;
+}
+
+.board-title {
+    color: #383E42;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e1efff;
+    padding-bottom: 10px;
+}
+
+.board-meta {
+    display: flex;
+    justify-content: space-between;
+    color: #3b82f6;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.board-meta-stats {
+    display: flex;
+    gap: 15px;
+}
+/* Board Detail Page Styles */
+.board-detail-header {
+    background-color: #f4f9ff;
+    padding: 30px 0 20px 0;
+    position: relative;
+    border-bottom: 1px solid #e1efff;
+}
+
+.btn-board-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: transparent;
+    border: 1px solid #93c5fd;
+    color: #383E42;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 0;
+    text-decoration: none;
+    position: absolute;
+    color: #383E42;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 0;
+    text-decoration: none;
+    position: absolute;
+    top: 30px;
+    left: 15px; /* container gutter offset */
+}
+
+.btn-board-back:hover {
+    background-color: #e1efff;
+    color: #383E42;
+}
+
+.board-detail-title-block {
+    text-align: center;
+    padding: 60px 0 40px 0;
+}
+
+.btn-board-back:hover {
+    background-color: #e1efff;
+    color: #383E42;
+}
+
+.board-detail-title-block {
+    text-align: center;
+    padding: 60px 0 40px 0;
+}
+
+.board-detail-title-block h1 {
+    color: #383E42;
+    font-weight: 800;
+    font-size: 32px;
+    margin-bottom: 40px;
+}
+
+.board-creator-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: absolute;
+    bottom: 20px;
+    left: 15px;
+}
+
+.board-creator-info .creator-avatar {
+    width: 36px;
+    height: 36px;
+    background-color: #e1efff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #383E42;
+    font-size: 14px;
+}
+
+.board-creator-info span {
+    color: #383E42;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.board-detail-actions {
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+    display: flex;
+    gap: 12px;
+}
+
+.btn-board-action {
+    background-color: transparent;
+    border: 1px solid #93c5fd;
+    color: #383E42;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 0;
+    transition: all 0.2s;
+}
+
+.btn-board-action:hover {
+    background-color: #e1efff;
+    color: #383E42;
+}
+
+/* Board Filter Tabs */
+.board-detail-content {
+    padding: 40px 0;
+}
+
+.board-filter-tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.board-filter-tab {
+    padding: 8px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #383E42;
+    background-color: transparent;
+    border: 1px solid #93c5fd;
+    text-decoration: none;
+    border-radius: 0;
+    transition: all 0.2s;
+}
+
+.board-filter-tab.active,
+.board-filter-tab:hover {
+    background-color: #383E42;
+    color: #fff;
+    border-color: #383E42;
+}
+
+.board-sort-select {
+    border: 1px solid #93c5fd;
+    border-radius: 0;
+    color: #383E42;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 30px 8px 15px;
+    box-shadow: none;
+}
+
+.board-sort-select:focus {
+    border-color: #383E42;
+    box-shadow: none;
+}
+
+/* Board Item Cars */
+.board-item-card {
+    border: 1px solid #e1efff;
+    border-radius: 0;
+    overflow: hidden;
+    height: 100%;
+}
+.item-card-image {
+    background-color: #f4f9ff;
+    position: relative;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-placeholder-img {
+    max-width: 40%;
+    opacity: 0.5;
+}
+
+.item-bookmark {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: #383E42;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.item-type-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #fff;
+    border: 1px solid #e1efff;
+}
+
+.item-card-content {
+    padding: 25px 20px;
+}
+
+.item-card-content h3 {
+    color: #383E42;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+.item-card-content p {
+    color: #3b82f6;
+    font-size: 12px;
+    margin: 0;
+    line-height: 1.5;
+}

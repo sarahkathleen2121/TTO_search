@@ -1,0 +1,70 @@
+/* terms-conditions.css */
+
+.tc-hero {
+    background-color: #eff0f0;
+    padding: 50px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid #e1efff;
+}
+
+.tc-breadcrumb {
+    color: #383E42;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.tc-breadcrumb a {
+    color: #383E42;
+    text-decoration: none;
+}
+
+.tc-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.tc-title {
+    color: #383E42;
+    font-size: 40px;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.tc-content {
+    padding: 50px 0 80px;
+}
+
+.tc-section {
+    max-width: 800px;
+    margin-bottom: 40px;
+}
+
+.tc-section h2 {
+    color: #383E42;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.tc-section p {
+    color: #383E42;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .tc-title {
+        font-size: 30px;
+    }
+
+    .tc-section h2 {
+        font-size: 15px;
+    }
+
+    .tc-section p {
+        font-size: 13px;
+    }
+}

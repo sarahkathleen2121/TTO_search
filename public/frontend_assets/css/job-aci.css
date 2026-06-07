@@ -1,0 +1,223 @@
+/* Hero */
+.jd-hero {
+    padding: 50px 0 30px;
+}
+
+.jd-breadcrumb {
+    color: #677389;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 14px;
+    font-weight: 400;
+}
+
+.jd-title {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 42px;
+    text-align: center;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+/* Content */
+.jd-section {
+    padding: 40px 0 70px;
+}
+
+.jd-section h4 {
+    color: #383E42;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 28px;
+    margin: 0 0 20px;
+}
+
+.jd-par {
+    color: #4a5568;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* Apply card */
+.jd-apply {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+.jd-apply h6 {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 14px;
+}
+
+.jd-apply .jd-par {
+    font-size: 14px;
+}
+
+.jd-apply .btn {
+    background: #677389;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 36px;
+    font-weight: 500;
+    font-size: 15px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    width: auto;
+}
+
+.jd-apply .btn:hover {
+    background: #383E42;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile list */
+.jd-list {
+    color: #4a5568;
+    font-size: 15px;
+    line-height: 1.7;
+    padding-left: 20px;
+    list-style: disc;
+}
+
+.jd-list li {
+    margin-bottom: 12px;
+}
+
+.jd-list li::marker {
+    color: #383E42;
+}
+
+/* Relevant slider */
+.jd-rel {
+    border-top: 1px solid #e2e8f0;
+    padding: 30px 0 14px;
+    margin-top: 50px;
+}
+
+.jd-rel h4 {
+    color: #383E42;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+.jd-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.jd-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid #a0aec0;
+    background: #fff;
+    color: #677389;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 12px;
+}
+
+.jd-btn:hover {
+    border-color: #383E42;
+    color: #383E42;
+    background: #f8f9fa;
+}
+
+.jd-viewport {
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.jd-track {
+    display: flex;
+    gap: 18px;
+    transition: transform 400ms ease;
+}
+
+.jd-card {
+    min-width: 280px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    transition: box-shadow 0.3s ease;
+}
+
+.jd-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.jd-card h6 {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0;
+}
+
+.jd-date {
+    color: #a0aec0;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.jd-desc {
+    color: #4a5568;
+    font-size: 14px;
+    margin: 12px 0 16px;
+    line-height: 1.5;
+}
+
+.jd-link {
+    color: #383E42;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s ease;
+}
+
+.jd-link:hover {
+    color: #677389;
+    text-decoration: none;
+}
+
+@media (max-width: 991px) {
+    .jd-title {
+        font-size: 34px;
+    }
+
+    .jd-section h4 {
+        font-size: 24px;
+    }
+
+    .jd-apply {
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .jd-title {
+        font-size: 28px;
+    }
+
+    .jd-card {
+        min-width: 260px;
+    }
+}

@@ -1,0 +1,261 @@
+/* Hero */
+.ct-hero {
+    padding: 48px 0 32px;
+}
+
+.ct-breadcrumb {
+    color: #677389;
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+.ct-title {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 42px;
+    margin: 8px 0 14px;
+    letter-spacing: -0.5px;
+}
+
+.ct-sub {
+    color: #4a5568;
+    max-width: 400px;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* CTA split */
+.ct-cta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0; */
+}
+
+.ct-cta>a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 40px 10px;
+    color: #383E42;
+    font-weight: 400;
+    font-size: 28px;
+    text-decoration: none;
+    border-right: 1px solid #e2e8f0;
+    transition: background 0.2s;
+}
+
+.ct-cta>a:hover {
+    background: #f8f9fb;
+}
+
+.ct-cta>a:last-child {
+    border-right: 0;
+}
+
+.ct-cta i {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #677389;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.ct-cta>a:hover i {
+    background: #383E42;
+}
+
+/* Office + Form */
+.ct-section {
+    padding: 50px 0;
+}
+
+.ct-h3 {
+    color: #383E42;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 24px;
+    margin-bottom: 24px;
+}
+
+.ct-map {
+    background: #e8f0fe;
+    border: none;
+    border-radius: 10px;
+    height: 300px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ct-map-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ct-map-pin {
+    color: #383E42;
+    font-size: 32px;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.ct-directions-btn {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    background: #383E42;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+}
+
+.ct-directions-btn:hover {
+    background: #677389;
+    transform: translateY(-1px);
+}
+
+.ct-photo {
+    background: #f1f5f9;
+    border-radius: 10px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.ct-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Form */
+.ct-section .form-control {
+    background: #f1f5f9;
+    border: none;
+    border-radius: 8px;
+    height: 48px;
+    font-size: 14px;
+    color: #383E42;
+    padding: 12px 16px;
+}
+
+.ct-section .form-control::placeholder {
+    color: #6b7280;
+}
+
+.ct-section .form-control:focus {
+    border-color: #a0aec0;
+    box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.1);
+    background: #f1f5f9;
+}
+
+.ct-section textarea.form-control {
+    height: 120px;
+    resize: vertical;
+}
+
+.ct-submit {
+    background: #677389;
+    color: #fff;
+    border: none;
+    height: 48px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ct-submit:hover {
+    background: #383E42;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Addresses */
+.ct-address h5 {
+    color: #383E42;
+    font-weight: 700;
+    font-size: 15px;
+    margin: 0 0 10px;
+}
+
+.ct-address p {
+    color: #4a5568;
+    font-size: 13.5px;
+    line-height: 1.8;
+    margin: 0 0 16px;
+}
+
+/* Banner */
+.ct-banner {
+    min-height: 410px;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+/* Showrooms */
+.ct-show {
+    padding: 40px 0 70px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.ct-show h4 {
+    color: #383E42;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 24px;
+    margin: 0 0 24px;
+}
+
+@media (max-width: 576px) {
+    .ct-title {
+        font-size: 32px;
+    }
+
+    .ct-cta {
+        grid-template-columns: 1fr;
+    }
+
+    .ct-cta>a {
+        font-size: 20px;
+        padding: 24px 10px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .ct-cta>a:last-child {
+        border-bottom: 0;
+    }
+
+    .ct-map {
+        border-radius: 10px;
+    }
+}
