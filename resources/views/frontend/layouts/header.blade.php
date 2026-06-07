@@ -6,18 +6,32 @@
                 <img class="logo_img" src="{{ asset('frontend_assets/images/logo.png') }}" alt="Logo">
             </a>
 
-            <!-- Mobile toggle button -->
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <!-- Mobile: quick icons + hamburger -->
+            <div class="header-mobile-actions d-flex d-lg-none align-items-center ms-auto">
+                <a href="{{ route('search.results') }}" class="mobile-icon-btn" aria-label="Search">
+                    <i class="fas fa-search"></i>
+                </a>
+                <a href="{{ route('enquiry.basket') }}" class="mobile-icon-btn position-relative" aria-label="Cart">
+                    <img src="{{ asset('frontend_assets/images/cart.png') }}" alt="Cart">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mobile-badge" id="basket-badge-mobile" style="{{ count(session('enquiry_basket', [])) == 0 ? 'display: none;' : '' }}">
+                        {{ array_sum(array_column(session('enquiry_basket', []), 'qty')) }}
+                    </span>
+                </a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" class="mobile-icon-btn mobile-icon-btn--user" aria-label="Account">
+                    <img src="{{ asset('frontend_assets/images/user.png') }}" alt="User">
+                </a>
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
 
             <!-- Right side: Menu and Icons -->
             <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="d-flex flex-column align-items-lg-end w-100 ms-lg-auto mt-3 mt-lg-0">
+                <div class="d-flex flex-column align-items-lg-end w-100 ms-lg-auto mt-1 mt-lg-0">
                     
-                    <!-- Top Icons Row -->
-                    <div class="navbar-icons mb-2 mt-2 mb-lg-3 d-flex align-items-center justify-content-start justify-content-lg-end gap-2 gap-lg-3">
+                    <!-- Top Icons Row (desktop) -->
+                    <div class="navbar-icons mb-2 mt-2 mb-lg-3 d-none d-lg-flex align-items-center justify-content-lg-end gap-2 gap-lg-3">
                         <a href="{{ route('search.results') }}" class="search-btn text-decoration-none">
                             <i class="fas fa-search"></i> Search
                         </a>
@@ -35,21 +49,37 @@
                     <!-- Bottom Menu Row -->
                     <ul class="navbar-nav align-items-start align-items-lg-center mt-2">
                         <li class="nav-item">
-                            <a id="navServices" class="nav-link" href="{{ route('services') }}">Services</a>
+                            <a id="navServices" class="nav-link d-none d-lg-block" href="{{ route('services') }}">Services</a>
+                            <button type="button" class="nav-link mobile-nav-toggle d-lg-none" data-submenu="mobileServicesSubmenu" aria-expanded="false">
+                                Services <i class="fas fa-chevron-down mobile-nav-chevron"></i>
+                            </button>
+                            <ul class="mobile-submenu d-lg-none" id="mobileServicesSubmenu">
+                                <li><a href="{{ route('service.listing') }}">Service Listing</a></li>
+                                <li><a href="{{ route('ideal.workspace') }}">The Ideal Workspace</a></li>
+                                <li><a href="{{ route('moodboards') }}">Moodboards</a></li>
+                                <li><a href="{{ route('services') }}" class="mobile-submenu-view-all">View All Services</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a id="navProducts" class="nav-link" href="{{ route('products.type') }}">Products</a>
+                            <a id="navProducts" class="nav-link d-none d-lg-block" href="{{ route('products.type') }}">Products</a>
+                            <button type="button" class="nav-link mobile-nav-toggle d-lg-none" data-submenu="mobileProductsSubmenu" aria-expanded="false">
+                                Products <i class="fas fa-chevron-down mobile-nav-chevron"></i>
+                            </button>
+                            <ul class="mobile-submenu d-lg-none" id="mobileProductsSubmenu">
+                                <li><a href="{{ route('products.type') }}">Shop by Product</a></li>
+                                <li><a href="{{ route('shop.by.industry') }}">Shop by Industry</a></li>
+                                <li><a href="{{ route('shop.by.brands') }}">Shop by Brand</a></li>
+                                <li><a href="{{ route('shop.by.space') }}">Shop by Space</a></li>
+                                <li><a href="{{ route('all.products') }}" class="mobile-submenu-view-all">See All Products</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('initiatives') }}">Initiatives</a>
                         </li>
-                        <!-- <li class="nav-item">
-                            <a class="nav-link" href="{{ route('resources') }}">Journal/Blog</a>
-                        </li> -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('about') }}">About</a>
                         </li>
-                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0 nav-item--book">
                             <button class="btn btn-book">Book a visit/call</button>
                         </li>
                     </ul>
@@ -149,17 +179,33 @@
 </div>
 
 <script>
-    // Hover-driven dropdowns for navbar
+    // Hover-driven dropdowns for navbar (desktop only)
     (function() {
         const servicesLink = document.getElementById("navServices");
         const productsLink = document.getElementById("navProducts");
         const servicesPanel = document.getElementById("servicesPanel");
         const productsPanel = document.querySelector(".main-container");
         const productsDropdown = document.getElementById("productsDropdown");
+        const navbarCollapse = document.getElementById("navbarNav");
+        const mainHeader = document.querySelector("header.main_header");
+        const desktopMq = window.matchMedia("(min-width: 992px)");
 
         let hideServicesTO, hideProductsTO;
 
+        function isDesktopNav() {
+            return desktopMq.matches;
+        }
+
+        function updateHeaderHeight() {
+            if (!mainHeader) return;
+            document.documentElement.style.setProperty("--header-height", mainHeader.offsetHeight + "px");
+        }
+
+        updateHeaderHeight();
+        window.addEventListener("resize", updateHeaderHeight);
+
         function showServices() {
+            if (!isDesktopNav()) return;
             clearTimeout(hideServicesTO);
             servicesPanel.classList.add("show");
         }
@@ -172,8 +218,8 @@
         }
 
         function showProducts() {
+            if (!isDesktopNav()) return;
             clearTimeout(hideProductsTO);
-            // ensure inner dropdown visible
             productsDropdown && productsDropdown.classList.remove("hide");
             productsPanel.classList.add("show");
         }
@@ -185,11 +231,15 @@
             );
         }
 
+        function closeMegaPanels() {
+            servicesPanel && servicesPanel.classList.remove("show");
+            productsPanel && productsPanel.classList.remove("show");
+        }
+
         // Services hover
         if (servicesLink && servicesPanel) {
             servicesLink.addEventListener("mouseenter", () => {
                 showServices();
-                // hide products if open
                 productsPanel.classList.remove("show");
             });
             servicesLink.addEventListener("mouseleave", hideServices);
@@ -206,6 +256,60 @@
             productsLink.addEventListener("mouseleave", hideProducts);
             productsPanel.addEventListener("mouseenter", showProducts);
             productsPanel.addEventListener("mouseleave", hideProducts);
+        }
+
+        // Mobile submenu toggles
+        document.querySelectorAll(".mobile-nav-toggle").forEach((toggle) => {
+            toggle.addEventListener("click", () => {
+                const submenuId = toggle.getAttribute("data-submenu");
+                const submenu = document.getElementById(submenuId);
+                const isOpen = toggle.getAttribute("aria-expanded") === "true";
+
+                document.querySelectorAll(".mobile-nav-toggle").forEach((other) => {
+                    if (other !== toggle) {
+                        other.setAttribute("aria-expanded", "false");
+                        const otherSub = document.getElementById(other.getAttribute("data-submenu"));
+                        otherSub && otherSub.classList.remove("open");
+                    }
+                });
+
+                toggle.setAttribute("aria-expanded", isOpen ? "false" : "true");
+                submenu && submenu.classList.toggle("open", !isOpen);
+            });
+        });
+
+        function closeMobileMenu() {
+            if (!navbarCollapse || isDesktopNav() || !navbarCollapse.classList.contains("show")) return;
+            const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse) || new bootstrap.Collapse(navbarCollapse, { toggle: false });
+            bsCollapse.hide();
+        }
+
+        // Close mobile menu on navigation or CTA click
+        if (navbarCollapse) {
+            navbarCollapse.querySelectorAll(".mobile-submenu a, .nav-link:not(.mobile-nav-toggle), .btn-book").forEach((link) => {
+                link.addEventListener("click", closeMobileMenu);
+            });
+        }
+
+        desktopMq.addEventListener("change", () => {
+            closeMegaPanels();
+            document.querySelectorAll(".mobile-submenu").forEach((sub) => sub.classList.remove("open"));
+            document.querySelectorAll(".mobile-nav-toggle").forEach((toggle) => toggle.setAttribute("aria-expanded", "false"));
+            document.body.classList.remove("mobile-menu-open");
+        });
+
+        if (navbarCollapse) {
+            navbarCollapse.addEventListener("shown.bs.collapse", () => {
+                if (!isDesktopNav()) {
+                    updateHeaderHeight();
+                    document.body.classList.add("mobile-menu-open");
+                }
+            });
+            navbarCollapse.addEventListener("hidden.bs.collapse", () => {
+                document.body.classList.remove("mobile-menu-open");
+                document.querySelectorAll(".mobile-submenu").forEach((sub) => sub.classList.remove("open"));
+                document.querySelectorAll(".mobile-nav-toggle").forEach((toggle) => toggle.setAttribute("aria-expanded", "false"));
+            });
         }
     })();
 

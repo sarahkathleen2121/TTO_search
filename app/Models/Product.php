@@ -15,6 +15,11 @@ class Product extends Model
     public function referenceImageUrl(): ?string
     {
         if ($this->thumbnail) {
+            // New path: uploads/products/filename.ext (directly in public/)
+            if (str_starts_with($this->thumbnail, 'uploads/')) {
+                return asset($this->thumbnail);
+            }
+            // Old path: products/filename.ext (via storage symlink)
             return asset('storage/'.$this->thumbnail);
         }
 

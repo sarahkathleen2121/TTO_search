@@ -84,7 +84,7 @@
                             <label class="form-label">Thumbnail Image</label>
                             <input type="file" name="thumbnail" class="form-control">
                             @if(isset($product) && $product->thumbnail)
-                                <img src="{{ asset('storage/'.$product->thumbnail) }}" alt="img" width="100" class="mt-2">
+                                <img src="{{ $product->referenceImageUrl() }}" alt="img" width="100" class="mt-2">
                             @endif
                         </div>
                         <div class="col-md-6 mb-3 d-flex align-items-center">

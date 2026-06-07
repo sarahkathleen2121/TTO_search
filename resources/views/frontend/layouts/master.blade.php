@@ -1256,15 +1256,16 @@
             fetch('{{ route("enquiry.basket.count") }}')
                 .then(res => res.json())
                 .then(data => {
-                    const badge = document.getElementById('basket-badge');
-                    if(badge) {
-                        if(data.count > 0) {
+                    ['basket-badge', 'basket-badge-mobile'].forEach((id) => {
+                        const badge = document.getElementById(id);
+                        if (!badge) return;
+                        if (data.count > 0) {
                             badge.style.display = 'block';
                             badge.textContent = data.totalQty;
                         } else {
                             badge.style.display = 'none';
                         }
-                    }
+                    });
                 });
         }
 

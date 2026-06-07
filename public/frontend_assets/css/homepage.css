@@ -955,9 +955,9 @@ body {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    body {
+    /* body {
         padding: 30px 0;
-    }
+    } */
 
     .slider-section {
         padding: 40px 0;
@@ -1023,9 +1023,9 @@ body {
 
 /* Small Mobile Responsive */
 @media (max-width: 480px) {
-    body {
+    /* body {
         padding: 20px 0;
-    }
+    } */
 
     .slider-section {
         padding: 30px 0;

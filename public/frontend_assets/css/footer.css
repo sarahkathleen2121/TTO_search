@@ -222,7 +222,16 @@
         padding-bottom: 30px;
     }
 
-    .footer-brand {
+    /* Col 1 (Services) & Col 2 (All Products) side by side, Col 3 below */
+    .footer-col:nth-child(1) {
+        grid-column: 1;
+    }
+
+    .footer-col:nth-child(2) {
+        grid-column: 2;
+    }
+
+    .footer-col:nth-child(3) {
         grid-column: 1 / -1;
     }
 
@@ -249,9 +258,26 @@
     }
 
     .footer-top {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: 20px;
         padding-bottom: 20px;
+    }
+
+    /* Col 1 (Services) & Col 2 (All Products) side by side, Col 3 below */
+    .footer-col:nth-child(1) {
+        grid-column: 1;
+    }
+
+    .footer-col:nth-child(2) {
+        grid-column: 2;
+    }
+
+    .footer-col:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+
+    .footer-newsletter {
+        grid-column: 1 / -1;
     }
 
     .footer-logo {

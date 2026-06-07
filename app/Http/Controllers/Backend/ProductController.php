@@ -13,6 +13,8 @@ use App\Models\Space;
 use App\Models\Color;
 use App\Models\Material;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -38,13 +40,14 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'nullable|numeric',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
         ]);
 
         $data = $request->except(['industries', 'spaces', 'colors', 'materials', 'thumbnail']);
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('products', 'public');
+            $data['thumbnail'] = $this->uploadThumbnail($request->file('thumbnail'));
         }
 
         $product = Product::create($data);
@@ -73,13 +76,17 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'nullable|numeric',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
         ]);
 
         $data = $request->except(['industries', 'spaces', 'colors', 'materials', 'thumbnail']);
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('products', 'public');
+            // Delete old thumbnail if it exists
+            $this->deleteOldThumbnail($product->thumbnail);
+
+            $data['thumbnail'] = $this->uploadThumbnail($request->file('thumbnail'));
         }
 
         $product->update($data);
@@ -94,7 +101,55 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        $this->deleteOldThumbnail($product->thumbnail);
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
+
+    /**
+     * Upload thumbnail directly to public/uploads/products/ (no symlink needed).
+     */
+    protected function uploadThumbnail($file): string
+    {
+        $dir = public_path('uploads/products');
+        if (!File::isDirectory($dir)) {
+            File::makeDirectory($dir, 0755, true);
+        }
+
+        $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+        $file->move($dir, $filename);
+
+        return 'uploads/products/' . $filename;
+    }
+
+    /**
+     * Delete old thumbnail file from both possible locations.
+     */
+    protected function deleteOldThumbnail(?string $path): void
+    {
+        if (!$path) {
+            return;
+        }
+
+        // Check in public/ directory (new upload location)
+        $publicPath = public_path($path);
+        if (File::exists($publicPath)) {
+            File::delete($publicPath);
+            return;
+        }
+
+        // Check in storage/ directory (old upload location via symlink)
+        $storagePath = storage_path('app/public/' . str_replace('products/', '', $path));
+        if (File::exists($storagePath)) {
+            File::delete($storagePath);
+            return;
+        }
+
+        // Also try direct storage path
+        $directPath = storage_path('app/public/' . $path);
+        if (File::exists($directPath)) {
+            File::delete($directPath);
+        }
+    }
 }
+
