@@ -5,6 +5,12 @@ window.TtoAiSearch = window.TtoAiSearch || {};
     let sceneSelection = { x: 0.1, y: 0.1, width: 0.4, height: 0.4 };
     let sceneImage = null;
 
+    let currentSearchMode = 'text';
+    let currentImageFile = null;
+    let currentSceneCoords = null;
+    let currentQuery = '';
+    let currentPage = 1;
+
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text || '';
@@ -18,24 +24,21 @@ window.TtoAiSearch = window.TtoAiSearch || {};
         const price = item.price
             ? `$ ${Number(item.price).toLocaleString()}`
             : '';
-        const category =
-            showCategory && item.category
-                ? `<div class="sr-card-category">${escapeHtml(item.category)}</div>`
-                : '';
+        const priceOrBrand = item.brand_name || price;
         return `
-                <div class="sr-card">
-                    <div class="sr-card-top">
-                        <i class="fa-regular fa-heart sr-card-fav" style="cursor:pointer;" onclick="addToBasket(${item.id})" title="Add to Enquiry Basket"></i>
-                        <a href="${escapeHtml(url)}">
-                            <img src="${escapeHtml(img)}" class="sr-card-img" alt="${escapeHtml(item.title)}" loading="lazy" />
-                        </a>
-                    </div>
-                    <div class="sr-card-body">
-                        ${category}
-                        <a href="${escapeHtml(url)}" class="text-decoration-none text-dark">
-                            <div class="sr-card-name">${escapeHtml(item.title)}</div>
-                        </a>
-                        <div class="sr-card-price">${price}</div>
+                <div class="col-sm-6 col-lg-4">
+                    <div class="ap-card">
+                        <div class="ap-card-top">
+                            <i class="fa-regular fa-heart ap-card-fav" style="cursor:pointer; z-index: 10;" onclick="addToBasket(${item.id})" title="Add to Enquiry Basket"></i>
+                            <img src="${escapeHtml(img)}" class="ap-card-img" alt="${escapeHtml(item.title)}" loading="lazy" />
+                            <a href="${escapeHtml(url)}" class="ap-card-link-overlay"></a>
+                        </div>
+                        <div class="ap-card-body">
+                            <a href="${escapeHtml(url)}" class="text-decoration-none text-dark">
+                                <div class="ap-card-name">${escapeHtml(item.title)}</div>
+                            </a>
+                            <div class="ap-card-price">${escapeHtml(priceOrBrand)}</div>
+                        </div>
                     </div>
                 </div>`;
     }
@@ -106,33 +109,154 @@ window.TtoAiSearch = window.TtoAiSearch || {};
         renderRelated(data);
     }
 
+    function renderPagination(data) {
+        const pagEl = document.getElementById('srPagination');
+        if (!pagEl) return;
+
+        const total = data.total || 0;
+        const page = data.page || 1;
+        const limit = data.limit || 9;
+        const totalPages = Math.ceil(total / limit);
+
+        if (totalPages <= 1) {
+            pagEl.classList.add('d-none');
+            pagEl.innerHTML = '';
+            return;
+        }
+
+        pagEl.classList.remove('d-none');
+        let html = '';
+
+        if (page > 1) {
+            html += `<a href="#" class="sr-page-link" data-page="${page - 1}"><i class="fas fa-arrow-left"></i> Prev</a>`;
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === page) {
+                html += `<span class="sr-page-num active">${i}</span>`;
+            } else {
+                if (totalPages > 6 && Math.abs(i - page) > 2 && i !== 1 && i !== totalPages) {
+                    if (i === 2 || i === totalPages - 1) {
+                        html += `<span class="sr-page-dots" style="color:#383e42;">...</span>`;
+                    }
+                    continue;
+                }
+                html += `<a href="#" class="sr-page-num" data-page="${i}">${i}</a>`;
+            }
+        }
+
+        if (page < totalPages) {
+            html += `<a href="#" class="sr-page-link" data-page="${page + 1}">Next <i class="fas fa-arrow-right"></i></a>`;
+        }
+
+        pagEl.innerHTML = html;
+
+        pagEl.querySelectorAll('[data-page]').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                const p = parseInt(el.dataset.page);
+                ns.applyFiltersAndSearch(p);
+                document.getElementById('srGrid')?.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    }
+
     function showLoading() {
         const grid = document.getElementById('srGrid');
         if (grid) {
             grid.innerHTML =
-                '<div class="sr-loading col-12"><i class="fas fa-spinner fa-spin"></i> Searching...</div>';
+                '<div class="col-12 text-center py-5" id="srLoadingIndicator"><i class="fas fa-spinner fa-spin fa-2x"></i><h5 class="mt-2">Searching...</h5></div>';
         }
         showRelatedLoading();
     }
 
+    function gatherParams(page = 1) {
+        const filters = {};
+        const pt = document.querySelector('[data-filter-type="product_type"] .ap-chip.selected');
+        if (pt) filters.product_type = pt.dataset.value;
+
+        const ind = document.querySelector('[data-filter-type="industry"] .ap-chip.selected');
+        if (ind) filters.industry = ind.dataset.value;
+
+        const sp = document.querySelector('[data-filter-type="space"] .ap-chip.selected');
+        if (sp) filters.space = sp.dataset.value;
+
+        const col = document.querySelector('[data-filter-type="color"] .ap-chip.selected');
+        if (col && col.dataset.value) filters.color = col.dataset.value;
+
+        const mat = document.querySelector('[data-filter-type="material"] .ap-chip.selected');
+        if (mat) filters.material = mat.dataset.value;
+
+        const br = document.querySelector('[data-filter-type="brand"] .ap-chip.selected');
+        if (br) filters.brand = br.dataset.value;
+
+        const priceSlider = document.getElementById('apPrice');
+        if (priceSlider) {
+            filters.max_price = priceSlider.value;
+            filters.min_price = 0;
+        }
+
+        let sort = 'relevance';
+        const activeSort = document.querySelector('#apSortGrid .ap-sort-btn.active');
+        if (activeSort) sort = activeSort.dataset.sort;
+
+        return {
+            filters,
+            sort,
+            page,
+            limit: 9
+        };
+    }
+
+    ns.applyFiltersAndSearch = function (page = 1) {
+        const params = gatherParams(page);
+        if (currentSearchMode === 'text') {
+            ns.runTextSearch(currentQuery, params).catch(console.error);
+        } else if (currentSearchMode === 'image' || currentSearchMode === 'scene') {
+            ns.runImageSearch(currentImageFile, params, currentSceneCoords).catch(console.error);
+        }
+    };
+
     ns.runTextSearch = async function (query, params) {
+        currentSearchMode = 'text';
+        currentQuery = query;
+        currentImageFile = null;
+        currentSceneCoords = null;
+        
+        const finalParams = params && params.page ? params : gatherParams(1);
+        currentPage = finalParams.page || 1;
+
         showLoading();
         const data = await ns.searchText({
             query,
-            filters: params.filters || null,
-            sort: params.sort || 'relevance',
-            page: params.page || 1,
-            limit: params.limit || 20,
+            filters: finalParams.filters || null,
+            sort: finalParams.sort || 'relevance',
+            page: currentPage,
+            limit: finalParams.limit || 9,
         });
         renderResults(data);
+        renderPagination(data);
     };
 
     ns.runImageSearch = async function (file, params, sceneCoords) {
+        if (sceneCoords) {
+            currentSearchMode = 'scene';
+            currentSceneCoords = sceneCoords;
+        } else {
+            currentSearchMode = 'image';
+            currentSceneCoords = null;
+        }
+        currentImageFile = file;
+
+        const finalParams = params && params.page ? params : gatherParams(1);
+        currentPage = finalParams.page || 1;
+
         showLoading();
         const data = sceneCoords
-            ? await ns.searchScene(file, sceneCoords, params)
-            : await ns.searchImage(file, params);
+            ? await ns.searchScene(file, sceneCoords, finalParams)
+            : await ns.searchImage(file, finalParams);
         renderResults(data);
+        renderPagination(data);
     };
 
     function initSceneCanvas(file) {

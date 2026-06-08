@@ -384,7 +384,15 @@ class PageController extends Controller
             });
         }
 
-        $blogs = $query->latest()->paginate(9);
+        if ($request->filled('search')) {
+            $search = trim($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $blogs = $query->latest()->paginate(9)->withQueryString();
         $categories = \App\Models\BlogCategory::orderBy('name')->get();
 
         return view('frontend.pages.resources', compact('blogs', 'categories'));

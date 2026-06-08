@@ -260,12 +260,21 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 0;
-    border-bottom: 1px solid #e8f0ff;
-    margin-bottom: 20px;
+    min-height: 56px;
+    padding: 20px 28px;
+    margin: 0 -28px 20px;
+    border-bottom: 1px solid transparent;
     position: sticky;
     top: 0;
     z-index: 10;
+    background: #eff0f0;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ap-sidebar-header.is-scrolled {
+    background: #ffffff;
+    border-bottom-color: #e8f0ff;
+    box-shadow: 0 2px 8px rgba(56, 62, 66, 0.06);
 }
 
 .ap-sidebar-back {

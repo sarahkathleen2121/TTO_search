@@ -179,10 +179,14 @@
                 document.body.style.overflow = 'hidden';
             }
 
+            const header = sidebar?.querySelector('.ap-sidebar-header');
+
             function closeSidebar() {
                 sidebar.classList.remove('open');
                 overlay.classList.remove('open');
                 document.body.style.overflow = '';
+                sidebar.scrollTop = 0;
+                header?.classList.remove('is-scrolled');
             }
 
             toggle.addEventListener('click', openSidebar);
@@ -233,6 +237,11 @@
                 grid.classList.add('view-2');
                 view2.classList.add('active');
                 view3.classList.remove('active');
+            });
+
+            // Sticky sidebar header background on scroll
+            sidebar?.addEventListener('scroll', () => {
+                header?.classList.toggle('is-scrolled', sidebar.scrollTop > 4);
             });
         })();
     </script>

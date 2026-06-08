@@ -16,10 +16,13 @@
       <div class="container">
         <!-- Toolbar -->
         <div class="rc-toolbar">
-          <div class="rc-search">
-            <input type="text" placeholder="Search" />
-            <button aria-label="search"><i class="fa fa-magnifying-glass"></i></button>
-          </div>
+          <form class="rc-search" action="{{ route('resources') }}" method="GET">
+            @if(request('category'))
+              <input type="hidden" name="category" value="{{ request('category') }}">
+            @endif
+            <input type="text" name="search" placeholder="Search" value="{{ request('search') }}" />
+            <button type="submit" aria-label="search"><i class="fa fa-magnifying-glass"></i></button>
+          </form>
           
           <div class="rc-select-wrapper">
              <i class="fa fa-chevron-down rc-select-arrow"></i>

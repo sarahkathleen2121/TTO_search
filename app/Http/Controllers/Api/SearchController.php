@@ -77,23 +77,37 @@ class SearchController extends Controller
         $validated = $request->validate([
             'query' => 'required|string|max:500',
             'filters' => 'nullable|array',
-            'filters.category' => 'nullable|string',
+            'filters.product_type' => 'nullable|string',
+            'filters.industry' => 'nullable|string',
+            'filters.space' => 'nullable|string',
             'filters.color' => 'nullable|string',
             'filters.material' => 'nullable|string',
             'filters.brand' => 'nullable|string',
+            'filters.min_price' => 'nullable|numeric',
+            'filters.max_price' => 'nullable|numeric',
             'filters.availability' => 'nullable|string',
-            'sort' => 'nullable|string|in:relevance,category,price',
+            'sort' => 'nullable|string',
             'page' => 'nullable|integer|min:1',
             'limit' => 'nullable|integer|min:1|max:100',
         ]);
 
         try {
-            $data = $this->fetchTextSearch($validated);
+            $vectorIds = null;
+            if (config('ai-search.enabled')) {
+                $payload = [
+                    'query' => $validated['query'],
+                    'sort' => 'relevance',
+                    'page' => 1,
+                    'limit' => 200,
+                ];
+                $data = $this->aiSearch->searchText($payload);
+                $vectorIds = collect($data['results'] ?? [])->pluck('id')->all();
+            }
 
-            return response()->json($this->enrichResults($data));
+            return response()->json($this->queryProducts($validated, $vectorIds));
         } catch (\Throwable $e) {
             if (config('ai-search.fallback_sql')) {
-                return response()->json($this->fallbackTextSearch($validated));
+                return response()->json($this->queryProducts($validated, null));
             }
 
             return response()->json(['message' => 'Search temporarily unavailable.'], 503);
@@ -105,20 +119,29 @@ class SearchController extends Controller
         $validated = $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
             'filters' => 'nullable|array',
-            'sort' => 'nullable|string|in:relevance,category,price',
+            'filters.product_type' => 'nullable|string',
+            'filters.industry' => 'nullable|string',
+            'filters.space' => 'nullable|string',
+            'filters.color' => 'nullable|string',
+            'filters.material' => 'nullable|string',
+            'filters.brand' => 'nullable|string',
+            'filters.min_price' => 'nullable|numeric',
+            'filters.max_price' => 'nullable|numeric',
+            'filters.availability' => 'nullable|string',
+            'sort' => 'nullable|string',
             'page' => 'nullable|integer|min:1',
             'limit' => 'nullable|integer|min:1|max:100',
         ]);
 
         try {
             $data = $this->aiSearch->searchImage($request->file('image'), [
-                'filters' => isset($validated['filters']) ? json_encode($validated['filters']) : null,
-                'sort' => $validated['sort'] ?? 'relevance',
-                'page' => $validated['page'] ?? 1,
-                'limit' => $validated['limit'] ?? 20,
+                'sort' => 'relevance',
+                'page' => 1,
+                'limit' => 200,
             ]);
+            $vectorIds = collect($data['results'] ?? [])->pluck('id')->all();
 
-            return response()->json($this->enrichResults($data));
+            return response()->json($this->queryProducts($validated, $vectorIds));
         } catch (\Throwable $e) {
             return response()->json([
                 'results' => [],
@@ -139,7 +162,16 @@ class SearchController extends Controller
             'width' => 'required|numeric|min:0.01|max:1',
             'height' => 'required|numeric|min:0.01|max:1',
             'filters' => 'nullable|array',
-            'sort' => 'nullable|string|in:relevance,category,price',
+            'filters.product_type' => 'nullable|string',
+            'filters.industry' => 'nullable|string',
+            'filters.space' => 'nullable|string',
+            'filters.color' => 'nullable|string',
+            'filters.material' => 'nullable|string',
+            'filters.brand' => 'nullable|string',
+            'filters.min_price' => 'nullable|numeric',
+            'filters.max_price' => 'nullable|numeric',
+            'filters.availability' => 'nullable|string',
+            'sort' => 'nullable|string',
             'page' => 'nullable|integer|min:1',
             'limit' => 'nullable|integer|min:1|max:100',
         ]);
@@ -151,13 +183,13 @@ class SearchController extends Controller
                 'width' => $validated['width'],
                 'height' => $validated['height'],
             ], [
-                'filters' => isset($validated['filters']) ? json_encode($validated['filters']) : null,
-                'sort' => $validated['sort'] ?? 'relevance',
-                'page' => $validated['page'] ?? 1,
-                'limit' => $validated['limit'] ?? 20,
+                'sort' => 'relevance',
+                'page' => 1,
+                'limit' => 200,
             ]);
+            $vectorIds = collect($data['results'] ?? [])->pluck('id')->all();
 
-            return response()->json($this->enrichResults($data));
+            return response()->json($this->queryProducts($validated, $vectorIds));
         } catch (\Throwable $e) {
             return response()->json([
                 'results' => [],
@@ -166,6 +198,238 @@ class SearchController extends Controller
                 'message' => 'Scene search is temporarily unavailable.',
             ], 503);
         }
+    }
+
+    protected function queryProducts(array $validated, ?array $vectorIds = null): array
+    {
+        $filters = $validated['filters'] ?? [];
+        $sort = $validated['sort'] ?? 'relevance';
+        $limit = intval($validated['limit'] ?? 9);
+
+        $productsQuery = Product::query()
+            ->with(['brand', 'productType']);
+
+        if ($vectorIds !== null) {
+            if (empty($vectorIds)) {
+                return [
+                    'results' => [],
+                    'total' => 0,
+                    'page' => 1,
+                    'limit' => $limit,
+                    'confidence' => 'none',
+                    'related_results' => [],
+                    'related_heading' => 'Related Products',
+                ];
+            }
+            $productsQuery->whereIn('products.id', $vectorIds);
+        } else {
+            $rawQuery = $validated['query'] ?? '';
+            $stopWords = [
+                'i', 'me', 'my', 'we', 'our', 'you', 'your', 'he', 'she', 'it', 'they',
+                'a', 'an', 'the', 'this', 'that', 'these', 'those',
+                'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
+                'have', 'has', 'had', 'do', 'does', 'did',
+                'will', 'would', 'shall', 'should', 'can', 'could', 'may', 'might',
+                'want', 'need', 'looking', 'find', 'get', 'show',
+                'for', 'of', 'in', 'on', 'at', 'to', 'with', 'from', 'by', 'about',
+                'and', 'or', 'but', 'not', 'no', 'so', 'if', 'then',
+                'some', 'any', 'all', 'very', 'just', 'also', 'please', 'thanks',
+            ];
+
+            $words = preg_split('/\s+/', strtolower(trim($rawQuery)));
+            $keywords = array_values(array_filter($words, function ($w) use ($stopWords) {
+                return strlen($w) >= 2 && !in_array($w, $stopWords, true);
+            }));
+
+            if (!empty($keywords)) {
+                $productsQuery->leftJoin('product_types', 'products.product_type_id', '=', 'product_types.id')
+                    ->leftJoin('brands', 'products.brand_id', '=', 'brands.id');
+
+                $relevanceParts = [];
+                $bindings = [];
+                foreach ($keywords as $kw) {
+                    $like = "%{$kw}%";
+                    $relevanceParts[] = '(CASE WHEN products.name LIKE ? THEN 2 ELSE 0 END)';
+                    $bindings[] = $like;
+                    $relevanceParts[] = '(CASE WHEN product_types.name LIKE ? THEN 2 ELSE 0 END)';
+                    $bindings[] = $like;
+                    $relevanceParts[] = '(CASE WHEN brands.name LIKE ? THEN 1 ELSE 0 END)';
+                    $bindings[] = $like;
+                    $relevanceParts[] = '(CASE WHEN products.description LIKE ? THEN 1 ELSE 0 END)';
+                    $bindings[] = $like;
+                }
+                $relevanceExpr = implode(' + ', $relevanceParts);
+                $productsQuery->selectRaw("products.*, ({$relevanceExpr}) as relevance_score", $bindings);
+
+                $productsQuery->where(function ($q) use ($keywords) {
+                    foreach ($keywords as $kw) {
+                        $like = "%{$kw}%";
+                        $q->orWhere('products.name', 'like', $like)
+                          ->orWhere('products.description', 'like', $like)
+                          ->orWhere('product_types.name', 'like', $like)
+                          ->orWhere('brands.name', 'like', $like);
+                    }
+                });
+            } else {
+                $productsQuery->where('products.name', 'like', "%{$rawQuery}%")
+                    ->orWhere('products.description', 'like', "%{$rawQuery}%");
+            }
+        }
+
+        if (!empty($filters['product_type'])) {
+            $productsQuery->whereHas('productType', function($q) use ($filters) {
+                $q->where('slug', $filters['product_type']);
+            });
+        }
+        if (!empty($filters['industry'])) {
+            $productsQuery->whereHas('industries', function($q) use ($filters) {
+                $q->where('slug', $filters['industry']);
+            });
+        }
+        if (!empty($filters['space'])) {
+            $productsQuery->whereHas('spaces', function($q) use ($filters) {
+                $q->where('slug', $filters['space']);
+            });
+        }
+        if (!empty($filters['brand'])) {
+            $productsQuery->whereHas('brand', function($q) use ($filters) {
+                $q->where('slug', $filters['brand']);
+            });
+        }
+        if (!empty($filters['color'])) {
+            $productsQuery->whereHas('colors', function($q) use ($filters) {
+                $q->where('name', $filters['color']);
+            });
+        }
+        if (!empty($filters['material'])) {
+            $productsQuery->whereHas('materials', function($q) use ($filters) {
+                $q->where('name', $filters['material']);
+            });
+        }
+        if (isset($filters['min_price']) && is_numeric($filters['min_price'])) {
+            $productsQuery->where('products.price', '>=', floatval($filters['min_price']));
+        }
+        if (isset($filters['max_price']) && is_numeric($filters['max_price'])) {
+            $productsQuery->where('products.price', '<=', floatval($filters['max_price']));
+        }
+        if (!empty($filters['availability'])) {
+            $productsQuery->where('products.availability', $filters['availability']);
+        }
+
+        if ($sort === 'latest') {
+            $productsQuery->orderByDesc('products.created_at');
+        } elseif ($sort === 'name_asc') {
+            $productsQuery->orderBy('products.name', 'asc');
+        } elseif ($sort === 'name_desc') {
+            $productsQuery->orderBy('products.name', 'desc');
+        } elseif ($sort === 'price_asc') {
+            $productsQuery->orderBy('products.price', 'asc');
+        } elseif ($sort === 'price_desc') {
+            $productsQuery->orderBy('products.price', 'desc');
+        } elseif ($sort === 'popular') {
+            $productsQuery->orderByDesc('products.is_featured');
+        } else {
+            if ($vectorIds !== null && !empty($vectorIds)) {
+                $idsString = implode(',', array_map('intval', $vectorIds));
+                $productsQuery->orderByRaw("FIELD(products.id, {$idsString})");
+            } else {
+                if (isset($keywords) && !empty($keywords)) {
+                    $productsQuery->orderByDesc('relevance_score');
+                } else {
+                    $productsQuery->orderByDesc('products.is_featured')->latest();
+                }
+            }
+        }
+
+        $paginated = $productsQuery->paginate($limit);
+
+        $relatedProducts = collect();
+        $resultIds = $paginated->pluck('id')->all();
+        if ($paginated->isNotEmpty()) {
+            $typeIds = $paginated->pluck('product_type_id')->filter()->unique()->all();
+            $brandIds = $paginated->pluck('brand_id')->filter()->unique()->all();
+
+            $relatedProducts = Product::query()
+                ->with(['productType', 'brand'])
+                ->whereNotIn('id', $resultIds)
+                ->where(function ($q) use ($typeIds, $brandIds) {
+                    if ($typeIds) {
+                        $q->whereIn('product_type_id', $typeIds);
+                    }
+                    if ($brandIds) {
+                        $q->orWhereIn('brand_id', $brandIds);
+                    }
+                })
+                ->inRandomOrder()
+                ->take(8)
+                ->get();
+        }
+
+        if ($relatedProducts->isEmpty()) {
+            $relatedProducts = Product::query()
+                ->with(['productType', 'brand'])
+                ->whereNotIn('id', $resultIds)
+                ->where('is_featured', true)
+                ->inRandomOrder()
+                ->take(8)
+                ->get();
+        }
+
+        return [
+            'results' => $paginated->map(fn (Product $p) => [
+                'id' => (string) $p->id,
+                'title' => $p->name,
+                'slug' => $p->slug,
+                'url' => route('product.detail', $p->slug),
+                'image_url' => $p->referenceImageUrl(),
+                'price' => $p->price,
+                'brand_name' => $p->brand?->name ?? '',
+                'category' => $p->productType?->name ?? '',
+                'similarity_score' => 0.5,
+            ])->values()->all(),
+            'total' => $paginated->total(),
+            'page' => $paginated->currentPage(),
+            'limit' => $paginated->perPage(),
+            'confidence' => $vectorIds !== null ? 'high' : 'medium',
+            'message' => $vectorIds !== null ? 'Showing AI search results.' : 'Showing keyword results (AI search offline).',
+            'related_results' => $relatedProducts->map(fn (Product $p) => [
+                'id' => (string) $p->id,
+                'title' => $p->name,
+                'slug' => $p->slug,
+                'url' => route('product.detail', $p->slug),
+                'image_url' => $p->referenceImageUrl(),
+                'price' => $p->price,
+                'brand_name' => $p->brand?->name ?? '',
+                'category' => $p->productType?->name ?? '',
+                'similarity_score' => 0.4,
+            ])->values()->all(),
+            'related_heading' => 'Related Products',
+        ];
+    }
+
+    protected function enrichProductList(array $items): array
+    {
+        $ids = collect($items)->pluck('id')->filter()->all();
+        $products = Product::query()
+            ->with(['productType', 'brand'])
+            ->whereIn('id', $ids)
+            ->get()
+            ->keyBy(fn (Product $p) => (string) $p->id);
+
+        return collect($items)->map(function (array $item) use ($products) {
+            $product = $products->get($item['id'] ?? null);
+            if ($product) {
+                $item['slug'] = $product->slug;
+                $item['url'] = route('product.detail', $product->slug);
+                $item['image_url'] = $product->referenceImageUrl() ?? $item['image_url'] ?? '';
+                $item['title'] = $product->name;
+                $item['price'] = $product->price;
+                $item['brand_name'] = $product->brand?->name ?? '';
+                $item['category'] = $product->productType?->name ?? ($item['category'] ?? '');
+            }
+
+            return $item;
+        })->values()->all();
     }
 
     public function filters(): JsonResponse
@@ -216,178 +480,5 @@ class SearchController extends Controller
         return $data;
     }
 
-    protected function enrichResults(array $data): array
-    {
-        $data['results'] = $this->enrichProductList($data['results'] ?? []);
-        $data['related_results'] = $this->enrichProductList($data['related_results'] ?? []);
 
-        return $data;
-    }
-
-    protected function enrichProductList(array $items): array
-    {
-        $ids = collect($items)->pluck('id')->filter()->all();
-        $products = Product::query()
-            ->with('productType')
-            ->whereIn('id', $ids)
-            ->get()
-            ->keyBy(fn (Product $p) => (string) $p->id);
-
-        return collect($items)->map(function (array $item) use ($products) {
-            $product = $products->get($item['id'] ?? null);
-            if ($product) {
-                $item['slug'] = $product->slug;
-                $item['url'] = route('product.detail', $product->slug);
-                $item['image_url'] = $product->referenceImageUrl() ?? $item['image_url'] ?? '';
-                $item['title'] = $product->name;
-                $item['price'] = $product->price;
-                $item['category'] = $product->productType?->name ?? ($item['category'] ?? '');
-            }
-
-            return $item;
-        })->values()->all();
-    }
-
-    protected function fallbackTextSearch(array $validated): array
-    {
-        $rawQuery = $validated['query'];
-
-        // Extract meaningful keywords by removing stop words
-        $stopWords = [
-            'i', 'me', 'my', 'we', 'our', 'you', 'your', 'he', 'she', 'it', 'they',
-            'a', 'an', 'the', 'this', 'that', 'these', 'those',
-            'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
-            'have', 'has', 'had', 'do', 'does', 'did',
-            'will', 'would', 'shall', 'should', 'can', 'could', 'may', 'might',
-            'want', 'need', 'looking', 'looking', 'find', 'get', 'show',
-            'for', 'of', 'in', 'on', 'at', 'to', 'with', 'from', 'by', 'about',
-            'and', 'or', 'but', 'not', 'no', 'so', 'if', 'then',
-            'some', 'any', 'all', 'very', 'just', 'also', 'please', 'thanks',
-        ];
-
-        $words = preg_split('/\s+/', strtolower(trim($rawQuery)));
-        $keywords = array_values(array_filter($words, function ($w) use ($stopWords) {
-            return strlen($w) >= 2 && !in_array($w, $stopWords, true);
-        }));
-
-        // Build query: search each keyword in name, description, product type name, and brand name
-        $productsQuery = Product::query()
-            ->with('productType')
-            ->select('products.*');
-
-        if (!empty($keywords)) {
-            // Left join product types and brands so we can search their names too
-            $productsQuery->leftJoin('product_types', 'products.product_type_id', '=', 'product_types.id')
-                ->leftJoin('brands', 'products.brand_id', '=', 'brands.id');
-
-            // Build a relevance score: count how many keywords match
-            $relevanceParts = [];
-            $bindings = [];
-            foreach ($keywords as $kw) {
-                $like = "%{$kw}%";
-                $relevanceParts[] = '(CASE WHEN products.name LIKE ? THEN 2 ELSE 0 END)';
-                $bindings[] = $like;
-                $relevanceParts[] = '(CASE WHEN product_types.name LIKE ? THEN 2 ELSE 0 END)';
-                $bindings[] = $like;
-                $relevanceParts[] = '(CASE WHEN brands.name LIKE ? THEN 1 ELSE 0 END)';
-                $bindings[] = $like;
-                $relevanceParts[] = '(CASE WHEN products.description LIKE ? THEN 1 ELSE 0 END)';
-                $bindings[] = $like;
-            }
-            $relevanceExpr = implode(' + ', $relevanceParts);
-            $productsQuery->selectRaw("({$relevanceExpr}) as relevance_score", $bindings);
-
-            // At least one keyword must match somewhere
-            $productsQuery->where(function ($q) use ($keywords) {
-                foreach ($keywords as $kw) {
-                    $like = "%{$kw}%";
-                    $q->orWhere('products.name', 'like', $like)
-                      ->orWhere('products.description', 'like', $like)
-                      ->orWhere('product_types.name', 'like', $like)
-                      ->orWhere('brands.name', 'like', $like);
-                }
-            });
-
-            $productsQuery->orderByDesc('relevance_score');
-        } else {
-            // No meaningful keywords, fall back to full phrase search
-            $productsQuery->where('name', 'like', "%{$rawQuery}%")
-                ->orWhere('description', 'like', "%{$rawQuery}%");
-        }
-
-        $products = $productsQuery->paginate($validated['limit'] ?? 20);
-
-        $resultIds = $products->pluck('id')->all();
-
-        // Build related products from same product types / brands as the results
-        $relatedProducts = collect();
-        if ($products->isNotEmpty()) {
-            $typeIds = $products->pluck('product_type_id')->filter()->unique()->all();
-            $brandIds = $products->pluck('brand_id')->filter()->unique()->all();
-
-            $relatedProducts = Product::query()
-                ->with('productType')
-                ->whereNotIn('id', $resultIds)
-                ->where(function ($q) use ($typeIds, $brandIds) {
-                    if ($typeIds) {
-                        $q->whereIn('product_type_id', $typeIds);
-                    }
-                    if ($brandIds) {
-                        $q->orWhereIn('brand_id', $brandIds);
-                    }
-                })
-                ->inRandomOrder()
-                ->take(8)
-                ->get();
-        }
-
-        // If still no related products, show random featured or latest products
-        if ($relatedProducts->isEmpty()) {
-            $relatedProducts = Product::query()
-                ->with('productType')
-                ->whereNotIn('id', $resultIds)
-                ->where('is_featured', true)
-                ->inRandomOrder()
-                ->take(8)
-                ->get();
-        }
-
-        if ($relatedProducts->isEmpty()) {
-            $relatedProducts = Product::query()
-                ->with('productType')
-                ->whereNotIn('id', $resultIds)
-                ->latest()
-                ->take(8)
-                ->get();
-        }
-
-        return [
-            'results' => $products->map(fn (Product $p) => [
-                'id' => (string) $p->id,
-                'title' => $p->name,
-                'slug' => $p->slug,
-                'url' => route('product.detail', $p->slug),
-                'image_url' => $p->referenceImageUrl(),
-                'price' => $p->price,
-                'category' => $p->productType?->name ?? '',
-                'similarity_score' => 0.5,
-            ])->values()->all(),
-            'total' => $products->total(),
-            'page' => $products->currentPage(),
-            'limit' => $products->perPage(),
-            'confidence' => 'medium',
-            'message' => 'Showing keyword results (AI search offline).',
-            'related_results' => $relatedProducts->map(fn (Product $p) => [
-                'id' => (string) $p->id,
-                'title' => $p->name,
-                'slug' => $p->slug,
-                'url' => route('product.detail', $p->slug),
-                'image_url' => $p->referenceImageUrl(),
-                'price' => $p->price,
-                'category' => $p->productType?->name ?? '',
-                'similarity_score' => 0.4,
-            ])->values()->all(),
-            'related_heading' => 'Related Products',
-        ];
-    }
 }
