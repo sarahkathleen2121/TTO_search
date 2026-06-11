@@ -5,6 +5,10 @@
 
     @php
         $bgImage = ($product && $product->referenceImageUrl()) ? $product->referenceImageUrl() : asset('frontend_assets/images/banner_img.png');
+        $visualImages = $product ? $product->visualImages : collect();
+        $uspImages = $product ? $product->uspImages : collect();
+        $galleryImages = $product ? $product->galleryImages : collect();
+        $galleryUrls = $galleryImages->map(fn ($img) => $img->url())->values();
     @endphp
 
     <!-- Hero -->
@@ -24,29 +28,26 @@
                 <h1 class="pd-title">{{ $product ? $product->name : 'Moss Upholstery Fabric' }}</h1>
             </div>
             <div class="pd-cta-wrap">
-                <button class="pd-btn primary" onclick="addToBasket({{ $product ? $product->id : 0 }})">Add to Enquiry Basket</button>
-                <button class="pd-btn outline"><i class="fa-solid fa-heart me-1"></i> Add to Favorites</button>
             </div>
         </div>
     </section>
 
+    @if($visualImages->count())
     <!-- Visual section (two boxes) -->
     <section class="py-4">
         <div class="container">
             <div class="row g-4">
+                @foreach($visualImages->take(2) as $visual)
                 <div class="col-md-6">
                     <div class="pd-visual-illus">
-                        <img src="{{ asset('frontend_assets/images/product_1.png') }}" alt="Product Image" class="pd-visual-img">
+                        <img src="{{ $visual->url() }}" alt="{{ $product->name ?? 'Product' }}" class="pd-visual-img">
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="pd-visual-illus">
-                        <img src="{{ asset('frontend_assets/images/product_2.png') }}" alt="Product Image" class="pd-visual-img">
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Specification with Tabs -->
     <section class="pd-spec">
@@ -118,37 +119,24 @@
         </div>
     </section>
 
-    <!-- Sustainability icon cards -->
+    @if($uspImages->count())
+    <!-- USP highlight images -->
     <section class="pd-sustain-cards">
         <div class="container">
             <div class="row g-5 justify-content-center">
+                @foreach($uspImages->take(2) as $uspImage)
                 <div class="col-md-6">
-                    <div class="pd-sustain-card">
+                    <div class="pd-sustain-card pd-sustain-card--image-only">
                         <div class="pd-sustain-card-img-wrap">
-                            <img src="{{ asset('frontend_assets/images/project_1.png') }}" alt="Sustainable" class="pd-sustain-card-img">
-                        </div>
-                        <div class="pd-sustain-card-body">
-                            <img src="{{ asset('frontend_assets/images/sustainabillity.png') }}" alt="Sustainable" class="pd-sustain-card-icon">
-                            <div class="pd-sustain-card-title">Sustainable</div>
-                            <p class="pd-sustain-card-desc">Our products a made form 100% recycled material.</p>
+                            <img src="{{ $uspImage->url() }}" alt="{{ $product->name ?? 'Product USP' }}" class="pd-sustain-card-img">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="pd-sustain-card">
-                        <div class="pd-sustain-card-img-wrap">
-                            <img src="{{ asset('frontend_assets/images/project_2.png') }}" alt="Low Waste" class="pd-sustain-card-img">
-                        </div>
-                        <div class="pd-sustain-card-body">
-                            <img src="{{ asset('frontend_assets/images/low_waste.png') }}" alt="Low Waste" class="pd-sustain-card-icon">
-                            <div class="pd-sustain-card-title">Low Waste</div>
-                            <p class="pd-sustain-card-desc">Our goal is to have zero carbon footprint by 2030.</p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </section>
+    @endif
 
     <!-- Sustainability section -->
     <section class="pd-sustain">
@@ -183,25 +171,21 @@
         </div>
     </section>
 
+    @if($galleryUrls->count())
     <!-- Gallery section -->
     <section class="pd-gallery">
         <h3 class="pd-gallery-title">Gallery</h3>
-        <div class="pd-gallery-viewport">
-            <div class="pd-gallery-track">
-                <div class="pd-gallery-slide side">
-                    <img src="{{ asset('frontend_assets/images/product_left.png') }}" alt="Gallery Left">
-                    <div class="pd-gallery-overlay"></div>
-                </div>
-                <div class="pd-gallery-slide center">
-                    <img src="{{ asset('frontend_assets/images/product_center.png') }}" alt="Gallery Center">
-                </div>
-                <div class="pd-gallery-slide side">
-                    <img src="{{ asset('frontend_assets/images/product_right.png') }}" alt="Gallery Right">
-                    <div class="pd-gallery-overlay"></div>
-                </div>
-            </div>
+        <div class="pd-gallery-viewport" id="pdGalleryViewport">
+            <button type="button" class="pd-gallery-nav pd-gallery-nav--prev" id="pdGalleryPrev" aria-label="Previous image">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="pd-gallery-track" id="pdGalleryTrack" data-images='@json($galleryUrls)'></div>
+            <button type="button" class="pd-gallery-nav pd-gallery-nav--next" id="pdGalleryNext" aria-label="Next image">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
     </section>
+    @endif
 
     <!-- Paired products + banner + next -->
     <section class="pd-paired">
@@ -213,7 +197,6 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="pd-card">
                             <div class="pd-card-top position-relative">
-                                <i class="fa-regular fa-bookmark pd-card-fav text-white" style="text-shadow: 0 0 5px rgba(0,0,0,0.3); cursor:pointer;" onclick="addToBasket({{ $related->id }})" title="Add to Enquiry Basket"></i>
                                 <a href="{{ route('product.detail', $related->slug) }}">
                                     <img src="{{ $related->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" class="pd-card-img" alt="{{ $related->name }}">
                                 </a>
@@ -263,4 +246,95 @@
     </section>
 
 
+    @if($galleryUrls->count())
+    <script>
+        (function () {
+            const track = document.getElementById('pdGalleryTrack');
+            if (!track) return;
+
+            let images = [];
+            try {
+                images = JSON.parse(track.dataset.images || '[]');
+            } catch (e) {
+                return;
+            }
+            if (!images.length) return;
+
+            let active = 0;
+            let timer = null;
+
+            function sideSlide(src, alt) {
+                return `<div class="pd-gallery-slide side">
+                    <img src="${src}" alt="${alt}">
+                    <div class="pd-gallery-overlay"></div>
+                </div>`;
+            }
+
+            function centerSlide(src, alt) {
+                return `<div class="pd-gallery-slide center">
+                    <img src="${src}" alt="${alt}">
+                </div>`;
+            }
+
+            function render() {
+                const n = images.length;
+                if (n === 1) {
+                    track.innerHTML = centerSlide(images[0], 'Gallery');
+                    return;
+                }
+                if (n === 2) {
+                    track.innerHTML = sideSlide(images[0], 'Gallery') + centerSlide(images[1], 'Gallery');
+                    return;
+                }
+                const prev = (active - 1 + n) % n;
+                const next = (active + 1) % n;
+                track.innerHTML =
+                    sideSlide(images[prev], 'Gallery') +
+                    centerSlide(images[active], 'Gallery') +
+                    sideSlide(images[next], 'Gallery');
+            }
+
+            function go(step) {
+                active = (active + step + images.length) % images.length;
+                render();
+            }
+
+            function startAuto() {
+                stopAuto();
+                if (images.length > 1) {
+                    timer = setInterval(() => go(1), 4500);
+                }
+            }
+
+            function stopAuto() {
+                if (timer) clearInterval(timer);
+            }
+
+            document.getElementById('pdGalleryPrev')?.addEventListener('click', () => {
+                go(-1);
+                startAuto();
+            });
+            document.getElementById('pdGalleryNext')?.addEventListener('click', () => {
+                go(1);
+                startAuto();
+            });
+
+            const viewport = document.getElementById('pdGalleryViewport');
+            let touchX = 0;
+            viewport?.addEventListener('touchstart', (e) => {
+                touchX = e.changedTouches[0].screenX;
+                stopAuto();
+            }, { passive: true });
+            viewport?.addEventListener('touchend', (e) => {
+                const diff = e.changedTouches[0].screenX - touchX;
+                if (Math.abs(diff) > 40) go(diff > 0 ? -1 : 1);
+                startAuto();
+            }, { passive: true });
+
+            render();
+            startAuto();
+            window.addEventListener('resize', render);
+        })();
+    </script>
+    @endif
     @endsection

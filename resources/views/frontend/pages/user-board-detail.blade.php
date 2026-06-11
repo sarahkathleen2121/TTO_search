@@ -93,7 +93,6 @@
                         <span class="bd-badge">Product</span>
                     </div>
                     <h3 class="bd-card-title">Native Light Chair</h3>
-                    <p class="bd-card-price">$ 1,200</p>
                 </div>
 
                 <!-- Card 3: Moodboard -->

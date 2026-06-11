@@ -28,11 +28,6 @@ class PageController extends Controller
                 $q->where('slug', $request->product_type);
             });
         }
-        if ($request->filled('industry')) {
-            $query->whereHas('industries', function($q) use ($request) {
-                $q->where('slug', $request->industry);
-            });
-        }
         if ($request->filled('brand')) {
             $query->whereHas('brand', function($q) use ($request) {
                 $q->where('slug', $request->brand);
@@ -48,14 +43,13 @@ class PageController extends Controller
 
         // Sidebar data
         $productTypes = \App\Models\ProductType::orderBy('name')->get();
-        $industries = \App\Models\Industry::orderBy('name')->get();
         $spaces = \App\Models\Space::orderBy('name')->get();
         $brands = \App\Models\Brand::orderBy('name')->get();
         $colors = \App\Models\Color::orderBy('name')->get();
         $materials = \App\Models\Material::orderBy('name')->get();
 
         return view('frontend.pages.all-products', compact(
-            'products', 'productTypes', 'industries', 'spaces', 'brands', 'colors', 'materials'
+            'products', 'productTypes', 'spaces', 'brands', 'colors', 'materials'
         ));
     }
 
@@ -106,55 +100,6 @@ class PageController extends Controller
         return view('frontend.pages.conference-rooms', compact('space', 'productTypes', 'context'));
     }
 
-    public function industryDetail($slug)
-    {
-        $industry = \App\Models\Industry::where('slug', $slug)->firstOrFail();
-
-        // Fetch up to 6 products belonging to this industry
-        $products = \App\Models\Product::whereHas('industries', function($q) use ($industry) {
-            $q->where('industries.id', $industry->id);
-        })->latest()->take(6)->get();
-
-        // If no products specific to this industry, fallback to latest products
-        if ($products->isEmpty()) {
-            $products = \App\Models\Product::latest()->take(6)->get();
-        }
-
-        $brands = \App\Models\Brand::orderBy('name')->get();
-
-        // Get another industry for the CTA banner
-        $nextIndustry = \App\Models\Industry::where('id', '!=', $industry->id)->inRandomOrder()->first();
-
-        return view('frontend.pages.hospitality', compact('industry', 'products', 'brands', 'nextIndustry'));
-    }
-
-    public function industryCategories($slug)
-    {
-        $industry = \App\Models\Industry::where('slug', $slug)->firstOrFail();
-
-        // Fetch product types that have products belonging to this industry
-        $productTypes = \App\Models\ProductType::with(['products' => function($q) use ($industry) {
-            $q->whereHas('industries', function($iq) use ($industry) {
-                $iq->where('industries.id', $industry->id);
-            })->latest()->take(8);
-        }])->whereHas('products', function($q) use ($industry) {
-            $q->whereHas('industries', function($iq) use ($industry) {
-                $iq->where('industries.id', $industry->id);
-            });
-        })->get();
-
-        // Map industry to $space object for view compatibility
-        $space = (object)[
-            'name' => $industry->name,
-            'slug' => $industry->slug,
-            'id' => $industry->id
-        ];
-
-        $context = 'industry';
-
-        return view('frontend.pages.conference-rooms', compact('space', 'productTypes', 'context'));
-    }
-
     public function spaceProducts($space_slug, $type_slug)
     {
         $space = \App\Models\Space::where('slug', $space_slug)->firstOrFail();
@@ -176,34 +121,6 @@ class PageController extends Controller
         return view('frontend.pages.conference-room-tables', compact('space', 'products', 'productTypes', 'colors', 'materials', 'context', 'productType'));
     }
 
-    public function industryProducts($industry_slug, $type_slug)
-    {
-        $industry = \App\Models\Industry::where('slug', $industry_slug)->firstOrFail();
-        $productType = \App\Models\ProductType::where('slug', $type_slug)->firstOrFail();
-
-        // Fetch products belonging to this industry and this product type
-        $products = \App\Models\Product::whereHas('industries', function($q) use ($industry) {
-            $q->where('industries.id', $industry->id);
-        })->whereHas('productType', function($q) use ($productType) {
-            $q->where('product_types.id', $productType->id);
-        })->latest()->get();
-
-        $productTypes = \App\Models\ProductType::orderBy('name')->get();
-        $colors = \App\Models\Color::orderBy('name')->get();
-        $materials = \App\Models\Material::orderBy('name')->get();
-
-        // Map industry to $space object for view compatibility
-        $space = (object)[
-            'name' => $industry->name,
-            'slug' => $industry->slug,
-            'id' => $industry->id
-        ];
-
-        $context = 'industry';
-
-        return view('frontend.pages.conference-room-tables', compact('space', 'products', 'productTypes', 'colors', 'materials', 'context', 'productType'));
-    }
-
     public function contact()
     {
         return view('frontend.pages.contact');
@@ -217,50 +134,6 @@ class PageController extends Controller
     public function esg()
     {
         return view('frontend.pages.esg');
-    }
-
-    public function hospitality($slug = 'hospitality')
-    {
-        $industry = \App\Models\Industry::where('slug', $slug)->first();
-        
-        if (!$industry) {
-            // Fallback: try to find any industry, or create a mock if none exist
-            $industry = \App\Models\Industry::first();
-        }
-
-        if (!$industry) {
-            $industry = new \App\Models\Industry();
-            $industry->name = 'Hospitality';
-            $industry->slug = 'hospitality';
-            $industry->id = 0; // dummy id
-        }
-
-        // Fetch products belonging to this industry
-        $products = collect();
-        if ($industry->id > 0) {
-            $products = \App\Models\Product::whereHas('industries', function($q) use ($industry) {
-                $q->where('industries.id', $industry->id);
-            })->latest()->take(6)->get();
-        }
-
-        // If no products specific to this industry, fallback to latest products
-        if ($products->isEmpty()) {
-            $products = \App\Models\Product::latest()->take(6)->get();
-        }
-
-        $brands = \App\Models\Brand::orderBy('name')->get();
-
-        // Get another industry for the CTA banner
-        $nextIndustry = null;
-        if ($industry->id > 0) {
-            $nextIndustry = \App\Models\Industry::where('id', '!=', $industry->id)->inRandomOrder()->first();
-        }
-        if (!$nextIndustry) {
-            // fallback next industry if there's only one or none
-            $nextIndustry = \App\Models\Industry::where('slug', '!=', 'hospitality')->first();
-        }
-
-        return view('frontend.pages.hospitality', compact('industry', 'products', 'brands', 'nextIndustry'));
     }
 
     public function idealWorkspace()
@@ -323,7 +196,9 @@ class PageController extends Controller
         $product = null;
         $relatedProducts = collect();
         if ($slug) {
-            $product = \App\Models\Product::where('slug', $slug)->first();
+            $product = \App\Models\Product::with(['visualImages', 'uspImages', 'galleryImages'])
+                ->where('slug', $slug)
+                ->first();
             if ($product) {
                 $relatedProducts = \App\Models\Product::where('id', '!=', $product->id)
                                     ->take(3)->get();
@@ -335,8 +210,7 @@ class PageController extends Controller
     public function productsType()
     {
         $productTypes = \App\Models\ProductType::withCount('products')->get();
-        $industries = \App\Models\Industry::orderBy('name')->get();
-        return view('frontend.pages.products-type', compact('productTypes', 'industries'));
+        return view('frontend.pages.products-type', compact('productTypes'));
     }
 
     public function resourceDetail($slug)
@@ -419,11 +293,6 @@ class PageController extends Controller
         return $this->renderShopBy('space');
     }
 
-    public function shopByIndustry()
-    {
-        return $this->renderShopBy('industry');
-    }
-
     public function shopByBrands()
     {
         return $this->renderShopBy('brand');
@@ -432,9 +301,7 @@ class PageController extends Controller
     protected function renderShopBy($type)
     {
         $items = collect();
-        if ($type === 'industry') {
-            $items = \App\Models\Industry::orderBy('name')->get();
-        } elseif ($type === 'brand') {
+        if ($type === 'brand') {
             $items = \App\Models\Brand::orderBy('name')->get();
         } else {
             $items = \App\Models\Space::orderBy('name')->get();
@@ -483,7 +350,6 @@ class PageController extends Controller
         }
 
         $productTypes = \App\Models\ProductType::orderBy('name')->get();
-        $industries = \App\Models\Industry::orderBy('name')->get();
         $spaces = \App\Models\Space::orderBy('name')->get();
         $brands = \App\Models\Brand::orderBy('name')->get();
         $colors = \App\Models\Color::orderBy('name')->get();
@@ -491,7 +357,7 @@ class PageController extends Controller
 
         return view('frontend.pages.search-results', compact(
             'query', 'products', 'featuredProducts',
-            'productTypes', 'industries', 'spaces', 'brands', 'colors', 'materials'
+            'productTypes', 'spaces', 'brands', 'colors', 'materials'
         ));
     }
 
@@ -604,6 +470,11 @@ class PageController extends Controller
     public function termsConditions()
     {
         return view('frontend.pages.terms-conditions');
+    }
+
+    public function returnRefundPolicy()
+    {
+        return view('frontend.pages.return-refund-policy');
     }
 
     // Fallback

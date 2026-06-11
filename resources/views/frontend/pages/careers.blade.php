@@ -1,9 +1,9 @@
 @extends('frontend.layouts.master')
 
-@section('title', 'Home - Welcome')
+@section('title', 'Careers')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/careers.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend_assets/css/careers.css') }}?v={{ time() }}">
 
     <!-- Hero -->
     <section class="crs-hero">
@@ -16,56 +16,53 @@
                 </div>
                 <div class="col-lg-6 crs-right">
                     <div class="crs-breadcrumb"><a href="{{ route('home') }}">Home</a> / Careers</div>
-                    <h1 class="crs-title">Working at<br />Total Office</h1>
+                    <h1 class="crs-title">Shape the Future of Work. Join the Team Behind It.</h1>
                     <p class="crs-lead">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                        enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                        nisi ut aliquip ex ea commodo consequat.
+                    Nearly three decades of redefining workspaces across the Middle East — and we're still just getting started. At The Total Office, we don't just design offices. We build careers worth showing up for.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Who We Are -->
+    <section class="crs-who">
+        <div class="container">
+            <h3>Who We Are</h3>
+            <p class="crs-who-text">We are a team of more than 75 people across Dubai, Abu Dhabi, Sharjah in UAE and Riyadh in KSA — designers, sales professionals, marketers, technicians, warehouse staff, and everything in between. What ties us together is not just what we do, but how we do it. We are human-centric by design — not just in the workspaces we create, but in the culture we have built internally. At TTO, every voice carries weight, every idea gets a platform, and every person has room to grow.</p>
+        </div>
+    </section>
+
     <!-- Core Values -->
     <section class="crs-values">
         <div class="container">
-            <h3>Our Core Values</h3>
+            <h3>Why The TTO</h3>
             <div class="crs-vrow row g-3 align-items-start">
                 <div class="col-2 col-md-1 crs-num">01</div>
-                <div class="col-10 col-md-4 crs-vname">Human Kind</div>
+                <div class="col-10 col-md-4 crs-vname">Flat Hierarchy, Real Impact</div>
                 <div class="col-12 col-md-7 crs-vdesc">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text
-                    ever since the 1500s,
+                At The Total Office, titles don't define who gets heard. We operate with a flat structure that encourages open dialogue at every level. If you have an idea, you'll have a platform to share it — and a team ready to back it.
                 </div>
             </div>
             <div class="crs-vrow row g-3 align-items-start">
                 <div class="col-2 col-md-1 crs-num">02</div>
-                <div class="col-10 col-md-4 crs-vname">Innovation</div>
+                <div class="col-10 col-md-4 crs-vname">Freedom to Perform</div>
                 <div class="col-12 col-md-7 crs-vdesc">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text
-                    ever since the 1500s,
+                We hire talented people and then trust them to deliver. You won't find micromanagement here. What you will find is the freedom to take ownership, the space to innovate, and a leadership team that measures performance by outcomes, not hours.
                 </div>
             </div>
             <div class="crs-vrow row g-3 align-items-start">
                 <div class="col-2 col-md-1 crs-num">03</div>
-                <div class="col-10 col-md-4 crs-vname">Reliable</div>
+                <div class="col-10 col-md-4 crs-vname">Always Learning</div>
                 <div class="col-12 col-md-7 crs-vdesc">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text
-                    ever since the 1500s,
+                From LEED and WELL accreditations to the latest in AI-driven space utilisation, our industry never stands still — and neither do we. We invest in our people's growth, exposing them to cutting-edge projects, global brands, and the kind of challenges that genuinely sharpen careers.
                 </div>
             </div>
             <div class="crs-vrow row g-3 align-items-start">
                 <div class="col-2 col-md-1 crs-num">04</div>
-                <div class="col-10 col-md-4 crs-vname">Collaborate</div>
+                <div class="col-10 col-md-4 crs-vname">People First, Always</div>
                 <div class="col-12 col-md-7 crs-vdesc">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                    industry. Lorem Ipsum has been the industry's standard dummy text
-                    ever since the 1500s,
+                Human-centric design is not just our product philosophy — it's our people philosophy. We care about the wellbeing, development, and experience of every person on our team, from our office staff to our warehouse and technical teams. When our people thrive, everything else follows.
                 </div>
             </div>
         </div>
@@ -76,18 +73,9 @@
         <div class="container">
             <div class="row g-4 align-items-start">
                 <div class="col-lg-6">
-                    <h3>We are workplace experts</h3>
+                    <h3>Who We're Looking For</h3>
                     <p style="color: #383E42">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                        enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                        nisi ut aliquip ex ea commodo consequat.
-                    </p>
-                    <p style="color: #383E42">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                        enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                        nisi ut aliquip ex ea commodo consequat.
+                    We are always interested in connecting with exceptional people, even when we are not actively recruiting. If you are an experienced workspace designer, a driven sales professional, a creative marketer, or a graduate ready to build something meaningful — we want to hear from you.
                     </p>
                 </div>
                 <div class="col-lg-6">
@@ -133,11 +121,11 @@
         </div>
     </section>
 
-    <!-- Resume form -->
+    <!-- Resume form (Closing CTA) -->
     <section class="crs-form">
         <div class="container">
             <div class="col-lg-7 mx-auto">
-                <h3>Send us your resume</h3>
+                <h3>Think you belong here? We'd love to start a conversation.</h3>
             <form id="cvForm" novalidate>
                 <div class="row g-3">
                     <div class="col-12">
@@ -161,7 +149,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <button type="submit" class="crs-submit">Submit</button>
+                        <button type="submit" class="crs-submit">Send Us Your CV</button>
                     </div>
                 </div>
             </form>

@@ -84,7 +84,6 @@
                             </div>
                             <div class="mbd-prod-body">
                                 <div class="mbd-prod-name">Native Light Chair</div>
-                                <div class="mbd-prod-price">$ 1,200</div>
                             </div>
                         </div>
                         <!-- Slide 2 -->
@@ -95,7 +94,6 @@
                             </div>
                             <div class="mbd-prod-body">
                                 <div class="mbd-prod-name">Moss Upholstery Fabric</div>
-                                <div class="mbd-prod-price">$ 500</div>
                             </div>
                         </div>
                         <!-- Slide 3 -->
@@ -106,7 +104,6 @@
                             </div>
                             <div class="mbd-prod-body">
                                 <div class="mbd-prod-name">Moss Upholstery Fabric</div>
-                                <div class="mbd-prod-price">$ 500</div>
                             </div>
                         </div>
                         <!-- Slide 4 -->
@@ -117,7 +114,6 @@
                             </div>
                             <div class="mbd-prod-body">
                                 <div class="mbd-prod-name">Moss Upholstery Fabric</div>
-                                <div class="mbd-prod-price">$ 500</div>
                             </div>
                         </div>
                         <!-- Slide 5 -->
@@ -128,7 +124,6 @@
                             </div>
                             <div class="mbd-prod-body">
                                 <div class="mbd-prod-name">Moss Upholstery Fabric</div>
-                                <div class="mbd-prod-price">$ 500</div>
                             </div>
                         </div>
                     </div>

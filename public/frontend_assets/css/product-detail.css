@@ -184,7 +184,7 @@
     color: #383E42;
     font-weight: 700;
     font-size: 42px;
-    font-style: italic;
+    font-style: normal;
     margin-bottom: 30px;
 }
 
@@ -240,7 +240,7 @@
     color: #383E42;
     font-weight: 700;
     font-size: 32px;
-    font-style: italic;
+    font-style: normal;
 }
 
 .pd-usp-desc {
@@ -379,14 +379,53 @@
     color: #383E42;
     font-weight: 700;
     font-size: 36px;
-    font-style: italic;
+    font-style: normal;
     margin-bottom: 40px;
 }
 
 .pd-gallery-viewport {
+    position: relative;
     width: 100%;
     overflow: hidden;
-    padding: 0;
+    padding: 0 48px;
+}
+
+.pd-gallery-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(56, 62, 66, 0.85);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.pd-gallery-nav:hover {
+    background: #383E42;
+}
+
+.pd-gallery-nav--prev {
+    left: 8px;
+}
+
+.pd-gallery-nav--next {
+    right: 8px;
+}
+
+.pd-sustain-card--image-only .pd-sustain-card-img-wrap {
+    height: 420px;
+}
+
+.pd-sustain-card--image-only .pd-sustain-card-body {
+    display: none;
 }
 
 .pd-gallery-track {
@@ -645,6 +684,24 @@
 
     .pd-gallery-track {
         gap: 0;
+    }
+
+    .pd-gallery-viewport {
+        padding: 0;
+    }
+
+    .pd-gallery-nav {
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+    }
+
+    .pd-gallery-nav--prev {
+        left: 4px;
+    }
+
+    .pd-gallery-nav--next {
+        right: 4px;
     }
 
     /* Responsive CTA Banner */

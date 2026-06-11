@@ -97,4 +97,30 @@ class Product extends Model
     {
         return $this->belongsToMany(Color::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+
+    public function visualImages()
+    {
+        return $this->hasMany(ProductImage::class)
+            ->where('type', ProductImage::TYPE_VISUAL)
+            ->orderBy('sort_order');
+    }
+
+    public function uspImages()
+    {
+        return $this->hasMany(ProductImage::class)
+            ->where('type', ProductImage::TYPE_USP)
+            ->orderBy('sort_order');
+    }
+
+    public function galleryImages()
+    {
+        return $this->hasMany(ProductImage::class)
+            ->where('type', ProductImage::TYPE_GALLERY)
+            ->orderBy('sort_order');
+    }
 }

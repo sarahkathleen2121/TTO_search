@@ -1,25 +1,24 @@
 /* Footer Section */
 .footer-section {
-    /* background-color: #eff0f0; */
-    padding: 50px 40px 0;
+    padding: 50px var(--site-gutter, 40px) 0;
     border-top: 1px solid #383e4214;
 }
 
 .footer-wrapper {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
 /* ===== Footer Top ===== */
 .footer-top {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 2fr 1fr 1fr;
-    gap: 30px;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr 1.6fr;
+    gap: 32px;
     padding-bottom: 40px;
     border-bottom: 1px solid #d6e4f5;
+    align-items: start;
 }
 
-/* Logo */
 .footer-brand {
     display: flex;
     align-items: flex-start;
@@ -31,15 +30,18 @@
 }
 
 .footer-logo-img {
-    height: 40px;
+    height: 44px;
     width: auto;
     display: block;
 }
 
-/* Link Columns */
 .footer-col {
     display: flex;
     flex-direction: column;
+}
+
+.footer-col--connect {
+    gap: 20px;
 }
 
 .footer-links {
@@ -54,6 +56,7 @@
     text-decoration: none;
     transition: color 0.3s;
     line-height: 1.4;
+    font-style: normal;
 }
 
 .footer-link:hover {
@@ -61,42 +64,32 @@
     text-decoration: underline;
 }
 
-/* Newsletter Column */
 .footer-newsletter {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.footer-newsletter-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
-
 .footer-newsletter-label {
     font-size: 13px;
     font-weight: 600;
     color: var(--primary-color);
-    white-space: nowrap;
 }
 
 .social-icons {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
 }
 
 .social-icon {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--primary-color);
-    font-size: 20px;
-    cursor: pointer;
+    font-size: 18px;
     transition: color 0.3s;
     text-decoration: none;
 }
@@ -105,10 +98,10 @@
     color: var(--primary-dark);
 }
 
-/* Newsletter Input */
 .newsletter-input-wrapper {
     display: flex;
     align-items: stretch;
+    max-width: 280px;
 }
 
 .newsletter-input {
@@ -122,6 +115,7 @@
     background: #fff;
     outline: none;
     transition: border-color 0.3s;
+    font-family: inherit;
 }
 
 .newsletter-input:focus {
@@ -158,6 +152,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
     padding: 20px 0;
 }
 
@@ -197,52 +193,59 @@
 /* ===== Footer Responsive ===== */
 @media (max-width: 1024px) {
     .footer-top {
-        grid-template-columns: 1.2fr 1fr 1fr 1fr;
-        gap: 25px;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 28px;
     }
 
-    .footer-newsletter {
+    .footer-brand {
+        grid-column: 1 / -1;
+    }
+
+    .footer-col--connect {
         grid-column: 1 / -1;
         max-width: 400px;
-    }
-
-    .footer-newsletter-top {
-        justify-content: flex-start;
     }
 }
 
 @media (max-width: 768px) {
     .footer-section {
-        padding: 40px 20px 0;
+        padding: 40px var(--site-gutter, 20px) 0;
     }
 
     .footer-top {
         grid-template-columns: 1fr 1fr;
-        gap: 25px;
+        gap: 24px;
         padding-bottom: 30px;
     }
 
-    /* Col 1 (Services) & Col 2 (All Products) side by side, Col 3 below */
-    .footer-col:nth-child(1) {
-        grid-column: 1;
+    .footer-brand {
+        grid-column: 1 / -1;
+        margin-bottom: 4px;
     }
 
     .footer-col:nth-child(2) {
-        grid-column: 2;
+        grid-column: 1;
     }
 
     .footer-col:nth-child(3) {
+        grid-column: 2;
+    }
+
+    .footer-col:nth-child(4) {
         grid-column: 1 / -1;
     }
 
-    .footer-newsletter {
+    .footer-col--connect {
         grid-column: 1 / -1;
+        max-width: 100%;
+    }
+
+    .newsletter-input-wrapper {
         max-width: 100%;
     }
 
     .footer-bottom {
         flex-direction: column;
-        gap: 12px;
         text-align: center;
         padding: 18px 0;
     }
@@ -254,42 +257,15 @@
 
 @media (max-width: 576px) {
     .footer-section {
-        padding: 30px 15px 0;
+        padding: 30px var(--site-gutter, 15px) 0;
     }
 
     .footer-top {
-        grid-template-columns: 1fr 1fr;
         gap: 20px;
         padding-bottom: 20px;
     }
 
-    /* Col 1 (Services) & Col 2 (All Products) side by side, Col 3 below */
-    .footer-col:nth-child(1) {
-        grid-column: 1;
-    }
-
-    .footer-col:nth-child(2) {
-        grid-column: 2;
-    }
-
-    .footer-col:nth-child(3) {
-        grid-column: 1 / -1;
-    }
-
-    .footer-newsletter {
-        grid-column: 1 / -1;
-    }
-
-    .footer-logo {
-        font-size: 24px;
-    }
-
     .footer-link {
-        font-size: 12px;
-    }
-
-    .newsletter-input,
-    .newsletter-btn {
         font-size: 12px;
     }
 

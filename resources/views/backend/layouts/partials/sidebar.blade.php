@@ -91,7 +91,6 @@
                         <li><a href="{{ route('products.index') }}" key="t-products">Products</a></li>
                         <li><a href="{{ route('brands.index') }}" key="t-brands">Brands</a></li>
                         <li><a href="{{ route('product-types.index') }}" key="t-product-types">Product Types</a></li>
-                        <li><a href="{{ route('industries.index') }}" key="t-industries">Industries</a></li>
                         <li><a href="{{ route('spaces.index') }}" key="t-spaces">Spaces</a></li>
                         <li><a href="{{ route('materials.index') }}" key="t-materials">Materials</a></li>
                         <li><a href="{{ route('colors.index') }}" key="t-colors">Colors</a></li>

@@ -12,17 +12,15 @@
             <!-- Items column -->
             <div class="col-lg-8">
                 <div class="row eb-head d-none d-lg-flex">
-                    <div class="col-6">Item</div>
-                    <div class="col-2">Price</div>
-                    <div class="col-2 text-center">QTY</div>
-                    <div class="col-2 text-end">Subtotal</div>
+                    <div class="col-8">Item</div>
+                    <div class="col-4 text-center">QTY</div>
                 </div>
                 
                 @if(isset($items) && count($items) > 0)
                     @foreach($items as $item)
                     <!-- Item -->
-                    <div class="row eb-item align-items-center" data-id="{{ $item['id'] }}" data-price="{{ $item['price'] }}">
-                        <div class="col-9 col-lg-6 d-flex align-items-center gap-4">
+                    <div class="row eb-item align-items-center" data-id="{{ $item['id'] }}">
+                        <div class="col-12 col-lg-8 d-flex align-items-center gap-4">
                             <div class="eb-thumb">
                                 <img src="{{ $item['thumbnail_url'] ?? asset('frontend_assets/images/banner_img.png') }}" style="width:100%;height:100%;object-fit:cover;" alt="{{ $item['name'] }}">
                             </div>
@@ -34,15 +32,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3 col-lg-2 fw-semibold text-primary">AED {{ number_format($item['price']) }}</div>
-                        <div class="col-6 col-lg-2 d-flex justify-content-lg-center mt-3 mt-lg-0">
+                        <div class="col-12 col-lg-4 d-flex justify-content-lg-center mt-3 mt-lg-0">
                             <div class="eb-qty">
                                 <button class="eb-dec" type="button">-</button>
                                 <input class="eb-count" type="number" min="1" value="{{ $item['qty'] }}" />
                                 <button class="eb-inc" type="button">+</button>
                             </div>
                         </div>
-                        <div class="col-6 col-lg-2 text-end fw-bold text-primary mt-3 mt-lg-0"><span class="eb-sub">AED {{ number_format($item['price'] * $item['qty']) }}</span></div>
                     </div>
                     @endforeach
                 @else
@@ -56,15 +52,10 @@
             <!-- Summary column -->
             <div class="col-lg-4">
                 <div class="eb-summary">
-                    <h6>Order Summary</h6>
+                    <h6>Enquiry Summary</h6>
                     <div class="d-flex justify-content-between mt-4">
-                        <span>Subtotal</span>
-                        <span class="text-primary fw-bold" id="ebSubtotal">AED 0</span>
-                    </div>
-                    <hr />
-                    <div class="eb-total">
-                        <span>Total</span>
-                        <span class="eb-total-amount" id="ebTotal">AED 0</span>
+                        <span>Items</span>
+                        <span class="text-primary fw-bold" id="ebItemCount">0</span>
                     </div>
                     <button class="eb-cta" @if(empty($items)) disabled style="opacity:0.5;" @endif>Request a Quote</button>
                 </div>
@@ -74,21 +65,14 @@
 
     <script>
         (function() {
-            function formatAED(v) {
-                return 'AED ' + v.toLocaleString('en-AE');
-            }
-
             function recalc() {
-                let total = 0;
+                let totalQty = 0;
                 document.querySelectorAll('.eb-item').forEach(function(row) {
-                    const price = Number(row.getAttribute('data-price')) || 0;
                     const qty = Math.max(1, Number(row.querySelector('.eb-count').value) || 1);
-                    const sub = price * qty;
-                    row.querySelector('.eb-sub').textContent = formatAED(sub);
-                    total += sub;
+                    totalQty += qty;
                 });
-                document.getElementById('ebSubtotal').textContent = formatAED(total);
-                document.getElementById('ebTotal').textContent = formatAED(total);
+                const countEl = document.getElementById('ebItemCount');
+                if (countEl) countEl.textContent = totalQty;
             }
 
             function updateBasketAPI(productId, qty) {

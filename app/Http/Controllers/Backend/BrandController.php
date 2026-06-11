@@ -23,12 +23,20 @@ class BrandController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|string|max:255']);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image',
+            'bg_image' => 'nullable|image',
+        ]);
         $data = $request->only('name');
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('brands', 'public');
+        }
+
+        if ($request->hasFile('bg_image')) {
+            $data['bg_image'] = $request->file('bg_image')->store('brands', 'public');
         }
 
         Brand::create($data);
@@ -42,12 +50,20 @@ class BrandController extends Controller
 
     public function update(Request $request, Brand $brand)
     {
-        $request->validate(['name' => 'required|string|max:255']);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image',
+            'bg_image' => 'nullable|image',
+        ]);
         $data = $request->only('name');
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('brands', 'public');
+        }
+
+        if ($request->hasFile('bg_image')) {
+            $data['bg_image'] = $request->file('bg_image')->store('brands', 'public');
         }
 
         $brand->update($data);

@@ -3,15 +3,14 @@
 @section('title', 'About - Our Story')
 
 @section('content')
-  <!-- Premium Typography: Playfair Display for Serifs, Inter for Sans-Serif -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="{{ asset('frontend_assets/css/about.css') }}?v=1.0.5">
+  <link rel="stylesheet" href="{{ asset('frontend_assets/css/about.css') }}?v=1.0.8">
   
   <!-- About scroll wrapper - contains horizontal timeline, footer shows below -->
   <div class="about-scroll-wrapper" id="aboutScrollWrapper">
+    <a href="{{ route('home') }}" class="about-fixed-logo" aria-label="Back to homepage">
+      <img src="{{ asset('frontend_assets/images/logo.png') }}" alt="The Total Office">
+    </a>
+
     <div class="scroll-pin-track" id="scrollPinTrack">
       <!-- Main Horizontal Timeline Track Container -->
       <main class="timeline-container" id="timelineContainer">
@@ -25,7 +24,7 @@
           
           <div class="hero-content">
             <span class="hero-subtitle">Our Story</span>
-            <h1 class="hero-title" style="font-size: 4.5rem; line-height: 1.1;">Nearly 3 Decades in the Making</h1>
+            <h1 class="hero-title">Nearly 3 Decades in the Making</h1>
             <p class="hero-desc">From a napkin sketch in a hospital to a regional force reshaping how the Middle East works — this is our story.</p>
             <div class="swipe-indicator">
               <span>Scroll down to explore</span>

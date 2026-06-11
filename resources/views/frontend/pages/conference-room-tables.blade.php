@@ -20,9 +20,7 @@
         <div class="container">
             <div class="crt-breadcrumb">
                 <a href="{{ route('home') }}">Home</a> / 
-                @if(isset($context) && $context === 'industry')
-                    <a href="{{ route('shop.by.industry') }}">Shop By Industry</a> / <a href="{{ route('industry.categories', $space->slug) }}">{{ $space->name }}</a>
-                @elseif(isset($context) && $context === 'brand')
+                @if(isset($context) && $context === 'brand')
                     <a href="{{ route('shop.by.brands') }}">Shop By Brand</a> / <a href="{{ route('brand.detail', $space->slug) }}">{{ $space->name }}</a>
                 @elseif(isset($context) && $context === 'product')
                     <a href="{{ route('products.type') }}">Shop By Product</a> / <a href="{{ route('product_type.detail', $space->slug) }}">{{ $space->name }}</a>
@@ -67,7 +65,6 @@
                     <div class="col-sm-6 col-md-4">
                         <div class="crt-card">
                             <div class="crt-card-top position-relative">
-                                <i class="fa-regular fa-heart crt-card-heart text-white" style="text-shadow: 0 0 5px rgba(0,0,0,0.3); cursor:pointer;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
                                 <a href="{{ route('product.detail', $product->slug) }}">
                                     <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" class="crt-card-img" alt="{{ $product->name }}">
                                 </a>
@@ -133,23 +130,12 @@
         </div>
 
         <div class="crt-filter-group">
-            <div class="crt-filter-label">Price</div>
-            <input id="crtPrice" class="crt-range" type="range" min="17" max="815" value="417" />
-            <div class="crt-price-row">
-                <span>$ 17</span>
-                <span id="crtPriceLabel">$ 815</span>
-            </div>
-        </div>
-
-        <div class="crt-filter-group">
             <div class="crt-filter-label">Sort by</div>
             <div class="crt-sort-grid">
                 <button class="crt-sort-btn active">Popular First</button>
                 <button class="crt-sort-btn">Latest First</button>
                 <button class="crt-sort-btn">A — Z</button>
                 <button class="crt-sort-btn">Z — A</button>
-                <button class="crt-sort-btn">Price High To Low</button>
-                <button class="crt-sort-btn">Price Low To High</button>
             </div>
         </div>
     </aside>
@@ -194,14 +180,6 @@
                 });
             });
 
-            const price = document.getElementById('crtPrice');
-            const priceLabel = document.getElementById('crtPriceLabel');
-            if (price && priceLabel) {
-                price.addEventListener('input', () => {
-                    priceLabel.textContent = '$ ' + price.value;
-                });
-            }
-
             // Grid view toggle (3 col vs 2 col)
             const grid = document.querySelector('.crt-grid');
             const view3 = document.getElementById('crtGridView3');
@@ -224,8 +202,3 @@
     </script>
 @endsection
 
-@push('scripts')
-    <script src="{{ asset('frontend_assets/js/ai-search/api.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/suggestions.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/search.js') }}"></script>
-@endpush

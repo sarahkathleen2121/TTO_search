@@ -21,15 +21,11 @@ window.TtoAiSearch = window.TtoAiSearch || {};
         const url = item.url || `/product-detail/${item.slug || ''}`;
         const img =
             item.image_url || '/frontend_assets/images/banner_img.png';
-        const price = item.price
-            ? `$ ${Number(item.price).toLocaleString()}`
-            : '';
-        const priceOrBrand = item.brand_name || price;
+        const priceOrBrand = item.brand_name || '';
         return `
                 <div class="col-sm-6 col-lg-4">
                     <div class="ap-card">
                         <div class="ap-card-top">
-                            <i class="fa-regular fa-heart ap-card-fav" style="cursor:pointer; z-index: 10;" onclick="addToBasket(${item.id})" title="Add to Enquiry Basket"></i>
                             <img src="${escapeHtml(img)}" class="ap-card-img" alt="${escapeHtml(item.title)}" loading="lazy" />
                             <a href="${escapeHtml(url)}" class="ap-card-link-overlay"></a>
                         </div>
@@ -174,9 +170,6 @@ window.TtoAiSearch = window.TtoAiSearch || {};
         const filters = {};
         const pt = document.querySelector('[data-filter-type="product_type"] .ap-chip.selected');
         if (pt) filters.product_type = pt.dataset.value;
-
-        const ind = document.querySelector('[data-filter-type="industry"] .ap-chip.selected');
-        if (ind) filters.industry = ind.dataset.value;
 
         const sp = document.querySelector('[data-filter-type="space"] .ap-chip.selected');
         if (sp) filters.space = sp.dataset.value;
@@ -377,10 +370,61 @@ window.TtoAiSearch = window.TtoAiSearch || {};
         }
     };
 
+    ns.initHeaderSearch = function () {
+        const textBtn = document.getElementById('headerAiSearchTextBtn');
+        const queryInput = document.getElementById('headerAiSearchQuery');
+        const imageInput = document.getElementById('headerAiSearchImageInput');
+        const modalEl = document.getElementById('aiSearchModal');
+
+        if (textBtn && queryInput) {
+            const runSearch = () => {
+                const q = queryInput.value.trim();
+                if (!q) return;
+                if (document.getElementById('srGrid')) {
+                    bootstrap.Modal.getInstance(modalEl)?.hide();
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('q', q);
+                    url.searchParams.set('mode', 'text');
+                    window.history.replaceState({}, '', url);
+                    ns.runTextSearch(q, {}).catch(console.error);
+                    return;
+                }
+                window.location.href = `/search-results?q=${encodeURIComponent(q)}&mode=text`;
+            };
+            textBtn.addEventListener('click', runSearch);
+            queryInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    runSearch();
+                }
+            });
+        }
+
+        if (imageInput) {
+            imageInput.addEventListener('change', () => {
+                window.location.href = '/search-results?mode=image';
+            });
+        }
+
+        if (modalEl) {
+            modalEl.addEventListener('shown.bs.modal', () => {
+                queryInput?.focus();
+            });
+        }
+    };
+
     ns.initSearchBar = function () {
         const textBtn = document.getElementById('aiSearchTextBtn');
         const queryInput = document.getElementById('aiSearchQuery');
         const imageInput = document.getElementById('aiSearchImageInput');
+
+        document.querySelectorAll('[data-ai-quick]').forEach((chip) => {
+            chip.addEventListener('click', () => {
+                const q = chip.getAttribute('data-ai-quick') || '';
+                if (queryInput) queryInput.value = q;
+                if (textBtn && q) textBtn.click();
+            });
+        });
 
         if (textBtn && queryInput) {
             textBtn.addEventListener('click', () => {
@@ -413,5 +457,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (document.getElementById('aiSearchBar') && !document.getElementById('srGrid')) {
         TtoAiSearch.initSearchBar();
+    }
+    if (document.getElementById('headerAiSearchBar')) {
+        TtoAiSearch.initHeaderSearch();
     }
 });

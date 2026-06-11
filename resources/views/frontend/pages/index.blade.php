@@ -4,7 +4,7 @@
 
 @section('content')
     <link rel="stylesheet" href="{{ asset('frontend_assets/css/homepage.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/ai-search.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend_assets/css/ai-search.css') }}?v={{ time() }}">
 
     <!-- Hero Section -->
     <section class="hero-section">
@@ -30,17 +30,24 @@
         </div>
     </section>
 
-    <div class="container mt-4 mb-5">
-        @include('frontend.components.ai-search-bar', ['style' => 'original'])
-    </div>
+    <section class="ai-home-search-section">
+        @include('frontend.components.ai-search-bar', ['style' => 'homepage'])
+    </section>
 
-    <!-- Video Section -->
-    <section class="container">
-        <div class="video-container" onclick="playVideo()">
-            <div class="video-play-button">
-                <i class="fas fa-play"></i>
-            </div>
-            <div class="video-text">Watch Our Showreel</div>
+    <!-- Virtual Tour Section -->
+    <section class="virtual-tour-section">
+        <div class="virtual-tour-header">
+            <h2 class="virtual-tour-title">TTOS Virtual Tour</h2>
+            <p class="virtual-tour-sub">Explore our showroom in 3D</p>
+        </div>
+        <div class="virtual-tour-embed">
+            <iframe
+                src="https://my.matterport.com/show/?m=4a6avyGATaB"
+                title="TTOS Virtual Tour"
+                allow="fullscreen; vr"
+                allowfullscreen
+                loading="lazy"
+            ></iframe>
         </div>
     </section>
     <!-- Bespoke Solutions Section -->
@@ -62,37 +69,7 @@
                     elit et at valpulate in turpis. Ultrices ullamcorper amet lacus urna
                     velit at.
                 </p>
-                <button class="bespoke-button">GET STARTED</button>
-                <div class="bespoke-industries-title">Industries:</div>
-                <div class="bespoke-industries">
-                    @foreach($industries as $industry)
-                    <div class="industry-item" onclick="window.location.href='{{ route('industry.detail', $industry->slug) }}'" style="cursor:pointer;">
-                        <span class="industry-name">{{ $industry->name }}</span>
-                        <span class="industry-arrow"><i class="fa-solid fa-arrow-right arrow-icon"></i></span>
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonial Section -->
-    <section class="testimonial-section">
-        <div class="testimonial-container">
-            <div class="testimonial-left">
-                <div class="testimonial-label">Team Quote</div>
-                <h2 class="testimonial-quote">
-                    Justo, et, scelerisque cursus quis. A felis, velit orci libero id augue amet. Gravida.
-                </h2>
-                <div class="testimonial-author">John Doe</div>
-                <p class="testimonial-desc">
-                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
-                </p>
-            </div>
-            <div class="testimonial-right">
-                <div class="testimonial-image-static">
-                    <img src="{{ asset('frontend_assets/images/team_quote.png') }}" alt="Team Quote">
-                </div>
+                <button class="bespoke-button" onclick="window.location.href='{{ route('all.products') }}'">GET STARTED</button>
             </div>
         </div>
     </section>
@@ -295,43 +272,6 @@
 
         <div class="text-center">
             <a href="#" class="cta-button">SEE ALL PRODUCTS</a>
-        </div>
-    </section>
-
-    <!-- Featured Products Section -->
-    <section class="featured-products-section">
-        <div class="container">
-            <div class="featured-products-header">
-                <h2 class="featured-products-title">Featured Products</h2>
-            </div>
-
-            <div class="row g-4 justify-content-center">
-                @foreach($featuredProducts as $product)
-                <div class="col-md-6 col-lg-4">
-                    <div class="fp-card">
-                        <div class="fp-card-top position-relative">
-                            <a href="{{ route('product.detail', ['slug' => $product->slug]) }}">
-                                <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/esg.png') }}" alt="{{ $product->name }}" onerror="this.src='{{ asset('frontend_assets/images/banner_img.png') }}'">
-                            </a>
-                        </div>
-                        <div class="fp-card-body">
-                            <a href="{{ route('product.detail', ['slug' => $product->slug]) }}" class="text-decoration-none text-dark">
-                                <div class="fp-name">{{ $product->name }}</div>
-                            </a>
-                            <div class="fp-brand">{{ $product->brand->name ?? 'Brand' }}</div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    <!-- Book a Visit Section -->
-    <section class="book-visit-section">
-        <div class="book-visit-content-wrapper">
-            <h2 class="book-visit-title">Visit Our Showroom</h2>
-            <button class="book-visit-button">Book a Visit</button>
         </div>
     </section>
 
@@ -685,8 +625,3 @@
     </script>
 @endsection
 
-@push('scripts')
-    <script src="{{ asset('frontend_assets/js/ai-search/api.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/suggestions.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/search.js') }}"></script>
-@endpush

@@ -48,29 +48,6 @@
     </div>
   </section>
 
-  <!-- Industry Products Section -->
-  <section class="pt-industry">
-    <div class="container">
-      <h2 class="pt-industry-title">Explore our products<br>based on Industry</h2>
-      
-      <div class="pt-industry-list">
-        @foreach($industries as $industry)
-          <div class="pt-industry-card">
-            <div class="row align-items-center">
-              <div class="col-md-3">
-                <h3 class="pt-industry-name">{{ $industry->name }}</h3>
-              </div>
-              <div class="col-md-9 pt-industry-content">
-                <p>Explore products crafted for the {{ $industry->name }} sector, with tailored solutions and design-led expertise.</p>
-                <a href="{{ route('industry.detail', $industry->slug) }}" class="pt-industry-link">Explore <i class="fas fa-chevron-right"></i></a>
-              </div>
-            </div>
-          </div>
-        @endforeach
-      </div>
-    </div>
-  </section>
-
   <!-- Brands section -->
   <section class="pt-brands">
     <div class="container">

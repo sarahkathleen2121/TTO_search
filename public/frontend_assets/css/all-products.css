@@ -63,6 +63,7 @@
     display: flex;
     align-items: center;
     transition: border-color 0.2s, box-shadow 0.2s;
+    overflow: visible !important;
 }
 
 .ap-search-bar input {

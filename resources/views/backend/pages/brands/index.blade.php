@@ -17,7 +17,8 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Image</th>
+                                <th>Image (Logo)</th>
+                                <th>Background Image</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -28,6 +29,13 @@
                                 <td>
                                     @if($brand->image)
                                         <img src="{{ asset('storage/'.$brand->image) }}" width="40">
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($brand->bg_image)
+                                        <img src="{{ asset('storage/'.$brand->bg_image) }}" width="80">
                                     @else
                                         N/A
                                     @endif

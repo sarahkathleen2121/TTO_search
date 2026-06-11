@@ -78,7 +78,6 @@ class SearchController extends Controller
             'query' => 'required|string|max:500',
             'filters' => 'nullable|array',
             'filters.product_type' => 'nullable|string',
-            'filters.industry' => 'nullable|string',
             'filters.space' => 'nullable|string',
             'filters.color' => 'nullable|string',
             'filters.material' => 'nullable|string',
@@ -120,7 +119,6 @@ class SearchController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
             'filters' => 'nullable|array',
             'filters.product_type' => 'nullable|string',
-            'filters.industry' => 'nullable|string',
             'filters.space' => 'nullable|string',
             'filters.color' => 'nullable|string',
             'filters.material' => 'nullable|string',
@@ -163,7 +161,6 @@ class SearchController extends Controller
             'height' => 'required|numeric|min:0.01|max:1',
             'filters' => 'nullable|array',
             'filters.product_type' => 'nullable|string',
-            'filters.industry' => 'nullable|string',
             'filters.space' => 'nullable|string',
             'filters.color' => 'nullable|string',
             'filters.material' => 'nullable|string',
@@ -279,11 +276,6 @@ class SearchController extends Controller
         if (!empty($filters['product_type'])) {
             $productsQuery->whereHas('productType', function($q) use ($filters) {
                 $q->where('slug', $filters['product_type']);
-            });
-        }
-        if (!empty($filters['industry'])) {
-            $productsQuery->whereHas('industries', function($q) use ($filters) {
-                $q->where('slug', $filters['industry']);
             });
         }
         if (!empty($filters['space'])) {

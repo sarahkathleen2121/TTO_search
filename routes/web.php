@@ -14,14 +14,9 @@ use App\Http\Controllers\Backend\DashboardController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::post('/booking', [App\Http\Controllers\Frontend\BookingController::class, 'store'])->name('booking.store');
 
-// Enquiry Basket Routes
-Route::prefix('enquiry-basket')->group(function () {
-    Route::get('/', [App\Http\Controllers\Frontend\EnquiryBasketController::class, 'index'])->name('enquiry.basket');
-    Route::post('/add', [App\Http\Controllers\Frontend\EnquiryBasketController::class, 'add'])->name('enquiry.basket.add');
-    Route::post('/update', [App\Http\Controllers\Frontend\EnquiryBasketController::class, 'update'])->name('enquiry.basket.update');
-    Route::post('/remove', [App\Http\Controllers\Frontend\EnquiryBasketController::class, 'remove'])->name('enquiry.basket.remove');
-    Route::get('/count', [App\Http\Controllers\Frontend\EnquiryBasketController::class, 'count'])->name('enquiry.basket.count');
-});
+// Legacy basket URL → contact page
+Route::redirect('/enquiry-basket', '/contact', 301);
+Route::redirect('/enquiry-basket/{any}', '/contact', 301)->where('any', '.*');
 
 // Static Pages
 Route::controller(App\Http\Controllers\Frontend\PageController::class)->group(function () {
@@ -34,16 +29,12 @@ Route::controller(App\Http\Controllers\Frontend\PageController::class)->group(fu
     Route::get('/conference-room-tables', 'conferenceRoomTables')->name('conference.room.tables');
     Route::get('/conference-rooms', 'conferenceRooms')->name('conference.rooms');
     Route::get('/space/{slug}', 'spaceDetail')->name('space.detail');
-    Route::get('/industry/{slug}', 'industryDetail')->name('industry.detail');
-    Route::get('/industry/{slug}/categories', 'industryCategories')->name('industry.categories');
     Route::get('/brand/{slug}', 'brandDetail')->name('brand.detail');
     Route::get('/space/{space_slug}/{type_slug}', 'spaceProducts')->name('space.products');
-    Route::get('/industry/{industry_slug}/{type_slug}', 'industryProducts')->name('industry.products');
     Route::get('/brand/{brand_slug}/{type_slug}', 'brandProducts')->name('brand.products');
     Route::get('/contact', 'contact')->name('contact');
     Route::get('/csr', 'csr')->name('csr');
     Route::get('/esg', 'esg')->name('esg');
-    Route::get('/hospitality', 'hospitality')->name('hospitality');
     Route::get('/ideal-workspace', 'idealWorkspace')->name('ideal.workspace');
     Route::get('/initiatives', 'initiatives')->name('initiatives');
     Route::get('/job-aci/{slug?}', 'jobAci')->name('job.aci');
@@ -66,7 +57,6 @@ Route::controller(App\Http\Controllers\Frontend\PageController::class)->group(fu
     Route::get('/service-listing', 'serviceListing')->name('service.listing');
     Route::get('/services', 'services')->name('services');
     Route::get('/shop-by-space', 'shopBySpace')->name('shop.by.space');
-    Route::get('/shop-by-industry', 'shopByIndustry')->name('shop.by.industry');
     Route::get('/shop-by-brands', 'shopByBrands')->name('shop.by.brands');
     Route::get('/sustainability', 'sustainability')->name('sustainability');
     Route::get('/team-member', 'teamMember')->name('team.member');
@@ -76,10 +66,16 @@ Route::controller(App\Http\Controllers\Frontend\PageController::class)->group(fu
     Route::get('/search-results', 'searchResults')->name('search.results');
     Route::get('/privacy-policy', 'privacyPolicy')->name('privacy.policy');
     Route::get('/terms-conditions', 'termsConditions')->name('terms.conditions');
+    Route::get('/return-refund-policy', 'returnRefundPolicy')->name('return.refund.policy');
     
     // Catch-all for other static pages
     Route::get('/page/{page}', 'show')->name('page.show');
 });
+
+// Legacy industry URLs → all products
+Route::redirect('/shop-by-industry', '/all-products', 301);
+Route::redirect('/hospitality', '/all-products', 301);
+Route::redirect('/industry/{any}', '/all-products', 301)->where('any', '.*');
 
 /*
 |--------------------------------------------------------------------------
@@ -107,7 +103,6 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     // Catalog Management
     Route::resource('brands', App\Http\Controllers\Backend\BrandController::class);
     Route::resource('product-types', App\Http\Controllers\Backend\ProductTypeController::class);
-    Route::resource('industries', App\Http\Controllers\Backend\IndustryController::class);
     Route::resource('spaces', App\Http\Controllers\Backend\SpaceController::class);
     Route::resource('materials', App\Http\Controllers\Backend\MaterialController::class);
     Route::resource('colors', App\Http\Controllers\Backend\ColorController::class);

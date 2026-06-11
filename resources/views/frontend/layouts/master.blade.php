@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', 'Frontend - Website')</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('frontend_assets/css/style.css') }}">
     <script src="https://kit.fontawesome.com/6cbdf8a9b4.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('frontend_assets/css/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend_assets/css/header.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend_assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend_assets/css/ai-search.css') }}">
     @stack('styles')
     <style>
         /* Global breadcrumbs link reset - keep original color and remove underline */
@@ -46,28 +46,13 @@
         <button onclick="hideNotification()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #a0aec0; cursor: pointer; font-size: 14px;"><i class="fas fa-times"></i></button>
     </div>
 
-    <!-- Basket Notification Toast -->
-    <div id="basketNotification" style="position: fixed; bottom: 30px; right: 30px; z-index: 1050; display: none; background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #e1efff; padding: 20px; width: 340px; border-radius: 0px; border-left: 4px solid #383E42;">
-        <div style="display: flex; gap: 15px; align-items: center;">
-            <div style="width: 50px; height: 50px; background: #383E42; color: #fff; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 20px;">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <div>
-                <h4 style="color: #383E42; font-weight: 700; font-size: 14px; margin: 0 0 8px; line-height: 1.4;" id="basketNotificationMsg">Item added to basket!</h4>
-                <a href="{{ route('enquiry.basket') }}" style="color: #383E42; font-weight: 700; font-size: 11px; text-decoration: none; display: flex; align-items: center; gap: 5px;">
-                    View Enquiry Basket <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-        <button onclick="hideBasketNotification()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #a0aec0; cursor: pointer; font-size: 14px;"><i class="fas fa-times"></i></button>
-    </div>
-
     @include('frontend.layouts.header')
     <!-- Main Content -->
     <main class="main-content">
         @yield('content')
     </main>
     @include('frontend.layouts.footer')
+    @include('frontend.components.header-ai-search-modal')
 
     <style>
         /* Book Modal Custom Styles */
@@ -1251,62 +1236,12 @@
             toast.style.display = 'none';
         }
 
-        // --- GLOBAL CART FUNCTIONS ---
-        function updateBadge() {
-            fetch('{{ route("enquiry.basket.count") }}')
-                .then(res => res.json())
-                .then(data => {
-                    ['basket-badge', 'basket-badge-mobile'].forEach((id) => {
-                        const badge = document.getElementById(id);
-                        if (!badge) return;
-                        if (data.count > 0) {
-                            badge.style.display = 'block';
-                            badge.textContent = data.totalQty;
-                        } else {
-                            badge.style.display = 'none';
-                        }
-                    });
-                });
-        }
-
-        function showBasketNotification(message) {
-            const toast = document.getElementById('basketNotification');
-            const msgEl = document.getElementById('basketNotificationMsg');
-            if(msgEl) msgEl.textContent = message || "Item added to basket!";
-            toast.style.display = 'block';
-            
-            // Auto hide after 3 seconds
-            setTimeout(() => {
-                hideBasketNotification();
-            }, 3000);
-        }
-
-        function hideBasketNotification() {
-            const toast = document.getElementById('basketNotification');
-            if(toast) toast.style.display = 'none';
-        }
-
-        function addToBasket(productId, qty = 1) {
-            fetch('{{ route("enquiry.basket.add") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ product_id: productId, qty: qty })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    updateBadge();
-                    showBasketNotification(data.message);
-                }
-            })
-            .catch(err => console.error("Error adding to basket", err));
-        }
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('frontend_assets/js/ai-search/api.js') }}"></script>
+    <script src="{{ asset('frontend_assets/js/ai-search/suggestions.js') }}"></script>
+    <script src="{{ asset('frontend_assets/js/ai-search/search.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

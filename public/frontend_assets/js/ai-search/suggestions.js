@@ -1,150 +1,141 @@
 window.TtoAiSearch = window.TtoAiSearch || {};
 
 (function (ns) {
-    let debounceTimer = null;
-    let activeIndex = -1;
-    let currentItems = [];
-
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text || '';
         return div.innerHTML;
     }
 
-    function getElements() {
-        return {
-            input: document.getElementById('aiSearchQuery'),
-            list: document.getElementById('aiSearchSuggestions'),
-        };
-    }
+    /**
+     * Creates an independent suggestions controller for a given
+     * input + list pair. Each instance keeps its own state so
+     * multiple search bars on the same page don't interfere.
+     */
+    function createInstance(inputEl, listEl) {
+        let debounceTimer = null;
+        let activeIndex = -1;
+        let currentItems = [];
 
-    function hideSuggestions() {
-        const { input, list } = getElements();
-        if (!list) return;
-        list.classList.add('d-none');
-        list.innerHTML = '';
-        activeIndex = -1;
-        currentItems = [];
-        if (input) input.setAttribute('aria-expanded', 'false');
-    }
-
-    function showSuggestions() {
-        const { list, input } = getElements();
-        if (!list) return;
-        list.classList.remove('d-none');
-        if (input) input.setAttribute('aria-expanded', 'true');
-    }
-
-    function renderSuggestions(items) {
-        const { list } = getElements();
-        if (!list) return;
-
-        currentItems = items;
-        activeIndex = -1;
-
-        if (!items.length) {
-            hideSuggestions();
-            return;
+        function hideSuggestions() {
+            if (!listEl) return;
+            listEl.classList.add('d-none');
+            listEl.innerHTML = '';
+            activeIndex = -1;
+            currentItems = [];
+            if (inputEl) inputEl.setAttribute('aria-expanded', 'false');
         }
 
-        list.innerHTML = items
-            .map((item, i) => {
-                const icon =
-                    item.kind === 'product'
-                        ? '<i class="fas fa-box suggest-icon"></i>'
-                        : '<i class="fas fa-wand-magic-sparkles suggest-icon"></i>';
-                const kindLabel =
-                    item.kind === 'product' ? 'Product' : 'AI suggestion';
-                return `<li role="option" data-index="${i}" id="aiSuggestOption${i}">
-                    ${icon}
-                    <span class="suggest-text">${escapeHtml(item.text)}</span>
-                    <span class="suggest-kind">${kindLabel}</span>
-                </li>`;
-            })
-            .join('');
-
-        showSuggestions();
-    }
-
-    function showLoading() {
-        const { list } = getElements();
-        if (!list) return;
-        list.innerHTML =
-            '<li class="suggest-loading"><i class="fas fa-spinner fa-spin"></i> AI suggestions...</li>';
-        showSuggestions();
-    }
-
-    function applySelection(item) {
-        const { input } = getElements();
-        if (!input || !item) return;
-
-        hideSuggestions();
-
-        if (item.kind === 'product' && item.url) {
-            window.location.href = item.url;
-            return;
+        function showSuggestions() {
+            if (!listEl) return;
+            listEl.classList.remove('d-none');
+            if (inputEl) inputEl.setAttribute('aria-expanded', 'true');
         }
 
-        input.value = item.text;
+        function renderSuggestions(items) {
+            if (!listEl) return;
 
-        if (document.getElementById('srGrid')) {
-            const url = new URL(window.location.href);
-            url.searchParams.set('q', item.text);
-            url.searchParams.set('mode', 'text');
-            window.history.replaceState({}, '', url);
-            if (typeof ns.runTextSearch === 'function') {
-                ns.runTextSearch(item.text, {}).catch(console.error);
+            currentItems = items;
+            activeIndex = -1;
+
+            if (!items.length) {
+                hideSuggestions();
+                return;
             }
-            return;
+
+            listEl.innerHTML = items
+                .map((item, i) => {
+                    const icon =
+                        item.kind === 'product'
+                            ? '<i class="fas fa-box suggest-icon"></i>'
+                            : '<i class="fas fa-wand-magic-sparkles suggest-icon"></i>';
+                    const kindLabel =
+                        item.kind === 'product' ? 'Product' : 'AI suggestion';
+                    return `<li role="option" data-index="${i}" id="${inputEl.id}Option${i}">
+                        ${icon}
+                        <span class="suggest-text">${escapeHtml(item.text)}</span>
+                        <span class="suggest-kind">${kindLabel}</span>
+                    </li>`;
+                })
+                .join('');
+
+            showSuggestions();
         }
 
-        window.location.href = `/search-results?q=${encodeURIComponent(item.text)}&mode=text`;
-    }
+        function showLoading() {
+            if (!listEl) return;
+            listEl.innerHTML =
+                '<li class="suggest-loading"><i class="fas fa-spinner fa-spin"></i> AI suggestions...</li>';
+            showSuggestions();
+        }
 
-    function setActiveIndex(index) {
-        const { list } = getElements();
-        if (!list) return;
-        const options = list.querySelectorAll('li[role="option"]');
-        options.forEach((el, i) => {
-            el.classList.toggle('active', i === index);
-        });
-        activeIndex = index;
-    }
+        function applySelection(item) {
+            if (!inputEl || !item) return;
 
-    ns.fetchSuggestions = async function (query) {
-        const q = (query || '').trim();
-        if (q.length < 2) {
             hideSuggestions();
-            return;
+
+            if (item.kind === 'product' && item.url) {
+                window.location.href = item.url;
+                return;
+            }
+
+            inputEl.value = item.text;
+
+            if (document.getElementById('srGrid')) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('q', item.text);
+                url.searchParams.set('mode', 'text');
+                window.history.replaceState({}, '', url);
+                if (typeof ns.runTextSearch === 'function') {
+                    ns.runTextSearch(item.text, {}).catch(console.error);
+                }
+                return;
+            }
+
+            window.location.href = `/search-results?q=${encodeURIComponent(item.text)}&mode=text`;
         }
 
-        showLoading();
-
-        try {
-            const data = await ns.getSuggestions(q);
-            renderSuggestions(data.suggestions || []);
-        } catch (err) {
-            console.error(err);
-            hideSuggestions();
+        function setActiveIndex(index) {
+            if (!listEl) return;
+            const options = listEl.querySelectorAll('li[role="option"]');
+            options.forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+            activeIndex = index;
         }
-    };
 
-    ns.initSuggestions = function () {
-        const { input, list } = getElements();
-        if (!input || !list) return;
+        async function fetchSuggestions(query) {
+            const q = (query || '').trim();
+            if (q.length < 2) {
+                hideSuggestions();
+                return;
+            }
 
-        input.addEventListener('input', () => {
+            showLoading();
+
+            try {
+                const data = await ns.getSuggestions(q);
+                renderSuggestions(data.suggestions || []);
+            } catch (err) {
+                console.error(err);
+                hideSuggestions();
+            }
+        }
+
+        // --- Bind events ---
+
+        inputEl.addEventListener('input', () => {
             clearTimeout(debounceTimer);
-            const value = input.value.trim();
+            const value = inputEl.value.trim();
             if (value.length < 2) {
                 hideSuggestions();
                 return;
             }
-            debounceTimer = setTimeout(() => ns.fetchSuggestions(value), 280);
+            debounceTimer = setTimeout(() => fetchSuggestions(value), 280);
         });
 
-        input.addEventListener('keydown', (e) => {
-            if (list.classList.contains('d-none') || !currentItems.length) {
+        inputEl.addEventListener('keydown', (e) => {
+            if (listEl.classList.contains('d-none') || !currentItems.length) {
                 return;
             }
 
@@ -166,7 +157,7 @@ window.TtoAiSearch = window.TtoAiSearch || {};
             }
         });
 
-        list.addEventListener('mousedown', (e) => {
+        listEl.addEventListener('mousedown', (e) => {
             const li = e.target.closest('li[role="option"]');
             if (!li) return;
             e.preventDefault();
@@ -177,15 +168,39 @@ window.TtoAiSearch = window.TtoAiSearch || {};
         });
 
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.ai-search-input-wrap')) {
+            if (!e.target.closest('.ai-search-input-wrap') && !e.target.closest('.ai-home-input-wrap')) {
                 hideSuggestions();
             }
         });
+
+        return { fetchSuggestions, hideSuggestions };
+    }
+
+    // Keep backward-compatible public API
+    ns.fetchSuggestions = function () {};
+
+    ns.initSuggestions = function (opts = {}) {
+        const input = document.getElementById(opts.inputId || 'aiSearchQuery');
+        const list = document.getElementById(opts.listId || 'aiSearchSuggestions');
+        if (!input || !list) return;
+
+        const instance = createInstance(input, list);
+
+        // If this is the default (page) instance, expose fetchSuggestions globally
+        if (!opts.inputId || opts.inputId === 'aiSearchQuery') {
+            ns.fetchSuggestions = instance.fetchSuggestions;
+        }
     };
 })(window.TtoAiSearch);
 
 document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('aiSearchQuery')) {
         TtoAiSearch.initSuggestions();
+    }
+    if (document.getElementById('headerAiSearchQuery')) {
+        TtoAiSearch.initSuggestions({
+            inputId: 'headerAiSearchQuery',
+            listId: 'headerAiSearchSuggestions',
+        });
     }
 });

@@ -14,11 +14,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $industries = \App\Models\Industry::take(4)->get();
         $productTypes = \App\Models\ProductType::withCount('products')->get();
-        $featuredProducts = \App\Models\Product::where('is_featured', true)->latest()->take(3)->get();
         $blogs = \App\Models\Blog::latest()->take(3)->get();
 
-        return view('frontend.pages.index', compact('industries', 'productTypes', 'featuredProducts', 'blogs'));
+        return view('frontend.pages.index', compact('productTypes', 'blogs'));
     }
 }

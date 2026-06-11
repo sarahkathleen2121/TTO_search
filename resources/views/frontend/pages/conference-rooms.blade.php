@@ -19,9 +19,7 @@
         <div class="container">
             <div class="cr-breadcrumb">
                 <a href="{{ route('home') }}">Home</a> / 
-                @if(isset($context) && $context === 'industry')
-                    <a href="{{ route('shop.by.industry') }}">Shop By Industry</a>
-                @elseif(isset($context) && $context === 'brand')
+                @if(isset($context) && $context === 'brand')
                     <a href="{{ route('shop.by.brands') }}">Shop By Brands</a>
                 @elseif(isset($context) && $context === 'product')
                     <a href="{{ route('products.type') }}">Shop By Product</a>
@@ -47,9 +45,7 @@
                             <button class="cr-navbtn" data-next><i class="fas fa-chevron-right"></i></button>
                         </div>
                         <div class="mt-auto pt-5">
-                            @if(isset($context) && $context === 'industry')
-                                <a href="{{ route('industry.products', ['industry_slug' => $space->slug, 'type_slug' => $type->slug]) }}" class="cr-view-all">View All <i class="fas fa-chevron-right ms-1"></i></a>
-                            @elseif(isset($context) && $context === 'brand')
+                            @if(isset($context) && $context === 'brand')
                                 <a href="{{ route('brand.products', ['brand_slug' => $space->slug, 'type_slug' => $type->slug]) }}" class="cr-view-all">View All <i class="fas fa-chevron-right ms-1"></i></a>
                             @elseif(isset($context) && $context === 'product')
                                 <a href="{{ route('product_type.space', ['product_type_slug' => $space->slug, 'space_slug' => $type->slug]) }}" class="cr-view-all">View All <i class="fas fa-chevron-right ms-1"></i></a>
@@ -64,7 +60,6 @@
                                 @forelse($type->products as $product)
                                 <div class="cr-card">
                                     <div class="cr-card-top position-relative">
-                                        <i class="fa-regular fa-heart cr-card-heart text-white" style="text-shadow: 0 0 5px rgba(0,0,0,0.3); cursor:pointer;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
                                         <a href="{{ route('product.detail', $product->slug) }}">
                                             <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" alt="{{ $product->name }}" class="cr-card-img">
                                         </a>

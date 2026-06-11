@@ -1,8 +1,8 @@
 /* terms-conditions.css */
 
 .tc-hero {
-    background-color: #eff0f0;
-    padding: 50px 0 40px;
+    /* background-color: #eff0f0; */
+    padding: 50px 0 0px;
     text-align: center;
     border-bottom: 1px solid #e1efff;
 }
@@ -27,7 +27,7 @@
     color: #383E42;
     font-size: 40px;
     font-weight: 800;
-    font-style: italic;
+    font-style: normal;
 }
 
 .tc-content {
@@ -65,6 +65,34 @@
     }
 
     .tc-section p {
+        font-size: 13px;
+    }
+}
+
+.tc-section ul {
+    color: #383E42;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.tc-section li {
+    margin-bottom: 8px;
+}
+
+.tc-section a {
+    color: #677389;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.tc-section a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .tc-section ul {
         font-size: 13px;
     }
 }

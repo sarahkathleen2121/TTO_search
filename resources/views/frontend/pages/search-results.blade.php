@@ -58,7 +58,6 @@
             <div class="col-sm-6 col-lg-4">
                 <div class="ap-card">
                     <div class="ap-card-top">
-                        <i class="fa-regular fa-heart ap-card-fav" style="cursor:pointer; z-index: 10;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
                         <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" class="ap-card-img" alt="{{ $product->name }}">
                         <a href="{{ route('product.detail', $product->slug) }}" class="ap-card-link-overlay"></a>
                     </div>
@@ -66,7 +65,9 @@
                         <a href="{{ route('product.detail', $product->slug) }}" class="text-decoration-none text-dark">
                             <div class="ap-card-name">{{ $product->name }}</div>
                         </a>
-                        <div class="ap-card-price">{{ $product->brand ? $product->brand->name : '$ '.number_format($product->price) }}</div>
+                        @if($product->brand)
+                        <div class="ap-card-price">{{ $product->brand->name }}</div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -89,16 +90,6 @@
             <div class="ap-chip-wrap">
                 @foreach($productTypes as $type)
                 <span class="ap-chip" data-value="{{ $type->slug }}">{{ $type->name }}</span>
-                @endforeach
-            </div>
-        </div>
-
-        <!-- By Industry -->
-        <div class="ap-filter-group" data-filter-type="industry">
-            <div class="ap-filter-label">By Industry</div>
-            <div class="ap-chip-wrap">
-                @foreach($industries as $industry)
-                <span class="ap-chip" data-value="{{ $industry->slug }}">{{ $industry->name }}</span>
                 @endforeach
             </div>
         </div>
@@ -149,16 +140,6 @@
             <div class="ap-see-all">+ See All</div>
         </div>
 
-        <!-- Price -->
-        <div class="ap-filter-group">
-            <div class="ap-filter-label">Price</div>
-            <input id="apPrice" class="ap-range" type="range" min="0" max="10000" value="10000" />
-            <div class="ap-price-row">
-                <span>$ 0</span>
-                <span id="apPriceLabel">$ 10,000</span>
-            </div>
-        </div>
-
         <!-- Sort by -->
         <div class="ap-filter-group">
             <div class="ap-filter-label">Sort by</div>
@@ -167,8 +148,6 @@
                 <button class="ap-sort-btn" data-sort="latest">Latest First</button>
                 <button class="ap-sort-btn" data-sort="name_asc">A — Z</button>
                 <button class="ap-sort-btn" data-sort="name_desc">Z — A</button>
-                <button class="ap-sort-btn" data-sort="price_desc">Price High To Low</button>
-                <button class="ap-sort-btn" data-sort="price_asc">Price Low To High</button>
             </div>
         </div>
     </aside>
@@ -250,29 +229,12 @@
                 });
             });
 
-            // Price slider
-            const priceSlider = document.getElementById('apPrice');
-            const priceLabel = document.getElementById('apPriceLabel');
-            if (priceSlider && priceLabel) {
-                priceSlider.addEventListener('input', () => {
-                    priceLabel.textContent = '$ ' + Number(priceSlider.value).toLocaleString();
-                });
-                priceSlider.addEventListener('change', () => {
-                    window.TtoAiSearch.applyFiltersAndSearch?.();
-                });
-            }
-
             // Reset filters
             back?.addEventListener('click', () => {
                 sidebar?.querySelectorAll('.ap-chip.selected').forEach(c => c.classList.remove('selected'));
                 // Set 'All' chip to selected in Color section
                 const colorAllChip = sidebar?.querySelector('[data-filter-type="color"] [data-value=""]');
                 colorAllChip?.classList.add('selected');
-
-                if (priceSlider && priceLabel) {
-                    priceSlider.value = 10000;
-                    priceLabel.textContent = '$ 10,000';
-                }
 
                 sidebar?.querySelectorAll('.ap-sort-btn').forEach(b => b.classList.remove('active'));
                 sidebar?.querySelector('.ap-sort-btn').classList.add('active');
@@ -288,8 +250,3 @@
     </script>
 @endsection
 
-@push('scripts')
-    <script src="{{ asset('frontend_assets/js/ai-search/api.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/suggestions.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/search.js') }}"></script>
-@endpush

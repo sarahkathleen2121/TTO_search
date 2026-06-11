@@ -11,7 +11,6 @@ use App\Models\Brand;
 use App\Models\ProductType;
 use App\Models\Color;
 use App\Models\Material;
-use App\Models\Industry;
 
 class ConferenceProductSeeder extends Seeder
 {
@@ -57,18 +56,6 @@ class ConferenceProductSeeder extends Seeder
         $spaces = [];
         foreach ($spaceData as $data) {
             $spaces[] = Space::firstOrCreate(['slug' => $data['slug']], ['name' => $data['name']]);
-        }
-
-        $indData = [
-            ['name' => 'Corporate', 'slug' => 'corporate'],
-            ['name' => 'Hospitality', 'slug' => 'hospitality'],
-            ['name' => 'Education', 'slug' => 'education'],
-            ['name' => 'Healthcare', 'slug' => 'healthcare'],
-            ['name' => 'Retail', 'slug' => 'retail'],
-        ];
-        $industries = [];
-        foreach ($indData as $data) {
-            $industries[] = Industry::firstOrCreate(['slug' => $data['slug']], ['name' => $data['name']]);
         }
 
         // Clear all old brands to keep only the requested 4 brands
@@ -136,11 +123,6 @@ class ConferenceProductSeeder extends Seeder
             $sp1 = $spaces[$i % count($spaces)];
             $sp2 = $spaces[($i + 1) % count($spaces)];
             $product->spaces()->attach([$sp1->id, $sp2->id]);
-
-            // Attach 2 industries sequentially
-            $ind1 = $industries[$i % count($industries)];
-            $ind2 = $industries[($i + 1) % count($industries)];
-            $product->industries()->attach([$ind1->id, $ind2->id]);
 
             // Attach colors and materials
             $product->colors()->attach([$colors[$i % count($colors)]->id]);

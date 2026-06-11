@@ -2,7 +2,62 @@
     $style = $style ?? 'clean';
 @endphp
 
-@if($style === 'original')
+@if($style === 'homepage')
+<div class="ai-search-bar-wrapper ai-search-style-homepage" id="aiSearchBar">
+    <div class="ai-home-card">
+        <div class="ai-home-card-inner">
+            <div class="ai-home-intro">
+                <span class="ai-home-badge">
+                    <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i>
+                    AI Search by The Total Office
+                </span>
+                <h2 class="ai-home-heading">Find workspace products in seconds</h2>
+                <p class="ai-home-lead">Search by name, style, or space — or upload a photo and let AI match products from our catalogue.</p>
+            </div>
+
+            <div class="ai-home-search-panel">
+                <div class="ai-home-input-wrap">
+                    <i class="fas fa-search ai-home-field-icon" aria-hidden="true"></i>
+                    <input
+                        type="text"
+                        class="ai-home-input"
+                        id="aiSearchQuery"
+                        placeholder="e.g. ergonomic chair, meeting table, reception sofa..."
+                        value="{{ request('q', '') }}"
+                        autocomplete="off"
+                        aria-autocomplete="list"
+                        aria-controls="aiSearchSuggestions"
+                        aria-expanded="false"
+                    />
+                    <ul class="ai-search-suggestions d-none" id="aiSearchSuggestions" role="listbox" aria-label="Search suggestions"></ul>
+                </div>
+                <div class="ai-home-panel-actions">
+                    <label class="ai-home-upload" title="Upload product image">
+                        <i class="fa-solid fa-camera" aria-hidden="true"></i>
+                        <span>Photo search</span>
+                        <input type="file" id="aiSearchImageInput" accept="image/jpeg,image/png,image/webp" hidden />
+                    </label>
+                    <button type="button" class="ai-home-submit" id="aiSearchTextBtn">
+                        <span>Search</span>
+                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="ai-home-suggestions-row" aria-label="Popular searches">
+                <span class="ai-home-suggestions-label">Try:</span>
+                <button type="button" class="ai-home-quick" data-ai-quick="office chair">Office chair</button>
+                <button type="button" class="ai-home-quick" data-ai-quick="conference table">Conference table</button>
+                <button type="button" class="ai-home-quick" data-ai-quick="reception desk">Reception desk</button>
+            </div>
+        </div>
+    </div>
+    <div class="ai-search-dropzone d-none" id="aiSearchDropzone">
+        <p>Drag and drop an image here, or use photo search.</p>
+    </div>
+    <div id="aiSearchPreview" class="ai-search-preview d-none"></div>
+</div>
+@elseif($style === 'original')
 <div class="ai-search-bar-wrapper mb-4 ai-search-style-original" id="aiSearchBar">
     <div class="ai-search-branding">AI Search Engine by The Total Office</div>
     <p class="ai-search-subtext">Search by text or upload an image.</p>

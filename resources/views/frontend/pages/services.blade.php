@@ -305,11 +305,6 @@
                 col2: { title: 'Discover All', items: ['Furniture', 'Acoustic Products', 'Writable Surfaces', 'Fabrics', 'Greenwalls'] },
                 text: 'Products'
             },
-            industry: {
-                col1: { title: 'Shop by Industry', items: ['Corporate', 'Education', 'Hospitality'] },
-                col2: { title: '', items: [] },
-                text: 'Industries'
-            },
             brand: {
                 col1: { title: 'Shop by Brand', items: ['Patra', 'Emmegi', 'Arper', 'JMM', 'Infiniti Design', 'Teknion', 'Manerba', 'MDD'] },
                 col2: { title: '', items: [] },

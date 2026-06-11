@@ -19,10 +19,18 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Image</label>
+                        <label class="form-label">Image (Logo)</label>
                         <input type="file" name="image" class="form-control">
                         @if(isset($brand) && $brand->image)
-                            <img src="{{ asset('storage/'.$brand->image) }}" width="80" class="mt-2">
+                            <img src="{{ asset('storage/'.$brand->image) }}" width="80" class="mt-2 d-block">
+                        @endif
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Background Image</label>
+                        <input type="file" name="bg_image" class="form-control">
+                        @if(isset($brand) && $brand->bg_image)
+                            <img src="{{ asset('storage/'.$brand->bg_image) }}" width="150" class="mt-2 d-block">
                         @endif
                     </div>
 

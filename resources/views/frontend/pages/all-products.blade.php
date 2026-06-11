@@ -34,7 +34,6 @@
                 <div class="col-sm-6 col-lg-4">
                     <div class="ap-card">
                         <div class="ap-card-top">
-                            <i class="fa-regular fa-heart ap-card-fav" style="cursor:pointer; z-index: 10;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
                             <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" class="ap-card-img" alt="{{ $product->name }}">
                             <a href="{{ route('product.detail', $product->slug) }}" class="ap-card-link-overlay"></a>
                         </div>
@@ -42,7 +41,9 @@
                             <a href="{{ route('product.detail', $product->slug) }}" class="text-decoration-none text-dark">
                                 <div class="ap-card-name">{{ $product->name }}</div>
                             </a>
-                            <div class="ap-card-price">{{ $product->brand ? $product->brand->name : '$ '.number_format($product->price) }}</div>
+                            @if($product->brand)
+                            <div class="ap-card-price">{{ $product->brand->name }}</div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -80,16 +81,6 @@
             <div class="ap-chip-wrap">
                 @foreach($productTypes as $type)
                 <span class="ap-chip {{ request('product_type') == $type->slug ? 'selected' : '' }}" onclick="window.location.href='{{ request()->fullUrlWithQuery(['product_type' => $type->slug]) }}'">{{ $type->name }}</span>
-                @endforeach
-            </div>
-        </div>
-
-        <!-- By Industry -->
-        <div class="ap-filter-group">
-            <div class="ap-filter-label">By Industry</div>
-            <div class="ap-chip-wrap">
-                @foreach($industries as $industry)
-                <span class="ap-chip {{ request('industry') == $industry->slug ? 'selected' : '' }}" onclick="window.location.href='{{ request()->fullUrlWithQuery(['industry' => $industry->slug]) }}'">{{ $industry->name }}</span>
                 @endforeach
             </div>
         </div>
@@ -140,16 +131,6 @@
             <div class="ap-see-all">+ See All</div>
         </div>
 
-        <!-- Price -->
-        <div class="ap-filter-group">
-            <div class="ap-filter-label">Price</div>
-            <input id="apPrice" class="ap-range" type="range" min="17" max="815" value="815" />
-            <div class="ap-price-row">
-                <span>$ 17</span>
-                <span id="apPriceLabel">$ 815</span>
-            </div>
-        </div>
-
         <!-- Sort by -->
         <div class="ap-filter-group">
             <div class="ap-filter-label">Sort by</div>
@@ -158,8 +139,6 @@
                 <button class="ap-sort-btn">Latest First</button>
                 <button class="ap-sort-btn">A — Z</button>
                 <button class="ap-sort-btn">Z — A</button>
-                <button class="ap-sort-btn">Price High To Low</button>
-                <button class="ap-sort-btn">Price Low To High</button>
             </div>
         </div>
     </aside>
@@ -213,15 +192,6 @@
                 });
             });
 
-            // Price range
-            const price = document.getElementById('apPrice');
-            const priceLabel = document.getElementById('apPriceLabel');
-            if (price && priceLabel) {
-                price.addEventListener('input', () => {
-                    priceLabel.textContent = '$ ' + price.value;
-                });
-            }
-
             // Grid view toggle (3 col vs 2 col)
             const grid = document.querySelector('.ap-grid');
             const view3 = document.getElementById('gridView3');
@@ -247,8 +217,3 @@
     </script>
 @endsection
 
-@push('scripts')
-    <script src="{{ asset('frontend_assets/js/ai-search/api.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/suggestions.js') }}"></script>
-    <script src="{{ asset('frontend_assets/js/ai-search/search.js') }}"></script>
-@endpush

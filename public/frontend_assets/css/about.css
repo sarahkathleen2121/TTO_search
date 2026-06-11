@@ -5,8 +5,8 @@
 
 /* Design Tokens & CSS Variables - Premium Light Theme */
 :root {
-  --font-serif: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Montserrat', system-ui, sans-serif;
+  --font-sans: 'Montserrat', system-ui, sans-serif;
   
   /* Luxury Curated Light/White Palette */
   --bg-primary: #f8f8f8; /* Soft luxurious off-white background */
@@ -50,9 +50,29 @@ html, body {
   display: none;
 }
 
-/* About page: block native horizontal scroll on desktop timeline */
+/* About page: hide site header, show fixed logo instead */
+body.about-page-active header.main_header {
+  display: none !important;
+}
+
 body.about-page-active {
   overflow-x: hidden;
+}
+
+.about-fixed-logo {
+  position: fixed;
+  top: clamp(16px, 3vw, 28px);
+  left: clamp(16px, 4vw, 48px);
+  z-index: 2000;
+  display: block;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.about-fixed-logo img {
+  width: clamp(120px, 14vw, 180px);
+  height: auto;
+  display: block;
 }
 
 /* Scroll Wrapper and Pin Track */
@@ -90,17 +110,17 @@ body.about-page-active {
   width: 100vw;
   height: 100%;
   position: relative;
-  z-index: 1; /* Establishes a local stacking context to force background image to paint correctly */
+  z-index: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
-  padding-left: 8vw; /* Fixed: use vw instead of % to prevent parent max-content stretch */
-  padding-right: 6vw;
+  padding: clamp(130px, 16vw, 200px) 6vw 4vw 8vw;
   flex-shrink: 0;
-  background-color: transparent; /* Changed to transparent to prevent painting over absolute backgrounds in Chrome */
+  background-color: transparent;
   overflow: hidden;
   color: #ffffff !important;
   isolation: isolate;
+  box-sizing: border-box;
 }
 
 .hero-bg-wrapper {
@@ -191,7 +211,20 @@ body.about-page-active {
   left: 0;
   width: 100%;
   height: 100%;
-  /* background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0.3) 100%);  */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.78) 18%,
+      rgba(255, 255, 255, 0.35) 38%,
+      transparent 52%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.35) 45%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
   z-index: 1;
   pointer-events: none;
 }
@@ -199,27 +232,28 @@ body.about-page-active {
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 700px;
+  max-width: 620px;
+  margin-top: 0;
 }
 
 .hero-subtitle {
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--accent-gold);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   display: block;
 }
 
 .hero-title {
   font-family: var(--font-serif);
-  font-size: 7rem;
-  font-weight: 400;
-  line-height: 0.95;
-  color: #ffffff !important; /* Fixed: White title text */
-  margin-bottom: 2rem;
+  font-size: clamp(2rem, 3.8vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #ffffff !important;
+  margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
 }
 
@@ -757,8 +791,8 @@ body.about-page-active {
   .hero-section {
     width: 100%;
     min-height: 70vh;
-    padding: 3rem 1.5rem;
-    align-items: center;
+    padding: clamp(110px, 28vw, 150px) 1.5rem 2.5rem;
+    align-items: flex-start;
     justify-content: flex-start;
     box-sizing: border-box;
   }
@@ -770,7 +804,7 @@ body.about-page-active {
   }
 
   .hero-title {
-    font-size: clamp(1.65rem, 5.5vw, 2.1rem) !important;
+    font-size: clamp(1.5rem, 6vw, 2rem) !important;
     line-height: 1.2 !important;
     margin-bottom: 1.25rem;
   }

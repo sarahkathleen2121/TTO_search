@@ -203,7 +203,6 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="cd-card">
                         <div class="cd-card-top position-relative">
-                                <i class="fa-regular fa-bookmark cd-card-bookmark text-white" style="text-shadow: 0 0 5px rgba(0,0,0,0.3); cursor:pointer;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
                             <a href="{{ route('product.detail', $product->slug) }}">
                                 <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" alt="{{ $product->name }}">
                             </a>
@@ -212,7 +211,6 @@
                             <a href="{{ route('product.detail', $product->slug) }}" class="text-decoration-none text-dark">
                                 <div class="cd-name">{{ $product->name }}</div>
                             </a>
-                            <div class="cd-price">$ {{ number_format($product->price) }}</div>
                         </div>
                     </div>
                 </div>

@@ -157,7 +157,6 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="hp-prod">
                         <div class="hp-prod-top position-relative">
-                            <i class="fa-regular fa-bookmark hp-prod-bookmark text-white" style="text-shadow: 0 0 5px rgba(0,0,0,0.3); cursor:pointer; z-index: 10;" onclick="addToBasket({{ $product->id }})" title="Add to Enquiry Basket"></i>
                             <img src="{{ $product->referenceImageUrl() ?? asset('frontend_assets/images/banner_img.png') }}" class="hp-prod-img" alt="{{ $product->name }}">
                             <a href="{{ route('product.detail', $product->slug) }}" class="hp-prod-link-overlay"></a>
                         </div>
@@ -165,7 +164,6 @@
                             <a href="{{ route('product.detail', $product->slug) }}" class="text-decoration-none text-dark">
                                 <div class="hp-prod-name">{{ $product->name }}</div>
                             </a>
-                            <div class="hp-prod-price">$ {{ number_format($product->price) }}</div>
                         </div>
                     </div>
                 </div>

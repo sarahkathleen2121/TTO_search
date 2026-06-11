@@ -35,7 +35,6 @@ class AppServiceProvider extends ServiceProvider
 
         \Illuminate\Support\Facades\View::composer('frontend.layouts.header', function ($view) {
             $view->with('productTypes', \App\Models\ProductType::orderBy('name')->get());
-            $view->with('industries', \App\Models\Industry::orderBy('name')->get());
             $view->with('brands', \App\Models\Brand::orderBy('name')->get());
             $view->with('spaces', \App\Models\Space::orderBy('name')->get());
         });

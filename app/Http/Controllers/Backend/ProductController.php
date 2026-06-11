@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Brand;
 use App\Models\ProductType;
-use App\Models\Industry;
 use App\Models\Space;
 use App\Models\Color;
 use App\Models\Material;
@@ -28,11 +28,10 @@ class ProductController extends Controller
     {
         $brands = Brand::all();
         $productTypes = ProductType::all();
-        $industries = Industry::all();
         $spaces = Space::all();
         $colors = Color::all();
         $materials = Material::all();
-        return view('backend.pages.products.create', compact('brands', 'productTypes', 'industries', 'spaces', 'colors', 'materials'));
+        return view('backend.pages.products.create', compact('brands', 'productTypes', 'spaces', 'colors', 'materials'));
     }
 
     public function store(Request $request)
@@ -41,34 +40,41 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'nullable|numeric',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'visual_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'usp_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
         ]);
 
-        $data = $request->except(['industries', 'spaces', 'colors', 'materials', 'thumbnail']);
+        $data = $request->except([
+            'spaces', 'colors', 'materials', 'thumbnail',
+            'visual_images', 'usp_images', 'gallery_images',
+        ]);
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $this->uploadThumbnail($request->file('thumbnail'));
+            $data['thumbnail'] = $this->uploadImage($request->file('thumbnail'));
         }
 
         $product = Product::create($data);
 
-        if ($request->has('industries')) $product->industries()->sync($request->industries);
         if ($request->has('spaces')) $product->spaces()->sync($request->spaces);
         if ($request->has('colors')) $product->colors()->sync($request->colors);
         if ($request->has('materials')) $product->materials()->sync($request->materials);
+
+        $this->storeDetailImages($product, $request);
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
 
     public function edit(Product $product)
     {
+        $product->load(['visualImages', 'uspImages', 'galleryImages']);
         $brands = Brand::all();
         $productTypes = ProductType::all();
-        $industries = Industry::all();
         $spaces = Space::all();
         $colors = Color::all();
         $materials = Material::all();
-        return view('backend.pages.products.create', compact('product', 'brands', 'productTypes', 'industries', 'spaces', 'colors', 'materials'));
+        return view('backend.pages.products.create', compact('product', 'brands', 'productTypes', 'spaces', 'colors', 'materials'));
     }
 
     public function update(Request $request, Product $product)
@@ -77,22 +83,31 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'price' => 'nullable|numeric',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'visual_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'usp_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:10240',
         ]);
 
-        $data = $request->except(['industries', 'spaces', 'colors', 'materials', 'thumbnail']);
+        $data = $request->except([
+            'spaces', 'colors', 'materials', 'thumbnail',
+            'visual_images', 'usp_images', 'gallery_images',
+            'remove_visual', 'remove_usp', 'remove_gallery',
+        ]);
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('thumbnail')) {
             $this->deleteOldThumbnail($product->thumbnail, $product->id);
-            $data['thumbnail'] = $this->uploadThumbnail($request->file('thumbnail'));
+            $data['thumbnail'] = $this->uploadImage($request->file('thumbnail'));
         }
 
         $product->update($data);
 
-        if ($request->has('industries')) $product->industries()->sync($request->industries);
         if ($request->has('spaces')) $product->spaces()->sync($request->spaces);
         if ($request->has('colors')) $product->colors()->sync($request->colors);
         if ($request->has('materials')) $product->materials()->sync($request->materials);
+
+        $this->removeDetailImages($request);
+        $this->storeDetailImages($product, $request);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
@@ -100,14 +115,64 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $this->deleteOldThumbnail($product->thumbnail, $product->id);
+        foreach ($product->images as $image) {
+            $this->deleteImageFile($image->path);
+        }
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
 
-    /**
-     * Upload thumbnail directly to public/uploads/products/ (no symlink needed).
-     */
-    protected function uploadThumbnail($file): string
+    protected function storeDetailImages(Product $product, Request $request): void
+    {
+        $this->appendImages($product, ProductImage::TYPE_VISUAL, $request->file('visual_images', []), 2);
+        $this->appendImages($product, ProductImage::TYPE_USP, $request->file('usp_images', []), 2);
+        $this->appendImages($product, ProductImage::TYPE_GALLERY, $request->file('gallery_images', []), null);
+    }
+
+    protected function appendImages(Product $product, string $type, array $files, ?int $maxTotal): void
+    {
+        $files = array_filter($files);
+        if (empty($files)) {
+            return;
+        }
+
+        $currentCount = $product->images()->where('type', $type)->count();
+        $sort = (int) $product->images()->where('type', $type)->max('sort_order');
+
+        foreach ($files as $file) {
+            if ($maxTotal !== null && $currentCount >= $maxTotal) {
+                break;
+            }
+
+            $product->images()->create([
+                'type' => $type,
+                'path' => $this->uploadImage($file),
+                'sort_order' => ++$sort,
+            ]);
+            $currentCount++;
+        }
+    }
+
+    protected function removeDetailImages(Request $request): void
+    {
+        $ids = array_merge(
+            $request->input('remove_visual', []),
+            $request->input('remove_usp', []),
+            $request->input('remove_gallery', [])
+        );
+
+        if (empty($ids)) {
+            return;
+        }
+
+        $images = ProductImage::whereIn('id', $ids)->get();
+        foreach ($images as $image) {
+            $this->deleteImageFile($image->path);
+            $image->delete();
+        }
+    }
+
+    protected function uploadImage($file): string
     {
         $dir = public_path('uploads/products');
         if (!File::isDirectory($dir)) {
@@ -120,20 +185,15 @@ class ProductController extends Controller
         return 'uploads/products/' . $filename;
     }
 
-    /**
-     * Delete thumbnail file only when no other product still uses the same path.
-     */
-    protected function deleteOldThumbnail(?string $path, ?int $exceptProductId = null): void
+    /** @deprecated Use uploadImage() */
+    protected function uploadThumbnail($file): string
+    {
+        return $this->uploadImage($file);
+    }
+
+    protected function deleteImageFile(?string $path): void
     {
         if (!$path) {
-            return;
-        }
-
-        $query = Product::where('thumbnail', $path);
-        if ($exceptProductId) {
-            $query->where('id', '!=', $exceptProductId);
-        }
-        if ($query->exists()) {
             return;
         }
 
@@ -149,5 +209,21 @@ class ProductController extends Controller
             }
         }
     }
-}
 
+    protected function deleteOldThumbnail(?string $path, ?int $exceptProductId = null): void
+    {
+        if (!$path) {
+            return;
+        }
+
+        $query = Product::where('thumbnail', $path);
+        if ($exceptProductId) {
+            $query->where('id', '!=', $exceptProductId);
+        }
+        if ($query->exists()) {
+            return;
+        }
+
+        $this->deleteImageFile($path);
+    }
+}

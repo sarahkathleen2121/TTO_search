@@ -43,14 +43,6 @@
 
                         <!-- Multi-select attributes -->
                         <div class="col-md-3 mb-3">
-                            <label class="form-label">Industries</label>
-                            <select name="industries[]" class="form-select" multiple style="height:100px;">
-                                @foreach($industries as $item)
-                                    <option value="{{ $item->id }}" {{ (isset($product) && $product->industries->contains($item->id)) ? 'selected' : '' }}>{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3 mb-3">
                             <label class="form-label">Spaces</label>
                             <select name="spaces[]" class="form-select" multiple style="height:100px;">
                                 @foreach($spaces as $item)
@@ -81,10 +73,57 @@
                             <textarea name="description" class="form-control" rows="3">{{ old('description', $product->description ?? '') }}</textarea>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Thumbnail Image</label>
-                            <input type="file" name="thumbnail" class="form-control">
+                            <label class="form-label">Thumbnail Image (Hero)</label>
+                            <input type="file" name="thumbnail" class="form-control" accept="image/*">
                             @if(isset($product) && $product->thumbnail)
                                 <img src="{{ $product->referenceImageUrl() }}" alt="img" width="100" class="mt-2">
+                            @endif
+                        </div>
+
+                        <div class="col-12"><hr><h5 class="mb-3">Product Detail Page Images</h5></div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Visual Images <small class="text-muted">(max 2 — side by side below hero)</small></label>
+                            <input type="file" name="visual_images[]" class="form-control" accept="image/*" multiple>
+                            @if(isset($product) && $product->visualImages->count())
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    @foreach($product->visualImages as $img)
+                                    <label class="border p-1 small">
+                                        <img src="{{ $img->url() }}" width="80" height="60" style="object-fit:cover" alt="">
+                                        <input type="checkbox" name="remove_visual[]" value="{{ $img->id }}"> Remove
+                                    </label>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">USP Images <small class="text-muted">(max 2 — below USP section)</small></label>
+                            <input type="file" name="usp_images[]" class="form-control" accept="image/*" multiple>
+                            @if(isset($product) && $product->uspImages->count())
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    @foreach($product->uspImages as $img)
+                                    <label class="border p-1 small">
+                                        <img src="{{ $img->url() }}" width="80" height="60" style="object-fit:cover" alt="">
+                                        <input type="checkbox" name="remove_usp[]" value="{{ $img->id }}"> Remove
+                                    </label>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Gallery Images <small class="text-muted">(5+ recommended — slides on product page)</small></label>
+                            <input type="file" name="gallery_images[]" class="form-control" accept="image/*" multiple>
+                            @if(isset($product) && $product->galleryImages->count())
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    @foreach($product->galleryImages as $img)
+                                    <label class="border p-1 small">
+                                        <img src="{{ $img->url() }}" width="80" height="60" style="object-fit:cover" alt="">
+                                        <input type="checkbox" name="remove_gallery[]" value="{{ $img->id }}"> Remove
+                                    </label>
+                                    @endforeach
+                                </div>
                             @endif
                         </div>
                         <div class="col-md-6 mb-3 d-flex align-items-center">

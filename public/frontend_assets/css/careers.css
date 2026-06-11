@@ -319,3 +319,21 @@
         height: 80px;
     }
 }
+
+/* Who We Are Section */
+.crs-who {
+    padding: 60px 0 30px;
+}
+
+.crs-who h3 {
+    color: var(--primary-color);
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.crs-who-text {
+    color: #383E42;
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 0;
+}

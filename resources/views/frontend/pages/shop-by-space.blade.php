@@ -10,18 +10,14 @@
                 <div class="col-lg-4">
                     <div class="sp-breadcrumb">
                         <a href="{{ route('home') }}">Home</a> / 
-                        @if($type === 'industry')
-                            Shop by Industry
-                        @elseif($type === 'brand')
+                        @if($type === 'brand')
                             Shop by Brand
                         @else
                             Shop by Space
                         @endif
                     </div>
                     <h1 class="sp-title">
-                        @if($type === 'industry')
-                            Products for what type of <br/>industry do you need?
-                        @elseif($type === 'brand')
+                        @if($type === 'brand')
                             Products for what type of <br/>brand do you need?
                         @else
                             Products for what type of <br/>space do you need?
@@ -71,8 +67,20 @@
           @forelse($items as $item)
             @php
                 $bgImage = asset('frontend_assets/images/conference_room.png');
-                if ($type === 'brand' && !empty($item->image)) {
-                    $bgImage = asset('storage/' . $item->image);
+                if ($type === 'brand') {
+                    if (!empty($item->bg_image)) {
+                        $bgImage = asset('storage/' . $item->bg_image);
+                    } elseif (!empty($item->image)) {
+                        $bgImage = asset('storage/' . $item->image);
+                    } else {
+                        $images = [
+                            asset('frontend_assets/images/conference_room.png'),
+                            asset('frontend_assets/images/offie_cabins.png'),
+                            asset('frontend_assets/images/work_space.png'),
+                            asset('frontend_assets/images/cafe_space.png')
+                        ];
+                        $bgImage = $images[$loop->index % 4];
+                    }
                 } else {
                     $slug = strtolower($item->slug);
                     if (str_contains($slug, 'conference')) {
@@ -94,9 +102,7 @@
                     }
                 }
 
-                if ($type === 'industry') {
-                    $exploreLink = route('industry.detail', $item->slug);
-                } elseif ($type === 'brand') {
+                if ($type === 'brand') {
                     $exploreLink = route('brand.detail', $item->slug);
                 } else {
                     $exploreLink = route('space.detail', $item->slug);

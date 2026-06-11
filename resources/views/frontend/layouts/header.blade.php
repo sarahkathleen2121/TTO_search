@@ -8,18 +8,9 @@
 
             <!-- Mobile: quick icons + hamburger -->
             <div class="header-mobile-actions d-flex d-lg-none align-items-center ms-auto">
-                <a href="{{ route('search.results') }}" class="mobile-icon-btn" aria-label="Search">
-                    <i class="fas fa-search"></i>
-                </a>
-                <a href="{{ route('enquiry.basket') }}" class="mobile-icon-btn position-relative" aria-label="Cart">
-                    <img src="{{ asset('frontend_assets/images/cart.png') }}" alt="Cart">
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger mobile-badge" id="basket-badge-mobile" style="{{ count(session('enquiry_basket', [])) == 0 ? 'display: none;' : '' }}">
-                        {{ array_sum(array_column(session('enquiry_basket', []), 'qty')) }}
-                    </span>
-                </a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" class="mobile-icon-btn mobile-icon-btn--user" aria-label="Account">
-                    <img src="{{ asset('frontend_assets/images/user.png') }}" alt="User">
-                </a>
+                <button type="button" class="mobile-icon-btn header-ai-search-btn" data-bs-toggle="modal" data-bs-target="#aiSearchModal" aria-label="AI Search">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                </button>
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -30,20 +21,12 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="d-flex flex-column align-items-lg-end w-100 ms-lg-auto mt-1 mt-lg-0">
                     
-                    <!-- Top Icons Row (desktop) -->
-                    <div class="navbar-icons mb-2 mt-2 mb-lg-3 d-none d-lg-flex align-items-center justify-content-lg-end gap-2 gap-lg-3">
-                        <a href="{{ route('search.results') }}" class="search-btn text-decoration-none">
-                            <i class="fas fa-search"></i> Search
-                        </a>
-                        <a href="{{ route('enquiry.basket') }}" class="cart-btn position-relative">
-                            <img src="{{ asset('frontend_assets/images/cart.png') }}" alt="Cart">
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="basket-badge" style="font-size: 0.6rem; {{ count(session('enquiry_basket', [])) == 0 ? 'display: none;' : '' }}">
-                                {{ array_sum(array_column(session('enquiry_basket', []), 'qty')) }}
-                            </span>
-                        </a>
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#signupModal" class="user-btn">
-                            <img src="{{ asset('frontend_assets/images/user.png') }}" alt="User">
-                        </a>
+                    <!-- AI Search (desktop) -->
+                    <div class="navbar-icons mb-2 mt-2 mb-lg-3 d-none d-lg-flex align-items-center justify-content-lg-end">
+                        <button type="button" class="header-ai-search-btn header-ai-search-btn--desktop" data-bs-toggle="modal" data-bs-target="#aiSearchModal" aria-label="AI Search">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            <span>AI Search</span>
+                        </button>
                     </div>
 
                     <!-- Bottom Menu Row -->
@@ -67,7 +50,6 @@
                             </button>
                             <ul class="mobile-submenu d-lg-none" id="mobileProductsSubmenu">
                                 <li><a href="{{ route('products.type') }}">Shop by Product</a></li>
-                                <li><a href="{{ route('shop.by.industry') }}">Shop by Industry</a></li>
                                 <li><a href="{{ route('shop.by.brands') }}">Shop by Brand</a></li>
                                 <li><a href="{{ route('shop.by.space') }}">Shop by Space</a></li>
                                 <li><a href="{{ route('all.products') }}" class="mobile-submenu-view-all">See All Products</a></li>
@@ -127,9 +109,6 @@
                 <a href="{{ route('products.type') }}" class="mega-sidebar-item active" data-target="mega-products" onmouseover="switchMegaMenu(event, 'mega-products')">
                     <span class="minus-icon"></span> Shop by Product
                 </a>
-                <a href="{{ route('shop.by.industry') }}" class="mega-sidebar-item" data-target="mega-industry" onmouseover="switchMegaMenu(event, 'mega-industry')">
-                    <span class="minus-icon"></span> Shop by Industry
-                </a>
                 <a href="{{ route('shop.by.brands') }}" class="mega-sidebar-item" data-target="mega-brand" onmouseover="switchMegaMenu(event, 'mega-brand')">
                     <span class="minus-icon"></span> Shop by Brand
                 </a>
@@ -149,13 +128,6 @@
                     <a href="{{ route('all.products') }}" class="mega-dropdown-item active"><span class="minus-icon" style="display:block;"></span> Discover All</a>
                     @foreach($productTypes as $type)
                     <a href="{{ route('product_type.detail', $type->slug) }}" class="mega-dropdown-item"><span class="minus-icon"></span> {{ $type->name }}</a>
-                    @endforeach
-                </div>
-
-                <!-- Shop by Industry -->
-                <div id="mega-industry" class="mega-content-list">
-                    @foreach($industries as $industry)
-                    <a href="{{ route('industry.detail', $industry->slug) }}" class="mega-dropdown-item"><span class="minus-icon"></span> {{ $industry->name }}</a>
                     @endforeach
                 </div>
 
@@ -351,58 +323,6 @@
             left: 400,
             behavior: "smooth",
         });
-    }
-
-    function playVideo() {
-        // Replace with your actual video URL
-        const videoUrl = "https://www.youtube.com/embed/dQw4w9WgXcQ";
-        const modal = document.createElement("div");
-        modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 9999;
-            `;
-
-        const videoFrame = document.createElement("div");
-        videoFrame.style.cssText = `
-                width: 90%;
-                max-width: 900px;
-                aspect-ratio: 22 / 9;
-                position: relative;
-            `;
-
-        videoFrame.innerHTML = `
-                <button onclick="this.closest('div').parentElement.remove()" style="
-                    position: absolute;
-                    top: -40px;
-                    right: 0;
-                    background: white;
-                    border: none;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    font-size: 24px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                ">×</button>
-                <iframe width="100%" height="100%" src="${videoUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            `;
-
-        modal.appendChild(videoFrame);
-        document.body.appendChild(modal);
-
-        modal.onclick = function(e) {
-            if (e.target === modal) modal.remove();
-        };
     }
 
     function toggleMainContainer(event) {
