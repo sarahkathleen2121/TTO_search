@@ -415,7 +415,7 @@
             @foreach($blogs as $blog)
             <div class="resource-card">
                 <div class="resource-image-container">
-                    <img src="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : asset('frontend_assets/images/banner_img.png') }}" alt="{{ $blog->image_alt }}" class="resource-img" onerror="this.style.display='none'">
+                    <img src="{{ $blog->featuredImageUrl() ?: asset('frontend_assets/images/banner_img.png') }}" alt="{{ $blog->image_alt }}" class="resource-img" onerror="this.style.display='none'">
                     <span class="resource-bookmark">
                         <i class="fa-regular fa-bookmark"></i>
                     </span>

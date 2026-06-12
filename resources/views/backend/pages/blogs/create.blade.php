@@ -53,7 +53,7 @@
                             <label class="form-label">Featured Image <span class="text-danger">{{ isset($blog) ? '' : '*' }}</span></label>
                             <input type="file" name="featured_image" class="form-control" {{ isset($blog) ? '' : 'required' }}>
                             @if(isset($blog) && $blog->featured_image)
-                                <img src="{{ asset('storage/'.$blog->featured_image) }}" width="80" class="mt-2">
+                                <img src="{{ $blog->featuredImageUrl() }}" width="80" class="mt-2">
                             @endif
                         </div>
 

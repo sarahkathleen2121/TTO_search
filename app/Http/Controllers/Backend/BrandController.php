@@ -32,11 +32,25 @@ class BrandController extends Controller
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('brands', 'public');
+            $file = $request->file('image');
+            $dir = public_path('uploads/brands');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $data['image'] = 'uploads/brands/' . $filename;
         }
 
         if ($request->hasFile('bg_image')) {
-            $data['bg_image'] = $request->file('bg_image')->store('brands', 'public');
+            $file = $request->file('bg_image');
+            $dir = public_path('uploads/brands');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $data['bg_image'] = 'uploads/brands/' . $filename;
         }
 
         Brand::create($data);
@@ -59,11 +73,25 @@ class BrandController extends Controller
         $data['slug'] = Str::slug($request->name);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('brands', 'public');
+            $file = $request->file('image');
+            $dir = public_path('uploads/brands');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $data['image'] = 'uploads/brands/' . $filename;
         }
 
         if ($request->hasFile('bg_image')) {
-            $data['bg_image'] = $request->file('bg_image')->store('brands', 'public');
+            $file = $request->file('bg_image');
+            $dir = public_path('uploads/brands');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $data['bg_image'] = 'uploads/brands/' . $filename;
         }
 
         $brand->update($data);

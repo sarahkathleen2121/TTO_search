@@ -69,9 +69,9 @@
                 $bgImage = asset('frontend_assets/images/conference_room.png');
                 if ($type === 'brand') {
                     if (!empty($item->bg_image)) {
-                        $bgImage = asset('storage/' . $item->bg_image);
+                        $bgImage = $item->bgImageUrl();
                     } elseif (!empty($item->image)) {
-                        $bgImage = asset('storage/' . $item->image);
+                        $bgImage = $item->imageUrl();
                     } else {
                         $images = [
                             asset('frontend_assets/images/conference_room.png'),

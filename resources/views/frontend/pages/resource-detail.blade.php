@@ -45,7 +45,7 @@
         </div>
 
         <div class="rd-cover">
-            <img src="{{ $blog->featured_image ? asset('storage/' . $blog->featured_image) : 'https://via.placeholder.com/1200x480' }}" alt="{{ $blog->image_alt ?? $blog->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="{{ $blog->featuredImageUrl() ?: 'https://via.placeholder.com/1200x480' }}" alt="{{ $blog->image_alt ?? $blog->title }}" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         
       </div>
@@ -100,7 +100,7 @@
               @foreach($relevantBlogs as $rBlog)
               <div class="item">
                   <div class="rd-thumb">
-                      <img src="{{ $rBlog->featured_image ? asset('storage/' . $rBlog->featured_image) : 'https://via.placeholder.com/150x100' }}" alt="{{ $rBlog->image_alt ?? $rBlog->title }}" class="img-fluid" style="object-fit: cover;">
+                      <img src="{{ $rBlog->featuredImageUrl() ?: 'https://via.placeholder.com/150x100' }}" alt="{{ $rBlog->image_alt ?? $rBlog->title }}" class="img-fluid" style="object-fit: cover;">
                   </div>
                   <a class="text-primary fw-bold text-decoration-none" href="{{ route('resource.detail', $rBlog->slug) }}">
                       {{ Str::limit($rBlog->title, 50) }}
@@ -138,7 +138,7 @@
                         @endforeach
                       </div>
                     @endif
-                    <img src="{{ $sBlog->featured_image ? asset('storage/' . $sBlog->featured_image) : 'https://via.placeholder.com/300x140' }}" alt="{{ $sBlog->image_alt ?? $sBlog->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="{{ $sBlog->featuredImageUrl() ?: 'https://via.placeholder.com/300x140' }}" alt="{{ $sBlog->image_alt ?? $sBlog->title }}" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
                 <div class="rd-card-body">
                     <div class="rd-name">{{ Str::limit($sBlog->title, 40) }}</div>

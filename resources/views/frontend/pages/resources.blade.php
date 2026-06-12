@@ -63,7 +63,7 @@
                         @endforeach
                       </div>
                     @endif
-                    <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->image_alt }}">
+                    <img src="{{ $blog->featuredImageUrl() }}" alt="{{ $blog->image_alt }}">
                   </div>
                   <div class="rc-card-body">
                     <h4 class="rc-name">{{ $blog->title }}</h4>
@@ -86,7 +86,7 @@
                         @endforeach
                       </div>
                     @endif
-                    <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->image_alt }}">
+                    <img src="{{ $blog->featuredImageUrl() }}" alt="{{ $blog->image_alt }}">
                   </div>
                   <div class="rc-card-body">
                     <h5 class="rc-name">{{ $blog->title }}</h5>
@@ -109,7 +109,7 @@
                         @endforeach
                       </div>
                     @endif
-                    <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="{{ $blog->image_alt }}">
+                    <img src="{{ $blog->featuredImageUrl() }}" alt="{{ $blog->image_alt }}">
                   </div>
                   <div class="rc-card-body">
                     <h5 class="rc-name">{{ $blog->title }}</h5>

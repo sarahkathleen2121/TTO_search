@@ -51,7 +51,14 @@ class BlogController extends Controller
         $data['category'] = $firstCategory ? $firstCategory->name : null;
 
         if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = $request->file('featured_image')->store('blogs', 'public');
+            $file = $request->file('featured_image');
+            $dir = public_path('uploads/blogs');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $data['featured_image'] = 'uploads/blogs/' . $filename;
         }
 
         $blog = Blog::create($data);
@@ -108,7 +115,14 @@ class BlogController extends Controller
         $data['category'] = $firstCategory ? $firstCategory->name : null;
 
         if ($request->hasFile('featured_image')) {
-            $data['featured_image'] = $request->file('featured_image')->store('blogs', 'public');
+            $file = $request->file('featured_image');
+            $dir = public_path('uploads/blogs');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $data['featured_image'] = 'uploads/blogs/' . $filename;
         }
 
         $blog->update($data);
@@ -144,9 +158,16 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('blogs', 'public');
+            $file = $request->file('file');
+            $dir = public_path('uploads/blogs');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            $filename = Str::random(40) . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            $path = 'uploads/blogs/' . $filename;
             return response()->json([
-                'location' => asset('storage/' . $path)
+                'location' => asset($path)
             ]);
         }
 
@@ -191,11 +212,15 @@ class BlogController extends Controller
             $filename = 'inline_' . uniqid() . '.' . $extension;
             $path = 'blogs/' . $filename;
             
-            // Save to storage
-            \Illuminate\Support\Facades\Storage::disk('public')->put($path, $decodedData);
+            // Save to public uploads
+            $dir = public_path('uploads/blogs');
+            if (!\Illuminate\Support\Facades\File::isDirectory($dir)) {
+                \Illuminate\Support\Facades\File::makeDirectory($dir, 0755, true);
+            }
+            file_put_contents($dir . '/' . $filename, $decodedData);
             
-            // Get the storage URL
-            $imageUrl = asset('storage/' . $path);
+            // Get the public URL
+            $imageUrl = asset('uploads/blogs/' . $filename);
             
             $processedImages[$hash] = $imageUrl;
             

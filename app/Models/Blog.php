@@ -24,4 +24,17 @@ class Blog extends Model
     {
         return $this->hasMany(BlogFaq::class);
     }
+
+    public function featuredImageUrl(): ?string
+    {
+        if (!$this->featured_image) {
+            return null;
+        }
+
+        if (str_starts_with($this->featured_image, 'uploads/')) {
+            return asset($this->featured_image);
+        }
+
+        return asset('storage/' . $this->featured_image);
+    }
 }

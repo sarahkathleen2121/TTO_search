@@ -27,7 +27,7 @@
                             <tr>
                                 <td>
                                     @if($blog->featured_image)
-                                        <img src="{{ asset('storage/'.$blog->featured_image) }}" width="60">
+                                        <img src="{{ $blog->featuredImageUrl() }}" width="60">
                                     @else
                                         N/A
                                     @endif

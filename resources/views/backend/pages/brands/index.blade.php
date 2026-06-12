@@ -28,14 +28,14 @@
                                 <td>{{ $brand->name }}</td>
                                 <td>
                                     @if($brand->image)
-                                        <img src="{{ asset('storage/'.$brand->image) }}" width="40">
+                                        <img src="{{ $brand->imageUrl() }}" width="40">
                                     @else
                                         N/A
                                     @endif
                                 </td>
                                 <td>
                                     @if($brand->bg_image)
-                                        <img src="{{ asset('storage/'.$brand->bg_image) }}" width="80">
+                                        <img src="{{ $brand->bgImageUrl() }}" width="80">
                                     @else
                                         N/A
                                     @endif
