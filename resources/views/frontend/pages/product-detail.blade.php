@@ -85,6 +85,7 @@
         </div>
     </section>
 
+    @if($uspImages->count())
     <!-- Product USP style block -->
     <section class="pd-usp">
         <div class="container">
@@ -118,6 +119,7 @@
             </div> -->
         </div>
     </section>
+    @endif
 
     @if($uspImages->count())
     <!-- USP highlight images -->
