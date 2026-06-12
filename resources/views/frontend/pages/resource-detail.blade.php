@@ -32,9 +32,7 @@
         
         <div class="d-flex align-items-center mb-3 gap-2" style="color: #383E42; font-size: 14px; font-weight: 600;">
             <span style="width: 8px; height: 8px; background: #cddcfb; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
-            @foreach($blog->categories as $cat)
-                {{ $cat->name }}{{ !$loop->last ? ',' : '' }}
-            @endforeach
+            {{ $blog->created_at ? $blog->created_at->format('d M Y') : '' }}
         </div>
         
         <div class="row g-4 align-items-end mb-5">

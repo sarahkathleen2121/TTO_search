@@ -234,7 +234,6 @@
 }
 
 .services-list-container {
-    max-width: 1120px;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -349,7 +348,7 @@
 }
 
 .services-process-container {
-    max-width: 1120px;
+    /* max-width: 1120px; */
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;

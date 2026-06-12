@@ -21,7 +21,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-5 d-flex justify-content-center">
                     <div class="hero-image">
                         <img src="{{asset('frontend_assets/images/hero_img.png')}}" alt="Hero Image" />
                     </div>
@@ -438,15 +438,15 @@
         <div class="link-cards-grid">
             <a href="{{ route('services') }}" class="link-card">
                 <img src="{{ asset('frontend_assets/images/bespoke_solutions.png') }}" alt="Bespoke Solutions" class="link-card-img">
-                <h3 class="link-card-title">Bespoke<br>Solutions</h3>
+                <!-- <h3 class="link-card-title">Bespoke<br>Solutions</h3> -->
             </a>
             <a href="{{ route('all.products') }}" class="link-card">
                 <img src="{{ asset('frontend_assets/images/products.png') }}" alt="Products" class="link-card-img">
-                <h3 class="link-card-title">Products</h3>
+                <!-- <h3 class="link-card-title">Products</h3> -->
             </a>
             <a href="{{ route('contact') }}" class="link-card">
                 <img src="{{ asset('frontend_assets/images/contact_us.png') }}" alt="Contact Us" class="link-card-img">
-                <h3 class="link-card-title">Contact Us</h3>
+                <!-- <h3 class="link-card-title">Contact Us</h3> -->
             </a>
         </div>
     </section>

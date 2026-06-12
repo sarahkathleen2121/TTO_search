@@ -27,39 +27,41 @@
                 <div class="col-lg-6">
                     <h3 class="ct-h3">Our Head Office</h3>
                     <div class="ct-map">
-                        <img src="{{ asset('frontend_assets/images/map.png') }}" alt="Map" class="ct-map-img" />
-                        <button class="ct-directions-btn">Get Directions</button>
-                        <i class="fa-solid fa-location-dot ct-map-pin"></i>
+                        <iframe 
+                            src="https://maps.google.com/maps?q=1702%20Grosvenor%20Business%20Tower%2C%20Barsha%20Heights%2C%20Dubai%20UAE&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
                     </div>
 
                     <div class="row g-4 mt-3 ct-address">
                         <div class="col-md-6">
                             <h5>Physical address</h5>
-                            <p><strong>Barsha Heights</strong><br />The View Tower – 8th Floor<br />Block 71, Building No.
-                                14A+14B<br />Beside Symphony Hotel<br />Gulf Street – Salmiya<br />Kuwait<br />P.O. Box 174
-                                SAFAT 13002 — Kuwait</p>
-                            <p>Open from 8:30am to 4:30pm (Sun-Thu)</p>
-                            <p>Tel:+965 22053700<br />Fax: +965 22053711</p>
-                            <p>barsha@totaloffice.com</p>
+                            <p><strong>Dubai Head Office</strong><br />1702, Grosvenor Business Tower<br />Barsha Heights (TECOM)<br />Dubai, UAE</p>
+                            <p>Open from 8:30am to 5:30pm (Mon-Fri)</p>
+                            <p>Tel: +971 4 450 8700</p>
+                            <p>info@thetotaloffice.com</p>
                         </div>
                         <div class="col-md-6">
-                            <h5>Abu Dhabi</h5>
-                            <p>The View Tower – 8th Floor<br />Block 71, Building No. 14A+14B<br />Beside Symphony
-                                Hotel<br />Gulf Street – Salmiya<br />Kuwait<br />P.O. Box 174 SAFAT 13002 — Kuwait</p>
-                            <p>Open from 8:30am to 4:30pm (Sun-Thu)</p>
-                            <p>Tel:+965 22053700<br />Fax: +965 22053711</p>
-                            <p>abudhabi@totaloffice.com</p>
+                            <h5>Abu Dhabi Office</h5>
+                            <p>3rd Floor, Al Saman Tower<br />Intersection of Hamdan St. & Muroor St.<br />Abu Dhabi, UAE</p>
+                            <p>Open from 8:30am to 5:30pm (Mon-Fri)</p>
+                            <p>Tel: +971 2 635 5588</p>
+                            <p>abudhabi@thetotaloffice.com</p>
                         </div>
                     </div>
 
                     <!-- Sharjah -->
                     <div class="ct-address mt-4">
-                        <h5>Sharjah</h5>
-                        <p>The View Tower – 8th Floor<br />Block 71, Building No. 14A+14B<br />Beside Symphony
-                            Hotel<br />Gulf Street – Salmiya<br />Kuwait<br />P.O. Box 174 SAFAT 13002 — Kuwait</p>
-                        <p>Open from 8:30am to 4:30pm (Sun-Thu)</p>
-                        <p>Tel:+965 22053700<br />Fax: +965 22053711</p>
-                        <p>sharjah@totaloffice.com</p>
+                        <h5>Sharjah Office</h5>
+                        <p>Industrial Area 13<br />Sharjah, UAE</p>
+                        <p>Open from 8:30am to 5:30pm (Mon-Fri)</p>
+                        <p>Tel: +971 6 544 0663</p>
+                        <p>sharjah@thetotaloffice.com</p>
                     </div>
                 </div>
 
@@ -97,20 +99,18 @@
             <h4>Showrooms</h4>
             <div class="row g-4 ct-address">
                 <div class="col-md-6">
-                    <h5>Dubai</h5>
-                    <p>The View Tower – 8th Floor<br />Block 71, Building No. 14A+14B<br />Beside Symphony Hotel<br />Gulf
-                        Street – Salmiya<br />Kuwait<br />P.O. Box 174 SAFAT 13002 — Kuwait</p>
-                    <p>Open from 8:30am to 4:30pm (Sun-Thu)</p>
-                    <p>Tel:+965 22053700<br />Fax: +965 22053711</p>
-                    <p>barsha@totaloffice.com</p>
+                    <h5>Dubai Showroom</h5>
+                    <p>1702, Grosvenor Business Tower<br />Barsha Heights (TECOM)<br />Dubai, UAE</p>
+                    <p>Open from 8:30am to 5:30pm (Mon-Fri)</p>
+                    <p>Tel: +971 4 450 8700</p>
+                    <p>info@thetotaloffice.com</p>
                 </div>
                 <div class="col-md-6">
-                    <h5>Abu Dhabi</h5>
-                    <p>The View Tower – 8th Floor<br />Block 71, Building No. 14A+14B<br />Beside Symphony Hotel<br />Gulf
-                        Street – Salmiya<br />Kuwait<br />P.O. Box 174 SAFAT 13002 — Kuwait</p>
-                    <p>Open from 8:30am to 4:30pm (Sun-Thu)</p>
-                    <p>Tel:+965 22053700<br />Fax: +965 22053711</p>
-                    <p>abudhabi@totaloffice.com</p>
+                    <h5>Abu Dhabi Showroom</h5>
+                    <p>3rd Floor, Al Saman Tower<br />Intersection of Hamdan St. & Muroor St.<br />Abu Dhabi, UAE</p>
+                    <p>Open from 8:30am to 5:30pm (Mon-Fri)</p>
+                    <p>Tel: +971 2 635 5588</p>
+                    <p>abudhabi@thetotaloffice.com</p>
                 </div>
             </div>
         </div>

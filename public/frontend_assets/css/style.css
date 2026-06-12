@@ -11,9 +11,16 @@
     --bs-font-monospace: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 .container {
-    max-width: 100% !important;
+    max-width: 1440px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     padding-left: var(--site-gutter);
     padding-right: var(--site-gutter);
+}
+.container-fluid {
+    max-width: 1440px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 * {
     margin: 0;
