@@ -49,7 +49,15 @@ class ProductController extends Controller
             'spaces', 'colors', 'materials', 'thumbnail',
             'visual_images', 'usp_images', 'gallery_images',
         ]);
-        $data['slug'] = Str::slug($request->name);
+        
+        $originalSlug = Str::slug($request->name);
+        $slug = $originalSlug;
+        $count = 1;
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        $data['slug'] = $slug;
 
         if ($request->hasFile('thumbnail')) {
             $data['thumbnail'] = $this->uploadImage($request->file('thumbnail'));
@@ -93,7 +101,15 @@ class ProductController extends Controller
             'visual_images', 'usp_images', 'gallery_images',
             'remove_visual', 'remove_usp', 'remove_gallery',
         ]);
-        $data['slug'] = Str::slug($request->name);
+        
+        $originalSlug = Str::slug($request->name);
+        $slug = $originalSlug;
+        $count = 1;
+        while (Product::where('slug', $slug)->where('id', '!=', $product->id)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        $data['slug'] = $slug;
 
         if ($request->hasFile('thumbnail')) {
             $this->deleteOldThumbnail($product->thumbnail, $product->id);
