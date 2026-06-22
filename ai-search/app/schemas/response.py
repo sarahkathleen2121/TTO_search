@@ -52,3 +52,23 @@ class HealthResponse(BaseModel):
     vector_store: str
     text_index_count: int = 0
     image_index_count: int = 0
+
+
+class BlogResult(BaseModel):
+    id: str
+    title: str
+    slug: str
+    url: str = ""
+    image_url: str = ""
+    excerpt: str = ""
+    categories: list[str] = []
+    created_at: str = ""
+    similarity_score: float = 0.0
+
+
+class BlogSearchResponse(BaseModel):
+    results: list[BlogResult]
+    total: int
+    page: int
+    limit: int
+

@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Models\Product;
 use App\Observers\ProductObserver;
+use App\Models\Blog;
+use App\Observers\BlogObserver;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('vendor.pagination.default');
 
         Product::observe(ProductObserver::class);
+        Blog::observe(BlogObserver::class);
 
         RateLimiter::for('search', function (Request $request) {
             return Limit::perMinute(30)->by($request->ip());

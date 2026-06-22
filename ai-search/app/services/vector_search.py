@@ -5,7 +5,7 @@ from typing import Any, Optional
 
 from app.config import Settings
 from app.schemas.request import SearchFilters
-from app.schemas.response import ProductResult, SearchResponse
+from app.schemas.response import ProductResult, SearchResponse, BlogResult, BlogSearchResponse
 from app.services.embedding_service import EmbeddingService
 from app.services.llm_related_service import LlmRelatedService
 from app.utils.related_products import (
@@ -384,3 +384,73 @@ class VectorSearchService:
         if sort == "price":
             return sorted(matches, key=lambda m: (float(m[2].get("price") or 0), -m[1]))
         return sorted(matches, key=lambda m: -m[1])
+
+    def search_blogs(
+        self,
+        query: str,
+        filters: Optional[Any],
+        page: int,
+        limit: int,
+    ) -> BlogSearchResponse:
+        if self.settings.skip_model_load or self.embeddings._text_model is None:
+            if hasattr(self.store, "_blogs") and hasattr(self.store._blogs, "get"):
+                data = self.store._blogs.get(include=["metadatas"])
+                ids = data.get("ids", [])
+                metadatas = data.get("metadatas", [])
+                
+                import re
+                words = re.findall(r'\w+', query.lower())
+                scored_matches = []
+                for pid, meta in zip(ids, metadatas):
+                    if not meta:
+                        continue
+                    if not words:
+                        scored_matches.append((pid, 0.5, meta))
+                        continue
+                    score = 0
+                    title = (meta.get("title") or "").lower()
+                    excerpt = (meta.get("excerpt") or "").lower()
+                    category = (meta.get("category") or "").lower()
+                    matched_kws = 0
+                    for kw in words:
+                        kw_score = 0
+                        if kw in title:
+                            kw_score += 10.0
+                        if kw in category:
+                            kw_score += 5.0
+                        if kw in excerpt:
+                            kw_score += 2.0
+                        if kw_score > 0:
+                            score += kw_score
+                            matched_kws += 1
+                    if matched_kws > 0:
+                        normalized_score = 0.5 + (0.45 * (matched_kws / len(words))) * min(1.0, score / 15.0)
+                        scored_matches.append((pid, normalized_score, meta))
+                matches = sorted(scored_matches, key=lambda m: -m[1])
+            else:
+                matches = []
+        else:
+            vector = self.embeddings.embed_text(query)
+            matches = self.store.query_blog_text(vector, top_k=limit * 5, where=None)
+        
+        total = len(matches)
+        start = (page - 1) * limit
+        end = start + limit
+        page_matches = matches[start:end]
+        
+        results = []
+        for bid, score, meta in page_matches:
+            categories = [meta.get("category")] if meta.get("category") else []
+            results.append(BlogResult(
+                id=bid,
+                title=meta.get("title", ""),
+                slug=meta.get("slug", ""),
+                image_url=meta.get("image_url", ""),
+                excerpt=meta.get("excerpt", ""),
+                categories=categories,
+                created_at=meta.get("created_at", ""),
+                similarity_score=round(score, 4)
+            ))
+        
+        return BlogSearchResponse(results=results, total=total, page=page, limit=limit)
+

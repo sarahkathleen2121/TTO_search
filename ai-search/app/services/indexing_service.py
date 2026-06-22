@@ -7,13 +7,35 @@ import httpx
 from PIL import Image
 
 from app.config import Settings
-from app.schemas.request import IndexProductPayload
+from app.schemas.request import IndexProductPayload, IndexBlogPayload
 from app.services.embedding_service import EmbeddingService
 from app.services.vector_search import build_index_text, metadata_from_payload
 from app.utils.image_utils import load_image_from_bytes, resize_image
 from app.utils.vector_db import VectorStore
 
 logger = logging.getLogger(__name__)
+
+
+def build_blog_index_text(data: dict[str, Any]) -> str:
+    parts = [
+        data.get("title", ""),
+        data.get("category", ""),
+        data.get("meta_keywords", ""),
+        data.get("content", ""),
+    ]
+    return " | ".join(p for p in parts if p)
+
+
+def blog_metadata_from_payload(data: dict[str, Any], settings: Settings) -> dict[str, Any]:
+    return {
+        "title": data.get("title", ""),
+        "slug": data.get("slug", ""),
+        "category": data.get("category", ""),
+        "excerpt": data.get("content", "")[:300],
+        "image_url": data.get("image_url", ""),
+        "created_at": data.get("created_at", ""),
+        "index_version": settings.index_version,
+    }
 
 
 class IndexingService:
@@ -64,8 +86,51 @@ class IndexingService:
             "total": len(products),
         }
 
+    def index_blog(self, payload: IndexBlogPayload) -> dict[str, Any]:
+        data = payload.model_dump()
+        blog_id = str(data["id"])
+        meta = blog_metadata_from_payload(data, self.settings)
+
+        text = build_blog_index_text(data)
+        text_vec = self.embeddings.embed_text(text)
+        self.store.upsert_blog_text(blog_id, text_vec, meta)
+
+        return {"id": blog_id, "text_indexed": True}
+
+    def bulk_index_blogs(self, blogs: list[IndexBlogPayload], replace: bool = True) -> dict[str, Any]:
+        if replace:
+            # Clear only the blogs collection to avoid erasing products.
+            if hasattr(self.store, "_blogs") and hasattr(self.store._blogs, "delete"):
+                try:
+                    self.store._blogs.delete()
+                except Exception:
+                    pass
+            elif hasattr(self.store, "_index") and hasattr(self.store._index, "delete"):
+                # For Pinecone
+                try:
+                    self.store._index.delete(delete_all=True, namespace="blog")
+                except Exception:
+                    pass
+
+        indexed = 0
+        errors = []
+        for blog in blogs:
+            try:
+                self.index_blog(blog)
+                indexed += 1
+            except Exception as exc:
+                errors.append({"id": blog.id, "error": str(exc)})
+        return {
+            "indexed": indexed,
+            "errors": errors,
+            "total": len(blogs),
+        }
+
     def delete_product(self, product_id: str) -> None:
         self.store.delete_product(product_id)
+
+    def delete_blog(self, blog_id: str) -> None:
+        self.store.delete_blog(blog_id)
 
     def _fetch_image(self, url: str) -> Image.Image:
         if url.startswith("/"):

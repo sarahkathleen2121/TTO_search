@@ -5,7 +5,7 @@ from fastapi import APIRouter, Header, HTTPException
 
 from app.config import get_settings
 from app.dependencies import get_indexing_service
-from app.schemas.request import BulkIndexRequest, IndexProductPayload
+from app.schemas.request import BulkIndexRequest, IndexProductPayload, BulkIndexBlogsRequest, IndexBlogPayload
 
 router = APIRouter(tags=["index"])
 _executor = ThreadPoolExecutor(max_workers=1)
@@ -40,3 +40,29 @@ def delete_product(product_id: str, x_api_key: str = Header(..., alias="X-API-Ke
     verify_api_key(x_api_key)
     get_indexing_service().delete_product(product_id)
     return {"deleted": product_id}
+
+
+@router.post("/api/index/blogs/bulk")
+async def bulk_index_blogs(body: BulkIndexBlogsRequest, x_api_key: str = Header(..., alias="X-API-Key")):
+    verify_api_key(x_api_key)
+    service = get_indexing_service()
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(
+        _executor,
+        lambda: service.bulk_index_blogs(body.blogs, replace=body.replace),
+    )
+
+
+@router.post("/api/index/blog")
+async def index_blog(body: IndexBlogPayload, x_api_key: str = Header(..., alias="X-API-Key")):
+    verify_api_key(x_api_key)
+    service = get_indexing_service()
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(_executor, lambda: service.index_blog(body))
+
+
+@router.delete("/api/index/blog/{blog_id}")
+def delete_blog(blog_id: str, x_api_key: str = Header(..., alias="X-API-Key")):
+    verify_api_key(x_api_key)
+    get_indexing_service().delete_blog(blog_id)
+    return {"deleted": blog_id}

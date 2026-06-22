@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\Blog;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -100,6 +101,54 @@ class AiSearchClient
             'reference_image_url' => $product->referenceImageUrl() ?? '',
             'has_image_embedding' => $product->hasIndexableImage(),
         ];
+    }
+
+    public function blogPayload(Blog $blog): array
+    {
+        $blog->loadMissing('categories');
+
+        return [
+            'id' => (string) $blog->id,
+            'title' => $blog->title,
+            'slug' => $blog->slug,
+            'content' => strip_tags($blog->content ?? ''),
+            'category' => $blog->categories->first()?->name ?? '',
+            'meta_keywords' => $blog->meta_keywords ?? '',
+            'image_url' => $blog->featuredImageUrl() ?? '',
+            'created_at' => $blog->created_at?->format('M d, Y') ?? '',
+        ];
+    }
+
+    public function indexBlog(array $payload): array
+    {
+        return $this->request('post', '/api/index/blog', $payload, true);
+    }
+
+    public function deleteBlog(string $blogId): array
+    {
+        $response = Http::timeout(config('ai-search.timeout_text'))
+            ->withHeaders(['X-API-Key' => config('ai-search.api_key')])
+            ->delete($this->url('/api/index/blog/'.$blogId));
+
+        return $this->handleResponse($response);
+    }
+
+    public function searchBlogs(array $payload): array
+    {
+        return $this->request('post', '/api/search/blogs', $payload);
+    }
+
+    public function bulkIndexBlogs(array $blogs, bool $replace = true): array
+    {
+        $response = Http::timeout(config('ai-search.timeout_index', 600))
+            ->connectTimeout(30)
+            ->withHeaders(['X-API-Key' => config('ai-search.api_key')])
+            ->post($this->url('/api/index/blogs/bulk'), [
+                'blogs' => $blogs,
+                'replace' => $replace,
+            ]);
+
+        return $this->handleResponse($response);
     }
 
     protected function request(string $method, string $path, array $data = [], bool $auth = false): array

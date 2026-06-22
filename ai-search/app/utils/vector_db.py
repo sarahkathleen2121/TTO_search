@@ -18,7 +18,15 @@ class VectorStore(ABC):
         pass
 
     @abstractmethod
+    def upsert_blog_text(self, blog_id: str, vector: list[float], metadata: dict[str, Any]) -> None:
+        pass
+
+    @abstractmethod
     def delete_product(self, product_id: str) -> None:
+        pass
+
+    @abstractmethod
+    def delete_blog(self, blog_id: str) -> None:
         pass
 
     @abstractmethod
@@ -34,11 +42,21 @@ class VectorStore(ABC):
         pass
 
     @abstractmethod
+    def query_blog_text(
+        self, vector: list[float], top_k: int, where: Optional[dict[str, Any]] = None
+    ) -> list[tuple[str, float, dict[str, Any]]]:
+        pass
+
+    @abstractmethod
     def count_text(self) -> int:
         pass
 
     @abstractmethod
     def count_image(self) -> int:
+        pass
+
+    @abstractmethod
+    def count_blog_text(self) -> int:
         pass
 
     @abstractmethod
@@ -57,12 +75,16 @@ class ChromaVectorStore(VectorStore):
         self._client = chromadb.PersistentClient(path=settings.chroma_persist_dir)
         self._text = self._client.get_or_create_collection(settings.text_collection)
         self._image = self._client.get_or_create_collection(settings.image_collection)
+        self._blogs = self._client.get_or_create_collection(settings.blogs_collection)
 
     def upsert_text(self, product_id: str, vector: list[float], metadata: dict[str, Any]) -> None:
         self._text.upsert(ids=[product_id], embeddings=[vector], metadatas=[metadata])
 
     def upsert_image(self, product_id: str, vector: list[float], metadata: dict[str, Any]) -> None:
         self._image.upsert(ids=[product_id], embeddings=[vector], metadatas=[metadata])
+
+    def upsert_blog_text(self, blog_id: str, vector: list[float], metadata: dict[str, Any]) -> None:
+        self._blogs.upsert(ids=[blog_id], embeddings=[vector], metadatas=[metadata])
 
     def delete_product(self, product_id: str) -> None:
         try:
@@ -71,6 +93,12 @@ class ChromaVectorStore(VectorStore):
             pass
         try:
             self._image.delete(ids=[product_id])
+        except Exception:
+            pass
+
+    def delete_blog(self, blog_id: str) -> None:
+        try:
+            self._blogs.delete(ids=[blog_id])
         except Exception:
             pass
 
@@ -83,6 +111,11 @@ class ChromaVectorStore(VectorStore):
         self, vector: list[float], top_k: int, where: Optional[dict[str, Any]] = None
     ) -> list[tuple[str, float, dict[str, Any]]]:
         return self._query(self._image, vector, top_k, where)
+
+    def query_blog_text(
+        self, vector: list[float], top_k: int, where: Optional[dict[str, Any]] = None
+    ) -> list[tuple[str, float, dict[str, Any]]]:
+        return self._query(self._blogs, vector, top_k, where)
 
     def _query(self, collection, vector, top_k, where):
         kwargs: dict[str, Any] = {"query_embeddings": [vector], "n_results": top_k}
@@ -104,11 +137,14 @@ class ChromaVectorStore(VectorStore):
     def count_image(self) -> int:
         return self._image.count()
 
+    def count_blog_text(self) -> int:
+        return self._blogs.count()
+
     def clear_all(self) -> None:
         from app.config import get_settings
 
         settings = get_settings()
-        names = [settings.text_collection, settings.image_collection]
+        names = [settings.text_collection, settings.image_collection, settings.blogs_collection]
         for name in names:
             try:
                 self._client.delete_collection(name)
@@ -116,9 +152,16 @@ class ChromaVectorStore(VectorStore):
                 pass
         self._text = self._client.get_or_create_collection(settings.text_collection)
         self._image = self._client.get_or_create_collection(settings.image_collection)
+        self._blogs = self._client.get_or_create_collection(settings.blogs_collection)
 
     def distinct_metadata(self, field: str, namespace: str = "text") -> list[str]:
-        collection = self._text if namespace == "text" else self._image
+        if namespace == "text":
+            collection = self._text
+        elif namespace == "image":
+            collection = self._image
+        else:
+            collection = self._blogs
+            
         data = collection.get(include=["metadatas"])
         values: set[str] = set()
         for meta in data.get("metadatas") or []:
@@ -147,6 +190,7 @@ class PineconeVectorStore(VectorStore):
         self._index = pc.Index(settings.pinecone_index)
         self._text_ns = "text"
         self._image_ns = "image"
+        self._blog_ns = "blog"
 
     def upsert_text(self, product_id: str, vector: list[float], metadata: dict[str, Any]) -> None:
         self._index.upsert(vectors=[{"id": product_id, "values": vector, "metadata": metadata}], namespace=self._text_ns)
@@ -154,15 +198,24 @@ class PineconeVectorStore(VectorStore):
     def upsert_image(self, product_id: str, vector: list[float], metadata: dict[str, Any]) -> None:
         self._index.upsert(vectors=[{"id": product_id, "values": vector, "metadata": metadata}], namespace=self._image_ns)
 
+    def upsert_blog_text(self, blog_id: str, vector: list[float], metadata: dict[str, Any]) -> None:
+        self._index.upsert(vectors=[{"id": blog_id, "values": vector, "metadata": metadata}], namespace=self._blog_ns)
+
     def delete_product(self, product_id: str) -> None:
         self._index.delete(ids=[product_id], namespace=self._text_ns)
         self._index.delete(ids=[product_id], namespace=self._image_ns)
+
+    def delete_blog(self, blog_id: str) -> None:
+        self._index.delete(ids=[blog_id], namespace=self._blog_ns)
 
     def query_text(self, vector, top_k, where=None):
         return self._query(self._text_ns, vector, top_k, where)
 
     def query_image(self, vector, top_k, where=None):
         return self._query(self._image_ns, vector, top_k, where)
+
+    def query_blog_text(self, vector, top_k, where=None):
+        return self._query(self._blog_ns, vector, top_k, where)
 
     def _query(self, namespace, vector, top_k, where):
         result = self._index.query(vector=vector, top_k=top_k, include_metadata=True, namespace=namespace, filter=where)
@@ -177,9 +230,13 @@ class PineconeVectorStore(VectorStore):
     def count_image(self) -> int:
         return self._index.describe_index_stats().get("namespaces", {}).get(self._image_ns, {}).get("vector_count", 0)
 
+    def count_blog_text(self) -> int:
+        return self._index.describe_index_stats().get("namespaces", {}).get(self._blog_ns, {}).get("vector_count", 0)
+
     def clear_all(self) -> None:
         self._index.delete(delete_all=True, namespace=self._text_ns)
         self._index.delete(delete_all=True, namespace=self._image_ns)
+        self._index.delete(delete_all=True, namespace=self._blog_ns)
 
     def distinct_metadata(self, field: str, namespace: str = "text") -> list[str]:
         return []

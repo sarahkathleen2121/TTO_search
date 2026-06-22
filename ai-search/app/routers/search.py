@@ -6,7 +6,7 @@ from fastapi import APIRouter, File, Form, Header, HTTPException, UploadFile
 from app.dependencies import get_embedding_service, get_vector_search_service, models_loading, models_ready
 from app.schemas.request import SearchFilters, TextSearchRequest
 from app.config import get_settings
-from app.schemas.response import FiltersResponse, ProductResult, SearchResponse, SearchSuggestionItem, SuggestResponse
+from app.schemas.response import FiltersResponse, ProductResult, SearchResponse, SearchSuggestionItem, SuggestResponse, BlogSearchResponse
 from app.services.suggestion_service import SuggestionService
 from app.services.scene_processor import process_scene_crop
 from app.utils.image_utils import load_image_from_bytes, resize_image, validate_image_bytes
@@ -44,6 +44,13 @@ def search_text(body: TextSearchRequest):
     _ensure_models_ready()
     service = get_vector_search_service()
     return service.search_text(body.query, body.filters, body.sort, body.page, body.limit)
+
+
+@router.post("/api/search/blogs", response_model=BlogSearchResponse)
+def search_blogs(body: TextSearchRequest):
+    _ensure_models_ready()
+    service = get_vector_search_service()
+    return service.search_blogs(body.query, body.filters, body.page, body.limit)
 
 
 @router.post("/api/search/image", response_model=SearchResponse)

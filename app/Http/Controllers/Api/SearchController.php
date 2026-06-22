@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 use App\Models\Product;
 use App\Services\AiSearchClient;
 use Illuminate\Http\JsonResponse;
@@ -367,6 +368,75 @@ class SearchController extends Controller
                 ->get();
         }
 
+        // ── Related Blogs ─────────────────────────────────────
+        $relatedBlogs = collect();
+        $rawQuery = $validated['query'] ?? '';
+        if (!empty($rawQuery)) {
+            if ($this->aiSearch->isEnabled()) {
+                try {
+                    $payload = [
+                        'query' => $rawQuery,
+                        'page' => 1,
+                        'limit' => 6,
+                    ];
+                    $data = $this->aiSearch->searchBlogs($payload);
+                    $blogIds = collect($data['results'] ?? [])->pluck('id')->all();
+                    
+                    if (!empty($blogIds)) {
+                        $idsString = implode(',', array_map('intval', $blogIds));
+                        $relatedBlogs = Blog::with('categories')
+                            ->whereIn('id', $blogIds)
+                            ->orderByRaw("FIELD(id, {$idsString})")
+                            ->get();
+                    }
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::warning('AI blog search failed, falling back to SQL', ['error' => $e->getMessage()]);
+                }
+            }
+
+            // Fallback: if AI search is disabled, failed, or returned no results
+            if ($relatedBlogs->isEmpty()) {
+                $blogStopWords = [
+                    'i', 'me', 'my', 'we', 'our', 'you', 'your', 'he', 'she', 'it', 'they',
+                    'a', 'an', 'the', 'this', 'that', 'these', 'those',
+                    'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being',
+                    'have', 'has', 'had', 'do', 'does', 'did',
+                    'will', 'would', 'shall', 'should', 'can', 'could', 'may', 'might',
+                    'want', 'need', 'looking', 'find', 'get', 'show',
+                    'for', 'of', 'in', 'on', 'at', 'to', 'with', 'from', 'by', 'about',
+                    'and', 'or', 'but', 'not', 'no', 'so', 'if', 'then',
+                    'some', 'any', 'all', 'very', 'just', 'also', 'please', 'thanks',
+                ];
+                $blogWords = preg_split('/\s+/', strtolower(trim($rawQuery)));
+                $blogKeywords = array_values(array_filter($blogWords, function ($w) use ($blogStopWords) {
+                    return strlen($w) >= 2 && !in_array($w, $blogStopWords, true);
+                }));
+
+                if (!empty($blogKeywords)) {
+                    $relatedBlogs = Blog::with('categories')
+                        ->where(function ($q) use ($blogKeywords) {
+                            foreach ($blogKeywords as $kw) {
+                                $like = "%{$kw}%";
+                                $q->orWhere('title', 'like', $like)
+                                  ->orWhere('content', 'like', $like)
+                                  ->orWhere('meta_keywords', 'like', $like);
+                            }
+                        })
+                        ->latest()
+                        ->take(6)
+                        ->get();
+                }
+            }
+        }
+
+        // Fallback: if no blogs matched, show latest blogs
+        if ($relatedBlogs->isEmpty()) {
+            $relatedBlogs = Blog::with('categories')
+                ->latest()
+                ->take(6)
+                ->get();
+        }
+
         return [
             'results' => $paginated->map(fn (Product $p) => [
                 'id' => (string) $p->id,
@@ -396,6 +466,16 @@ class SearchController extends Controller
                 'similarity_score' => 0.4,
             ])->values()->all(),
             'related_heading' => 'Related Products',
+            'related_blogs' => $relatedBlogs->map(fn (Blog $b) => [
+                'id' => (string) $b->id,
+                'title' => $b->title,
+                'slug' => $b->slug,
+                'url' => route('resource.detail', $b->slug),
+                'image_url' => $b->featuredImageUrl(),
+                'excerpt' => \Illuminate\Support\Str::limit(strip_tags($b->content), 120),
+                'categories' => $b->categories->pluck('name')->all(),
+                'created_at' => $b->created_at?->format('M d, Y') ?? '',
+            ])->values()->all(),
         ];
     }
 

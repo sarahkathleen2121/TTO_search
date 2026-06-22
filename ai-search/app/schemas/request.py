@@ -49,3 +49,20 @@ class SceneSearchCoords(BaseModel):
     y: float = Field(..., ge=0, le=1)
     width: float = Field(..., gt=0, le=1)
     height: float = Field(..., gt=0, le=1)
+
+
+class IndexBlogPayload(BaseModel):
+    id: str
+    title: str
+    slug: str
+    content: str
+    category: str = ""
+    meta_keywords: str = ""
+    image_url: str = ""
+    created_at: str = ""
+
+
+class BulkIndexBlogsRequest(BaseModel):
+    blogs: list[IndexBlogPayload]
+    replace: bool = True
+

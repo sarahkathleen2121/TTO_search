@@ -39,6 +39,30 @@ window.TtoAiSearch = window.TtoAiSearch || {};
                 </div>`;
     }
 
+    function blogCardHtml(blog) {
+        const url = blog.url || `/new-blogs/${blog.slug || ''}`;
+        const img = blog.image_url || '/frontend_assets/images/banner_img.png';
+        const cats = (blog.categories || []).map(c => `<span class="sr-blog-badge">${escapeHtml(c)}</span>`).join('');
+        const date = blog.created_at || '';
+        return `
+                <div class="col-md-6 col-lg-4">
+                    <div class="sr-blog-card">
+                        <a href="${escapeHtml(url)}" class="sr-blog-card-link">
+                            <div class="sr-blog-card-img-wrap">
+                                <img src="${escapeHtml(img)}" class="sr-blog-card-img" alt="${escapeHtml(blog.title)}" loading="lazy" />
+                                ${cats ? `<div class="sr-blog-badges">${cats}</div>` : ''}
+                            </div>
+                            <div class="sr-blog-card-body">
+                                ${date ? `<span class="sr-blog-date">${escapeHtml(date)}</span>` : ''}
+                                <h3 class="sr-blog-card-title">${escapeHtml(blog.title)}</h3>
+                                <p class="sr-blog-card-excerpt">${escapeHtml(blog.excerpt || '')}</p>
+                                <span class="sr-blog-read-more">Read More <i class="fas fa-chevron-right ms-1"></i></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>`;
+    }
+
     function showRelatedLoading() {
         const section = document.getElementById('srRelatedSection');
         const grid = document.getElementById('srRelatedGrid');
@@ -75,6 +99,22 @@ window.TtoAiSearch = window.TtoAiSearch || {};
             .join('');
     }
 
+    function renderBlogs(data) {
+        const section = document.getElementById('srBlogsSection');
+        const grid = document.getElementById('srBlogsGrid');
+        if (!section || !grid) return;
+
+        const blogs = data.related_blogs || [];
+        if (blogs.length === 0) {
+            section.classList.add('d-none');
+            grid.innerHTML = '';
+            return;
+        }
+
+        section.classList.remove('d-none');
+        grid.innerHTML = blogs.map(blog => blogCardHtml(blog)).join('');
+    }
+
     function renderResults(data) {
         const grid = document.getElementById('srGrid');
         const countEl = document.getElementById('srResultsCount');
@@ -103,6 +143,7 @@ window.TtoAiSearch = window.TtoAiSearch || {};
 
         grid.innerHTML = results.map((item) => productCardHtml(item, false)).join('');
         renderRelated(data);
+        renderBlogs(data);
     }
 
     function renderPagination(data) {

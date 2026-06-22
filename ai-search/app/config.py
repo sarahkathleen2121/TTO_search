@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     chroma_persist_dir: str = "./data/chroma"
     text_collection: str = "tto_products_text"
     image_collection: str = "tto_products_image"
+    blogs_collection: str = "tto_blogs_text"
     pinecone_api_key: str = ""
     pinecone_index: str = ""
     pinecone_environment: str = ""

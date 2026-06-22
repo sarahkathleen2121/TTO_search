@@ -47,6 +47,17 @@
                 <p class="sr-related-subtext" id="srRelatedSubtext">Complementary items curated for your search</p>
                 <div class="row g-4 ap-grid" id="srRelatedGrid"></div>
             </div>
+
+            {{-- Related Blogs Section --}}
+            <div class="sr-blogs-block d-none" id="srBlogsSection">
+                <hr class="sr-related-divider" />
+                <h2 class="sr-blogs-title">Related Articles</h2>
+                <p class="sr-blogs-subtext">Insights and guides related to your search</p>
+                <div class="row g-4" id="srBlogsGrid"></div>
+                <div class="sr-blogs-cta">
+                    <a href="{{ route('resources') }}" class="sr-blogs-view-all">View All Articles <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
         </div>
     </section>
 
